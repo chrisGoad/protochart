@@ -1,4 +1,3 @@
-
 (function (pj) {
   var geom = pj.geom;
 

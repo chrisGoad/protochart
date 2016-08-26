@@ -8,7 +8,7 @@
 var dom = pj.set("dom",pj.Object.mk());
 var svg =  pj.set("svg",pj.Object.mk());
 dom.__builtIn = true;
-svg.__builtIn = true;
+svg.__builtIn = true; 
 
 /* the two varieties of dom elements are svg.shape and html.Element
  * each particular element, such as an svg rect or an html div, is represented by its own prototype.
