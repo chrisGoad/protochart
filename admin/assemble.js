@@ -1,7 +1,5 @@
 /*
 
-cd /mnt/ebs0/prototypejungledev/node;node admin/assemble.js  ui p p
-
 cd /mnt/ebs0/prototypejungledev/node;node admin/assemble.js d p
 
 cd /mnt/ebs0/prototypejungledev/node;node admin/assemble.js p p
