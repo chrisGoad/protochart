@@ -177,7 +177,6 @@ ui.setSaved = function (){}; // stub called from ui
           ui.disableBackspace(); // it is extremely annoying to lose edits to an item because of doing a ui-back inadvertantly
           //ui.addMessageListener();
             function afterInstall(e,rs)  {
-              debugger;
               if (e === "noUrl") {
                 //ui.shareBut.$css('color','gray');
               }
@@ -232,7 +231,6 @@ ui.setSaved = function (){}; // stub called from ui
               pj.main(ui.source,afterInstall);
             } else if (pj.path) {
               var fpath = 'https://protochart.firebaseio.com'+pj.path+'.json?callback=prototypeJungle.assertItemLoaded';
-              debugger;
               pj.install(fpath,afterInstall); 
             } else {
               afterInstall("noUrl");

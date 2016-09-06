@@ -22,17 +22,13 @@ var minify = require('minify');
 //var compressor = require('node-minify');
 var zlib = require('zlib');    
 
-//var maxAge = 7200;
-//var maxAge = toDev?0:7200;
-
-//var dom_files = ["marks","geom","data","install_data","dom1","jxon","svg","html","uistub","domstringify"];
 var dom_files = ["spread","geom","data","dom1","jxon","svg","html","uistub","domstringify"];
 //var dom_files = ["geom","dom1","jxon","svg","uistub","domstringify"];
 dom_files = dom_files.map(function (f) { return "dom/"+f;});
 
-var ui_files = ["svg_serialize","ajax","poster", "constants","firebase","ui","browser",
+var ui_files = ["svg_serialize","ajax","constants","firebase","ui","browser",
                 //"page",
-                "save","dom2","controls","svgx","tree1","tree2","lightbox","test"];
+                "save","dom2","controls","svgx","tree1","tree2","lightbox"];
   
 ui_files = ui_files.map(function (f) { return "ui/"+f;});
 
@@ -52,39 +48,9 @@ function doGzip(file,cb) {
 }
 
 
-var asyncFor = function (fn,data,cb,tolerateErrors) {
-    var ln = data.length;
-    function asyncFor1(n) {
-      if (n===ln) {
-        if (cb) {
-          cb(undefined,data);
-        }
-        return;
-      }
-      var dt = data[n];
-      fn.call(null,dt,function (e) {
-        if (e) {
-          if (tolerateErrors) {
-            asyncFor1(n+1);
-          } else if (cb) {
-            cb(e);
-          }
-        } else {
-          asyncFor1(n+1);
-        }
-      });
-    }
-    asyncFor1(0);
-  }
-
-
 
 function fullName(f) {
   return 'js/'+f+".js";
-  //var dir = util.beforeChar(f,'/');
-  //var rs =  "/home/ubuntu/"+(fromDev?"xfer_prototypejungle":"git/www")+"/js/"+f+".js";
-  //console.log("FULLNAME OF",f,rs);
-  //return rs;
 }
 
 function extract(fl) {
@@ -116,7 +82,6 @@ function mextract(fls) {
   return rs;
 }
 
-var atProtoChart = {pjui:1,pjeditor:1,pjchooser:1,pjdom:1};
 
 function mkS3Path(which,version,mini) {
   
@@ -136,12 +101,19 @@ function mkModule(which,version,contents,cb) {
   var path = mkS3Path(which,version,0);
   var minpath = mkS3Path(which,version,1);
   var gzPath =  mkS3Path(which,version,1);
-  //var file = mkLocalFile(which,version,0);
-  //var minfile = mkLocalFile(which,version,1);
-  //var bucket = "prototypejungle.org";
   console.log("Saving to path ",path);
   fs.writeFileSync(path,rs);
-  //s3.setBucket(bucket);
+  minify(path,function (err,compressed) {
+      console.log(err,"Saving the compressed file to ",minpath,!!compressed);
+      fs.writeFileSync(minpath,compressed); // save the compressed version locally
+      doGzip(minpath,function () { // finally ,gzip it;
+        console.log("gzipping done");
+      });
+      
+  });
+}
+ 
+ 
   //var minifier = new compressor.minify;
   /*
   new compressor.minify({type:'gcc',
@@ -154,34 +126,9 @@ function mkModule(which,version,contents,cb) {
              });
            } 
   });
-*/
-  minify(path,function (err,compressed) {
-    //minify.optimize(file,function (err,compressed) {
-      console.log(err,"Saving the compressed file to ",minpath,!!compressed);
-      fs.writeFileSync(minpath,compressed); // save the compressed version locally
-      //doGzip(minpath,function () { // finally ,gzip it;
-      //  console.log("gzipping done");
-      //});
-      return;
-        var minfgz = fs.readFileSync(minfile+".gz");
-        console.log("LENGTH ",minfgz.length);
-          console.log("Saving minimized to path ",minpath," from file ",minfile);
-
-        s3.save(minpath,minfgz,{contentType:"application/javascript",encoding:"utf8",
-                contentEncoding:"gzip",dontCount:1,maxAge:maxAge},cb);// and save the gzipped file to s3
-      });
- //   });*/
-}
+*/                    
                      
-                     
-                  
-function mk_pjcore(cb) {
-  console.log("mk_pjcore");
-  var fls = core_files;
-  var rs =
-  '\nwindow.prototypeJungle =  (function () {\n\"use strict"\n'+mextract(fls) + "\nreturn pj;\n})();\n";
-  mkModule("pjcore",versions.pjcore,rs,cb);
-}
+                 
 
 function mk_pjdom(cb) { 
   var fls = dom_files;
@@ -192,13 +139,6 @@ function mk_pjdom(cb) {
 }
 
 
-function mk_pjdata(cb) { 
-  var fls = data_files;
-  var rs =
-  '(function (pj) {\n\"use strict"\n\nvar geom=pj.geom;'+mextract(fls) + "\nreturn pj;\n})(prototypeJungle);\n";
-  mkModule("pjdata",versions.pjdom,rs,cb);
-  
-}
 function mk_pjui(cb) { 
   var fls = ui_files;
   var rs = "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
@@ -322,19 +262,19 @@ function mk_bubbles(cb) {
 var afn = function (d,cb) {
   d(cb);
 }
-var jobsByWhat = {dom:[mk_pjdom],ui:[mk_pjui],data:[mk_pjdata],
-                  view:[mk_pjview],insert:[mk_insert],page:[mk_pjpage],
-                  chooser:[mk_pjchooser],editor:[mk_pjeditor]
+var jobByWhat = {dom:mk_pjdom,ui:mk_pjui,//data:mk_pjdata,
+                  view:mk_pjview,chooser:mk_pjchooser,editor:mk_pjeditor
                   // some old items: inspect:[mk_pjinspect],draw:[mk_pjdraw],dev:[mk_pjdev],login:[mk_pjloginout],
                  // rest:[mk_topbar,mk_pjloginout,mk_pjworker,mk_bubbles]
                   }
                   
-var jobs = jobsByWhat[what]; 
+var job = jobByWhat[what]; 
 
-if (jobs) {
+if (job) {
   console.log("ASSEMBLING ",what);
+  job();
   //var jobs = [mk_pjom,mk_pjdom,mk_pjui,mk_pjtopbar,mk_pjchooser,mk_pjview,mk_pjloginout,mk_pjworker,mk_bubbles];
-  asyncFor(afn,jobs,function () {console.log("S3 Save  DDONE");});
+ // asyncFor(afn,jobs,function () {console.log("S3 Save  DDONE");});
 } else {
   console.log("NO ASSEMBLY INSTRUCTIONS EXIT FOR ",what);
 }

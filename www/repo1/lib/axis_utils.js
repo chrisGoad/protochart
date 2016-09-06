@@ -10,11 +10,9 @@ var dat = pj.dat;
 var item = pj.Object.mk();
 
 item.initAxes = function (main) {
-  debugger;
 var axis = main.axisH;
 var axisV = main.axisV;
 if (axisV) {
-  debugger;
   axisV.__show();
   axisV.orientation = 'vertical';
   axisV.set('scale',dat.LinearScale.mk());
@@ -47,7 +45,6 @@ if (main.__adjustable) {
 }
 
 item.updateAxes = function (main,flip) {
-  debugger;
   var categories,cnt,max;
   var core = main.core;
   var axisH = main.axisH;
@@ -111,7 +108,6 @@ item.updateAxes = function (main,flip) {
 
 
 item.updateAxis = function (main) {
-  debugger;
   var core = main.core;
   var axis = main.axis;
   core.rangeScaling = function (x) {

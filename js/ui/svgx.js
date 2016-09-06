@@ -403,7 +403,7 @@ var mouseMoveListener = function (root,e) {
   clickedPoint = xf.applyInverse(cp);// in coordinates of content
   ui.points.push({a:cp,b:clickedPoint})
   e.preventDefault();
-  pj.log('control','control','mousemove  controlActivity',controlActivity,root.dragee,cp);
+ // pj.log('control','control','mousemove  controlActivity',controlActivity,root.dragee,cp);
   if (controlActivity === 'panning') { 
     pdelta = cp.difference(root.refPoint);
     tr = root.contents.__getTranslation();

@@ -9,12 +9,13 @@
 </head>
 <body style="margin:0px;overflow:hidden">
 <script src="https://www.gstatic.com/firebasejs/3.0.0/firebase.js"></script>
-<script src="https://prototypejungle.org/js/pjcore-0.9.3.js"></script>
+<!-- <script src="https://prototypejungle.org/js/pjcore-0.9.3.js"></script>-->
+<script src="js/pjcore-0.9.3.js"></script>
 <script src="js/pjdom-0.9.3.js"></script>
-
+<!--
 <script src="js/pjdata-0.9.3.js"></script>
-
-<script src="js/pjui-0.9.3.js"></script>
+-->
+<script src="js/pjui-0.9.3.min.js"></script>
 <script src="js/pjeditor-0.9.3.js"></script>
 <script>
 pj.ui.checkBrowser();
@@ -41,11 +42,12 @@ $('document').ready(function () {
     debugger;
   }});*/
   //pj.ui.drawVersion = 1;
+  pj.newExternalize = 1;
   pj.ui.updateOnMouseUp = 0;
   pj.ui.forDraw = 1;
   pj.tlogActive = 1; // controls time logging (pj.tlog)
   //pj.ui.setUIconstants();
-  pj.activeConsoleTags = ['error'];//,'control'];//'adjust' controls console logging
+  pj.activeConsoleTags = ['error','control'];//,'control'];//'adjust' controls console logging
   pj.debuggerOnError = 1;
   //pj.errorOnMissingProto = 1;
   pj.throwOnError = 1;

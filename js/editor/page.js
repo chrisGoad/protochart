@@ -219,6 +219,9 @@ ui.layout = function(noDraw) { // in the initialization phase, it is not yet tim
    var noteWidth = Math.min(svgwd-40,570);
    var noteLeft = 0.5 * (svgwd - 40 - noteWidth);
    tree.noteDiv.$css({left:noteLeft+"px",width:noteWidth +"px"});
+   if (ui.editMode && ui.editDivContainsData) {
+    ui.viewData();
+   }
 
 //   tree.noteDiv.$css({"left":(ui.intro?0:90)+"px","width":(svgwd - (ui.intro?10:140))+"px"});
    //tree.noteDiv.$css({left:"20px",width:svgwd +"px"});
@@ -273,13 +276,86 @@ ui.updateFromData =function (dataString,url,cb) {
   }
 }
 
-ui.viewData  = function (dataString) {
+var htmlEscape = function (str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+var  delims = {',':1,':':1,'<':1,'>':1,';':1,' ':1,'\n':1};
+
+var splitAtDelims = function (str) {
+  var ln = str.length;
+  var rs = [];
+  var word = '';
+  for (var i=0;i<ln;i++) {
+    var c = str[i];
+    if (delims[c]) {
+      rs.push(word);
+      word = '';
+      rs.push(c);
+    } else if (c !== '\r') {
+      word += c;
+    }
+  }
+  return rs;
+}
+var wordWrap = function (str,maxLength) {
+  debugger;
+  var split = splitAtDelims(str);
+  var rs = '';
+  var currentLength = 0;
+  split.forEach(function (word) {
+    var rrs;
+    if (word) {
+      if (word === '\n') {
+        rrs = rs;
+        debugger;
+        if (rs[rs.length-1] != '\n') {
+          rs += word;
+        }
+        currentLength = 0;
+        return;
+      }
+      var wln = word.length;
+      if (wln + currentLength > maxLength) {
+        rs += '\n';
+        currentLength = 0;
+      } else {
+        currentLength += wln;
+      }
+      rs += word;
+      rrs = rs;
+    }
+  });
+  return rs;
+}
+
+
+
+
+
+ui.viewData  = function (idataString) {
+  var dataString;
+  if (idataString) {
+    ui.dataString = idataString;
+    dataString = idataString;
+  } else {
+    dataString = ui.dataString;
+  }
   if (!ui.editMode) {
     ui.editMode = true;
     ui.replaceMode = false;
     ui.layout();
   }
-  var htmlString = '<pre>'+dataString+'</pre>';
+  ui.editDivContainsData = true;
+  var wwd  = uiWidth;//$(window).width();
+  debugger;
+  var maxLength = Math.floor((wwd/622)*84);
+  var htmlString = '<pre>'+htmlEscape(wordWrap(dataString,maxLength))+'</pre>';
   ui.editDiv.$html(htmlString);
 }
 
@@ -327,6 +403,7 @@ ui.getData = function (url,initialUrl,cb,dontUpdate) {
 }
 
 ui.uploadBut.$click(function () {
+  ui.editDivContainsData = false;
   ui.editDiv.$html('<iframe width = "100%" height="100%" src="/upload.html"></iframe>');
 });
   
@@ -350,7 +427,7 @@ ui.viewDataBut.$click(function () {
     var afterFetch = function () {ui.editMsg.$html(url);};
     if (url[0] === '[') { // url has the form [uid]path .. that is, it is a reference to a user's database, which in turn points to storage
       var indirect = pj.indirectUrl(url);
-      pj.httpGet(iurl,function (erm,rs) {
+      pj.httpGet(indirect,function (erm,rs) {
                 debugger;
                 ui.getData(JSON.parse(rs),url,afterFetch);
               });

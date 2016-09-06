@@ -240,9 +240,10 @@ item.update = function () {
   
   /* GENERATE AND ADD THE GRIDLINES */
   gridLines = pj.resetComputedArray(this,'gridLines');
+  debugger;
   if (this.showGridLines) {
     gridLineP = this.gridLineP;
-    gridLineP.__show();
+   // gridLineP.__show();
     if (horizontal) {
       gridLineP.y1 = -this.gridLineLength;
       gridLineP.y2 = 0;
@@ -252,6 +253,7 @@ item.update = function () {
     }
     bigTickPositions.forEach(function (position) {
       gridLine = gridLineP.instantiate();
+      gridLine.__show();
       gridLines.push(gridLine);
       ip = scale.eval(position);
       if (horizontal) {

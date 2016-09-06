@@ -512,7 +512,7 @@ tree.hiddenProperty = function (p) {
   
 pj.Object.__fieldIsEditable = function (k) {
   var ch,tp;
-  console.log('IS EDITABLE ',k);
+  if (k === 'dimension') console.log('IS EDITABLE ',k);
   if (tree.frozenProperties[k]) {
     return false;
   }
@@ -521,9 +521,10 @@ pj.Object.__fieldIsEditable = function (k) {
   tp = typeof ch;
   if (k==="data") return false;
   if (!this.__inWs()) {
-    console.log(k,' NOT EDITABLE BECAUSE WS');
+    if (k === 'dimension')  console.log(k,' NOT EDITABLE BECAUSE WS');
     return false;
   }
+  if (k === 'dimension') console.log(k,' is in WS');
   if (tp === "function") return false;
   return !this.__fieldIsFrozen(k)
 }
