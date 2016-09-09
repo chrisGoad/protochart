@@ -1,0 +1,5 @@
+<svg id="svg" baseProfile="full" xmlns="http://www.w3.org/2000/svg" version="1.1" style = "background:white" viewBox="0 0 400 320">
+<g id="outerG" transform = "translate(200 167.5)scale(3)">
+<rect id="rect1" x="-12.5" y="-10" width="25" height="15" visibility="inherit" fill="orange" transform="translate(0 -16)scale(1)"></rect><rect id="rect2" x="-12.5" y="-10" width="25" height="15" visibility="inherit" fill="orange" transform="translate(0 16)scale(1)"></rect><circle id="circle1" r="20" visibility="inherit" stroke="black" fill="rgb(39, 49, 151)" stroke-width="2" transform="translate(-30 0)scale(1)"></circle><circle id="circle2" r="20" visibility="inherit" stroke="black" fill="rgb(39, 49, 151)" stroke-width="2" transform="translate(30 0)scale(1)"></circle>
+</g>
+</svg>

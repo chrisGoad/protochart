@@ -11,7 +11,9 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.0.0/firebase.js"></script>
-<script src="https://prototypejungle.org/js/pjdom-0.9.3.js"></script>
+<!-- <script src="https://prototypejungle.org/js/pjdom-0.9.3.js"></script>-->
+<script src="js/pjcore-0.9.3.js"></script>
+<script src="js/pjdom-0.9.3.js"></script>
 <script src="js/pjui-0.9.3.js"></script>
 <script>
 (function () {
@@ -34,9 +36,17 @@ var selectFile = function () {
   filenameInput.val(selectedFile.name);
 }
 
+var afterUpload = function () {
+  $('#returnFrom').show();
+  $('#returnNote').show();
+  $('#uploadMore').show();
+  $('#upload').hide();  
+}
+
+var maxUploadSize = 50000;
 var doUpload = function () {
   debugger;
- 
+  var uploadCanceled = false;
   if (!selectedFile) {
     errorMessage.text('No file chosen')
   }
@@ -47,21 +57,29 @@ var doUpload = function () {
   var storageRef = ui.storageRef.child(ui.storageRefString()+path);
   var uploadTask = storageRef.put(selectedFile);//, metadata);
   uploadTask.on('state_changed', function(snapshot){
-    },
-    function(error) {
+      console.log('Bytes transferred',snapshot.bytesTransferred);
+      if (snapshot.bytesTransferred > maxUploadSize) {
+        errorMessage.text('Exceeded maximum upload size:'+maxUploadSize);
+        message.text('The upload was canceled');
+        uploadTask.cancel();
+        uploadCanceled = true;
+        $('#install').hide();
+        afterUpload();
+      }
+   },
+   function(error) {
       debugger;
     },
     function() {
       debugger;
+     if (uploadCanceled) {
+       return;
+     }
      downloadURL = ui.removeToken(uploadTask.snapshot.downloadURL);
      ui.addToDirectory('/data',ename,downloadURL,function () {
       message.text('The upload to /data/'+name+' is complete');
       $('#install').show();
-     $('#returnFrom').show();
-     $('#returnNote').show();
-    //  $('#returnFrom').show();
-      $('#uploadMore').show();
-      $('#upload').hide();
+      afterUpload();
       debugger;
      });
     });

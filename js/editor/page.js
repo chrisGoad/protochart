@@ -591,8 +591,24 @@ ui.hideFilePulldown = function () {
     pj.ui.fsel.hide();
   }
 }
-  
-  
+
+// if the current item has been loaded from an item file (in which case ui.itemSource will be defined),
+// this checks whether it is owned by the current user, and, if so, returns its path
+ui.ownedItemPath = function (itemSource) {
+  debugger;
+  if (!itemSource) {
+    return undefined;
+  }
+  var uid = ui.currentUser.uid;
+  var secondSlash = itemSource.indexOf('/',1);
+  var owner = itemSource.substring(1,secondSlash);
+  if (uid !== owner) {
+    return undefined;
+  }
+  var path = itemSource.substring(secondSlash+2); // +2 because there's a /s/ before the path
+  return path;
+ 
+}
 ui.setFselDisabled = function () {
    // ui.setPermissions();
    if (!fsel.disabled) {
@@ -600,8 +616,17 @@ ui.setFselDisabled = function () {
    }
    var disabled = fsel.disabled;
    disabled.new = disabled.insertOwn = disabled.save = disabled.saveAs = disabled.saveAsSvg  = !ui.currentUser;
-
-   //fsel.disabled.editText =  !ui.textSelected();
+   if (!ui.itemSource) {
+     disabled.save = true;
+    //code
+   }
+   if (!disabled.save) {
+     ui.itemPath = ui.ownedItemPath(ui.itemSource);
+     if (!ui.itemPath) {
+        disabled.save = true;
+     }
+   }
+    //fsel.disabled.editText =  !ui.textSelected();
    //fsel.disabled.addLegend = !ui.designatedChart();
    fsel.updateDisabled();
 }
@@ -672,12 +697,18 @@ fsel.onSelect = function (n) {
       var chartsPage = ui.useMinified?"/charts":"/chartsd";
       location.href = chartsPage;
       break;
-    case "save":
-      ui.resaveItem(pj.root);
-      break;
+    //case "save":
+      
+      //ui.resaveItem(pj.root);
+     // break;
     case "addTitle":
       ui.insertItem('/repo1/text/textbox1.js','titleBox',undefined,'title');
       break;
+    case "save":
+      debugger;
+      ui.resaveItem();
+      break;
+
     case "addLegend":
       ui.addTitleAndLegend();
       return;
@@ -932,17 +963,14 @@ ui.canbeResaved = function (itm) {
 }
 
 
-ui.resaveItem = function (itm) {
+ui.resaveItem = function () {
   debugger;
-  var doneSaving = function () {ui.messageElement.$hide();};
-  if (ui.canbeResaved(itm)) {
-    var repo = ui.stripPrototypeJungleDomain(itm.__sourceRepo);
-    var path = itm.__sourcePath;
-    var fullPath = repo+"/"+path;
-    ui.displayMessage(ui.messageElement,'Saving...');
-    ui.saveItem(fullPath,doneSaving);
-  } else {
+  var doneSaving = function () {
+    ui.displayMessage(ui.messageElement,'Done saving...');
+    window.setTimeout(function () {ui.messageElement.$hide()},500);
   }
+  ui.displayMessage(ui.messageElement,'Saving...');
+  ui.saveItem(ui.itemPath,doneSaving);
 }
 
 /* Replacement section */

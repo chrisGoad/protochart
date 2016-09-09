@@ -27,6 +27,7 @@
     */
   ui.processIncomingItem = function (rs,cb) {
     pj.root = rs;
+    pj.ui.itemSource = loadingItem;
     pj.replaceableSpread = pj.descendantWithProperty(pj.root,'replacements');
     //rs.__sourceRepo = pj.repo;
     //rs.__sourcePath = pj.path;
@@ -119,7 +120,7 @@ ui.setSaved = function (){}; // stub called from ui
     });
   }
     
-
+ var loadingItem = undefined;
   // set some vars in ui. from the query
   
   function processQuery(iq) {
@@ -143,7 +144,8 @@ ui.setSaved = function (){}; // stub called from ui
     if (itm) {
       //var itms = itm.split("|");
       //pj.repo = itms[0];//"http://prototypejungle.org/"+itms[1]+"/"+itms[2];
-      pj.path = itm;//itms[1];//itms.slice(3).join("/");
+      pj.path = itm;//itms[1];//itms.slice(3).join("/")
+      loadingItem = itm;
     } else {
       pj.repo=q.repo;
       pj.path=q.path?pj.stripInitialSlash(q.path):undefined;

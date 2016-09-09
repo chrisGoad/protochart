@@ -1,6 +1,8 @@
 {{boilerplate}}
 <script src="https://www.gstatic.com/firebasejs/3.0.0/firebase.js"></script>
-<script src="https://prototypejungle.org/js/pjdom-0.9.3.js"></script>
+<!-- <script src="https://prototypejungle.org/js/pjdom-0.9.3.js"></script>-->
+<script src="js/pjcore-0.9.3.js"></script>
+<script src="js/pjdom-0.9.3.js"></script>
 <script src="js/pjui-0.9.3.js"></script>
 
 <script>
@@ -26,17 +28,28 @@ var setHandler = function (id,fn) {
 
 
 
+var message;
 var signIn = function  (provider) {
   //auth().signInWithPopup(provider).then(function(result) {
+  debugger;
+  message.innerHTML  = 'test';
+  purl = sessionStorage.getItem('preSigninUrl');
+	dest = purl?purl:"/edit.html";
 	var purl,dest;
 	var au = auth();
  // au.signInWithRedirect(provider).then(function(result) {
   au.signInWithPopup(provider).then(function(result) {
-			purl = sessionStorage.getItem('preSigninUrl');
-			dest = purl?purl:"/edit.html";
-			location.href = dest;
+      debugger;
+	   location.href = dest;
   }).catch(function(error) {
-     alert('did not signe in');
+    debugger;
+    console.log('error signing in ',error);
+    message.innerHTML = 'Sign in failed: '+error.message;
+
+    //debugger;
+    //au.fetchProvidersForEmail('cagoad@gmail.com').then(function (val) {
+    //  debugger;
+  //  });
   });
 }
 function twitter_sign_in() {
@@ -56,12 +69,15 @@ function facebook_sign_in() {
 
 ready(function () {
 	debugger;
+  message = document.getElementById('message');
+  message.innerHTML = 'ZUB';
+
 	setHandler('google',google_sign_in);
 	setHandler('twitter',twitter_sign_in);
 	setHandler('facebook',facebook_sign_in);
 	pj.ui.setCurrentUser(function () {
 		if (pj.ui.currentUser) {
-      alert('you are already signed in');
+      message.innerHTML = 'You are signed in';
     }
 	})
 });
@@ -82,5 +98,7 @@ ready(function () {
 <img  src="/images/sign_in_github.svg"> <!--from https://www.gstatic.com/mobilesdk/160512_mobilesdk/auth_service_github.svg-->
 
 <img src="https://www.gstatic.com/mobilesdk/160409_mobilesdk/images/auth_service_github.svg"/>
+
+<div id="message" style="padding-top:20px">/div>
 
 {{endplate}}

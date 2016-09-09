@@ -783,7 +783,7 @@ svg.Root.fitContents = function (fitFactor,dontDraw) {
   }
   ff = fitFactor?fitFactor:this.contents.fitFactor;
   if (!ff) {
-    ff = this.fitFactor;
+    ff = svg.fitFactor;
   }
   fitAdjust = this.contents.fitAdjust;
   cxf = cn.transform;

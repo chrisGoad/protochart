@@ -188,6 +188,7 @@ item.update = function () {
     this.labelText.center();
   } else {
     this.labelText.__hide();
+    ui.hide(this,['labelText','label','labelSep']);
   }
 }
 

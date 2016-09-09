@@ -1,0 +1,11 @@
+<svg id="svg" baseProfile="full" xmlns="http://www.w3.org/2000/svg" version="1.1" style = "background:white" viewBox="0 0 400 320">
+<g id="outerG" transform = "translate(200 160)scale(2.5)">
+<circle id="circle1" r="10" visibility="inherit" stroke="black" fill="rgb(39, 49, 151)" stroke-width="2" transform="translate(-50 0)scale(1)"></circle><circle id="circle2" r="10" visibility="inherit" stroke="black" fill="rgb(39, 49, 151)" stroke-width="2" transform="translate(50 0)scale(1)"></circle><g>
+<path id="shaft" visibility="inherit" stroke="orange" fill="none" stroke-opacity="1" stroke-width="3" d="M -36.8926317715553 7.257861035082811 A 90 90 1 0 0 36.89263177155533 7.257861035082783"></path><line id="head0" x1="36.89263177155533" y1="7.257861035082783" x2="24.812428886100516" y2="16.80130146993101" stroke-linecap="round" visibility="inherit" stroke="orange" stroke-width="3"></line><line id="head1" x1="36.89263177155533" y1="7.257861035082783" x2="20.71324757814992" y2="7.680078273201939" stroke-linecap="round" visibility="inherit" stroke="orange" stroke-width="3"></line>
+</g>
+<g>
+<path id="shaft" visibility="inherit" stroke="orange" fill="none" stroke-opacity="1" stroke-width="3" d="M 36.89263177155533 -7.257861035082797 A 90 90 1 0 0 -36.8926317715553 -7.257861035082811"></path><line id="head0" x1="-36.8926317715553" y1="-7.257861035082811" x2="-24.812428886100484" y2="-16.801301469931023" stroke-linecap="round" visibility="inherit" stroke="orange" stroke-width="3"></line><line id="head1" x1="-36.8926317715553" y1="-7.257861035082811" x2="-20.713247578149897" y2="-7.680078273201953" stroke-linecap="round" visibility="inherit" stroke="orange" stroke-width="3"></line>
+</g>
+
+</g>
+</svg>

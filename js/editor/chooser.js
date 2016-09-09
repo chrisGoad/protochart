@@ -387,7 +387,11 @@ function popItems() {
   if ((mode=="saveAs") || (mode=="saveAsSvg") || (mode === "dataSource")) {
     deleteB.$hide();
     fileNameSpan.$show();
-    fileNameExt.$show();
+    if (mode === 'saveAsSvg') {
+      fileNameExt.$show();
+    } else {
+      fileNameExt.$hide();
+    }
     if (mode === "dataSource") {
       fileNameSpan.$html('Or specify data source here (any url):')
     }

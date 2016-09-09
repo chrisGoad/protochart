@@ -32,7 +32,7 @@ var ui_files = ["svg_serialize","ajax","constants","firebase","ui","browser",
   
 ui_files = ui_files.map(function (f) { return "ui/"+f;});
 
-var chooser_files = ["ui/html","ui/ajax","ui/ui","ui/constants","editor/chooser"];
+var chooser_files = ["ui/ajax","ui/ui","ui/constants","editor/chooser"];
 
 var view_files = ["ui/poster","ui/constants","ui/min_ui","ui/view"];
 

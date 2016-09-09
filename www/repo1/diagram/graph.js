@@ -5,6 +5,7 @@ item.scaling = 1; // scaling between positions of vertices and image placement o
 item.set("circleP",circlePP.instantiate());
 item.set('arrowP',arrowPP.instantiate());
 item.arrowP.labelSep = 10;
+item.arrowP.label = 'label';
 item.arrowP.__hide();
 //item.arrowP.labelText.__hide();
 item.circleP.__adjustable = true;

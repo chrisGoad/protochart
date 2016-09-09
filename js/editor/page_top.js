@@ -72,7 +72,6 @@ ui.signOut = function () {
     auth.signOut().then(function () {
       ui.currentUser = undefined;
       ui.setSignInOutButtons();
-      alert('signnout')
     })
   }
 }
