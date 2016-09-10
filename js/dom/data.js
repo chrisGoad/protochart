@@ -782,6 +782,8 @@ dat.findDataSource = function (iroot) {
 }
   
   
+pj.data = pj.returnData;
+
   
 //end extract   
   

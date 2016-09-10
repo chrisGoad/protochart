@@ -87,7 +87,7 @@ itemsBrowser.addChildren([
   bottomDiv = html.Element.mk('<div style="padding-top:10px;width:100%"/>').addChildren([
     html.Element.mk('<div/>').addChildren([
       fileNameLine = fileNameSpan = html.Element.mk('<span>Filename: </span>'),
-      fileName = html.Element.mk('<input type="input" style="font:8pt arial;background-color:#e7e7ee,width:30%;margin-left:10px"/>'),
+      fileName = html.Element.mk('<input type="input" style="font:8pt arial;background-color:#e7e7ee,width:60%;margin-left:10px"/>'),
       fileNameExt = html.Element.mk('<span>.svg</span>'),
       openB =  html.Element.mk('<span class="button" style="float:right">New Folder</span>'),
       deleteB =  html.Element.mk('<span class="button" style="float:right">Delete</span>')
@@ -370,7 +370,6 @@ var keys;
 function popItems() { 
   debugger;
   keys = parent.pj.ui.chooserKeys;  // the file tree
-  itemsMode = parent.pj.ui.chooserMode;
   mode = itemsMode;
   //disableButton(deleteB);
   aspectRatioLine.$hide();
@@ -662,12 +661,16 @@ ui.genMainPage = function (options) {
       setError({text:"The name contain characters only digits and letters",div1:false});  
     }
   });
-  fileName.addEventListener("keyup",function (e) {
-    nameChecker(fileName,e);
-  });
-
+  debugger;
+  itemsMode = parent.pj.ui.chooserMode;
+  fileName.removeEventListener("keyup");
+  if (itemsMode !== 'dataSource') {
+    fileName.addEventListener("keyup",function (e) {
+      nameChecker(fileName,e);
+    });
+  }
   forDraw = options.fordraw;
-  popItems(options.item,options.mode,options.codeBuilt);
+  popItems();//options.item,options.mode,options.codeBuilt);
 }
 
 //end extract

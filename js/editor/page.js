@@ -239,7 +239,7 @@ ui.layout = function(noDraw) { // in the initialization phase, it is not yet tim
 
 /*update the current item from data */
 
-ui.updateFromData =function (dataString,url,cb) {
+ui.updateFromData =function (idata,url,cb) {
   debugger;
   var data;
   var ds = dat.findDataSource();
@@ -247,12 +247,16 @@ ui.updateFromData =function (dataString,url,cb) {
     return;
   }
   var dataContainer = ds[0];
-  try {
-    data = JSON.parse(dataString);
-  } catch (e) {
-    debugger;
-    ui.editError.$html(e.message);
-    return;
+  if (typeof idata === 'string') {
+    try {
+      data = JSON.parse(idata);
+    } catch (e) {
+      debugger;
+      ui.editError.$html(e.message);
+      return;
+    }
+  } else {
+    data = idata;
   }
   ui.editError.$html('');
   var dt = pj.lift(data);
@@ -338,20 +342,27 @@ var wordWrap = function (str,maxLength) {
 
 
 
-ui.viewData  = function (idataString) {
+ui.viewData  = function (idata) {
   var dataString;
-  if (idataString) {
-    ui.dataString = idataString;
-    dataString = idataString;
-  } else {
+  var isString = typeof idata === 'string';
+  if (isString) {
+    ui.dataString = idata;
+    dataString = idata;
+  } else if (idata === undefined) {
     dataString = ui.dataString;
   }
+  isString = typeof dataString === 'string';
   if (!ui.editMode) {
     ui.editMode = true;
     ui.replaceMode = false;
     ui.layout();
   }
+  debugger;
   ui.editDivContainsData = true;
+  if (!isString) {
+    ui.editDiv.$html('');
+    return;
+  }
   var wwd  = uiWidth;//$(window).width();
   debugger;
   var maxLength = Math.floor((wwd/622)*84);
@@ -359,20 +370,21 @@ ui.viewData  = function (idataString) {
   ui.editDiv.$html(htmlString);
 }
 
-ui.viewAndUpdateFromData =  function (dataString,url,cb) {
-  ui.viewData(dataString);
-  ui.updateFromData(dataString,url,cb);
+ui.viewAndUpdateFromData =  function (data,url,cb) {
+  ui.viewData(data);
+  ui.updateFromData(data,url,cb);
 }
 
 ui.getDataJSONP = function (url,initialUrl,cb,dontUpdate) {
-  pj.returnData = function (dataString) {
+  debugger;
+  pj.data = function (data) {
       if (dontUpdate) {
-         ui.viewData(rs,url);
+         ui.viewData(data,url);
         if (cb) {
           cb();
         }
       } else {
-        ui.viewAndUpdateFromData(dataString,initialUrl,cb);
+        ui.viewAndUpdateFromData(data,initialUrl,cb);
       }
     }
   pj.loadScript(url);
@@ -967,7 +979,7 @@ ui.resaveItem = function () {
   debugger;
   var doneSaving = function () {
     ui.displayMessage(ui.messageElement,'Done saving...');
-    window.setTimeout(function () {ui.messageElement.$hide()},500);
+    window.setTimeout(function () {ui.messageElement.$hide()},1500);
   }
   ui.displayMessage(ui.messageElement,'Saving...');
   ui.saveItem(ui.itemPath,doneSaving);
