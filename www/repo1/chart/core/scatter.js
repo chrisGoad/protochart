@@ -20,6 +20,7 @@ item.circleP.__draggable = false;
 item.circleP.dimension = 20;
 item.circleP.update();
 item.circleP.__hide();
+
 item.set('marks',pj.Spread.mk(item.circleP));
 
 
@@ -75,6 +76,7 @@ item.marks.binder = function (circle,data,indexInSeries,lengthOfDataSeries) {
   var item = this.__parent,
     categoryCount,group,x,y;
   var numD = item.numericalDomain;
+  circle.__editPanelName = 'This mark';
   circle.data = datum;
   categoryCount = item.categoryCount;
   group = Math.floor(indexInSeries/categoryCount);// which group of data, grouping by domain
@@ -91,6 +93,28 @@ item.marks.binder = function (circle,data,indexInSeries,lengthOfDataSeries) {
 }
 
 
+// propagate changes in colors to the bars over to the legend
+
+item.listenForUIchange = function (ev) {
+  if (ev.id === "UIchange") {
+    if (ev.property === 'fill') {
+      var nd = ev.node;
+      var pr = nd.parent(); 
+      if (pr.name() === 'categorizedPrototypes') {
+        var lga = pj.ancestorWithProperty(pr,'legend')
+        if (lga) {
+          lga.legend.setColorOfCategory(nd.name(),nd.fill,true);
+        }
+      }
+     // return;
+    }
+    this.update();
+    this.__draw();
+    pj.tree.refresh();
+  }
+}
+
+/*
 item.listenForUIchange = function (ev) {
   if (ev.id === "UIchange") {
     this.update();
@@ -98,7 +122,7 @@ item.listenForUIchange = function (ev) {
     pj.tree.refresh();
   }
 }
-
+*/
 item.addListener("UIchange","listenForUIchange");
 
 item.update = function () {
@@ -107,6 +131,7 @@ item.update = function () {
     //horizontal = this.orientation === 'horizontal',
     categories,cnt,max;
   if (!this.data) return;
+  this.circleP.__editPanelName = 'Prototype for all marks';
   this.numericalDomain = this.data.numericalDomain();
 
    this.rangeMax = this.data.max('range');
@@ -115,7 +140,7 @@ item.update = function () {
   var domainValues = this.data.extractDomainValues();
   //color_utils.initColors(this);
   if (this.data.categories) {
-    this.categoryCount = this.data.categories.length;
+     this.categoryCount = this.data.categories.length;
   }
   var numD = this.numericalDomain;
   if (!numD) {
@@ -133,6 +158,16 @@ item.update = function () {
   this.marks.scale = 1;
   this.marks.setData(this.data,true);
   color_utils.initColors(this);
+  if (this.data.categories) {
+    // so the legend colors can be updated
+    // repeated since categorizedPrototypes might not have been around the first time
+    color_utils.initColors(this);
+     debugger;
+    var categorizedPrototypes = this.marks.categorizedPrototypes;
+    this.data.categories.forEach(function (category) {
+       categorizedPrototypes[category].__editPanelName = 'Marks for '+category;
+    });
+  }
 }
 
 // document the meaning of fields

@@ -260,8 +260,8 @@ ui.updateFromData =function (idata,url,cb) {
   }
   ui.editError.$html('');
   var dt = pj.lift(data);
-  dt.__sourceRelto = undefined;
-  dt.__sourcePath = url;
+  //dt.__sourceRelto = undefined;
+  dt.__sourceUrl = url;
   dt.__requireDepth = 1; // so that it gets counted as a require on externalize
   dataContainer.__idata = undefined;
   try {
@@ -966,12 +966,6 @@ ui.saveItem = function (path,cb,aspectRatio) { // aspectRatio is only relevant f
     location.href = loc;
 
   },aspectRatio);
-}
-
-ui.canbeResaved = function (itm) {
-   var path = itm.__sourcePath;
-   var repo = itm.__sourceRepo;
-   return path && !(pj.endsIn(path,'.js')) &&  ui.stripPrototypeJungleDomain(repo);
 }
 
 

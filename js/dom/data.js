@@ -696,7 +696,7 @@ pj.Object.setData = function (xdt,doUpdate) {
   //var isArray = Array.isArray(xdt);
   var isNode = pj.isNode(xdt);
   var fromExternal,dt,lifted;
-  fromExternal = pj.getval(xdt,'__sourcePath');
+  fromExternal = pj.getval(xdt,'__sourceUrl');
   if (!isNode) {
     lifted = pj.lift(xdt);
     // need an Object.create here so that we get a reference on externalization
@@ -754,8 +754,13 @@ pj.Object.__dataSource = function () {
   var dat = this.__get('data');
   if (dat) {
     while (dat && dat.__get) {
-      if (dat.__get('__sourcePath')) {
-        return pj.fullUrl(dat.__get('__sourceRelto'),dat.__get('__sourcePath'));
+      //if (dat.__get('__sourcePath')) {
+      //  return pj.fullUrl(dat.__get('__sourceRelto'),dat.__get('__sourcePath'));
+        //return dat.__get('__sourceRepo') + "|" + dat.__sourcePath;
+     // }
+      var url = dat.__get('__sourceUrl');
+      if (url) {
+        return url;
         //return dat.__get('__sourceRepo') + "|" + dat.__sourcePath;
       }
       dat = Object.getPrototypeOf(dat);

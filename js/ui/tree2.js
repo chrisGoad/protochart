@@ -819,14 +819,16 @@ tree.showItem = function (itm,mode,noSelect,noName) {
     tree.adjustingCheckboxes = [];
     addAdjustSelector(subdiv,itm);
   }
-  if (itm.__mark && (itm.__parent.__name === 'modifications')) {
+  if (itm.__mark && (itm.__parent.__name === 'modifications')) { 
     var revertBut = subdiv.addChild(html.Element.mk('<div class="roundButton">revert to prototype </div>'));
     revertBut.addEventListener("click",function () {
       var spread = itm.__parent.__parent;
+      debugger;
       spread.unmodify(itm);
       //itm.__revertToPrototype(propertiesNotToRevert);
-      itm.__update();
-      itm.__draw();
+      debugger;
+      spread.__update();
+      spread.__draw();
       pj.tree.refresh();
       ui.nowAdjusting = false;
       ui.clearControl();

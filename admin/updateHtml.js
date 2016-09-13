@@ -21,14 +21,14 @@ var boilerplate =
 <meta name="description" content="An open platform for making charts and diagrams, based on deep prototypes">
 <title>ProtoChart</title>
 <link rel="stylesheet" type="text/css"  href="/style.css">
-<link rel="icon" href="/images/favicon2.png" />
+<link rel="icon" href="/images/favicon.png" />
 </head>
 <body style="background-color:white">
 <div id="outerContainer">  
   <div id="topbar"> 
      <div id="topbarOuter" style="padding-bottom:30px">`+
         (index?'\n':'<a href="/"><span style="position:relative;top:-30px" class="mainTitle">ProtoChart</span></a>\n')+
-`        <img style ="position:relative;top:-8px;border:none;left:-0px;" alt="images/logo_alt.html" src="/images/logo5.svg"  width="120" height="60"/>
+`        <img style ="position:relative;top:-8px;border:none;left:-0px;" alt="images/logo_alt.html" src="/images/logo.svg"  width="120" height="60"/>
         <div id = "topbarInner" style="position:relative;float:right;top:12px">` +
            (comingSoon?'':'<a href="/edit.html?source=/repo1/startchart/column.js&intro=1" class="ubutton">Intro</a>\n')+ 
 `           <a href="/doc/choosedoc.html" class="ubutton">Docs</a> 
@@ -110,7 +110,7 @@ if (index) {
     addHtml(['index.html','indexd.html']);
 } else {
     addHtml(['svg.html','viewtext.html','sign_in.html']);
-    addHtmlDocs(fts,["intro","code","about","choosedoc"]);    
+    addHtmlDocs(fts,["intro","code","about","choosedoc","inherit"]);    
     //addSvgDocs(fts,['prototree']);
     //addSvgDocs(fts,["figure1","figure2","prototree","instantiate1","instantiate2","figure_serialize1","logo"]);  
   // fts.push({source:"style.css",ctype:"text/css"});
