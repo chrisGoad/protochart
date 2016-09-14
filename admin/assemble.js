@@ -23,6 +23,7 @@ var minify = require('minify');
 var zlib = require('zlib');    
 
 var dom_files = ["spread","geom","data","dom1","jxon","svg","html","uistub","domstringify"];
+var dom_files = ["spread","geom","data","dom1","jxon","svg","html","uistub","domstringify"];
 //var dom_files = ["geom","dom1","jxon","svg","uistub","domstringify"];
 dom_files = dom_files.map(function (f) { return "dom/"+f;});
 

@@ -9,7 +9,12 @@ var ui = pj.set("ui",Object.create(pj.Object));
 ui.setNote = function () {}
 ui.watch = function () {}
 ui.freeze = function (){}
+ui.freezeExcept = function (){}
 ui.hide = function () {}
+ui.hideExcept = function () {}
+ui.hideInstance = function () {}
+ui.hideInInstance = function () {}
+pj.Object.__setFieldType = function () {}
 
 //end extract
 

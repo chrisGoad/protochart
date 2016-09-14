@@ -4,23 +4,26 @@
 <title>Standalone example for PrototypeJungle</title>
 <body>
 <script src="http://prototypejungle.org/js/pjcore-0.9.3.js"></script>
-<script src="https://protochart.org/js/pjdom-0.9.3.js"></script>
+<!-- <script src="https://protochart.org/js/pjdom-0.9.3.js"></script>-->
+<script src="/js/pjdom-0.9.3.js"></script>
 
 <script>
 /*
-http://127.0.0.1:3000/repo1/example/standalone.html
+http://127.0.0.1:3000/repo1/example/load_data.html
 */
   
 document.addEventListener('DOMContentLoaded',function () {
   debugger;
   //pj.require('https://prototypejungle.org/repo1/shape/arc_arrow.js',function (errorMessage,arrowPP) {
   //pj.require('https://prototypejungle.org/repo1/example/simple_diagram.js',function (errorMessage,item) {
-  pj.require('/repo1/example/simple_diagram.js',function (errorMessage,item) {
+  pj.require('/repo1/chart/bar.js','[TcYg4ep5s5TrvfxG5CWr11vjZZu1]/data/metal_densities.json',function (erm,graphP,data) {
+
+ // pj.require('/repo1/example/simple_diagram.js',function (errorMessage,item) {
     debugger;
     var root = pj.svg.Root.mk(document.getElementById("svgDiv"));
     //var root = pj.svg.Element.mk('<g/>');// the root of the diagram we are assembling
     root.set("contents", item);
-    pj.updateParts(root);
+    item.graph.setData(data);
     root.fitContents();
   });
 });

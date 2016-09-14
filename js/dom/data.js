@@ -786,7 +786,19 @@ dat.findDataSource = function (iroot) {
   return rs;
 }
   
+
+pj.getDataJSONP = function (url,cb) {
   
+ui.getDataJSONP = function (url,cb) {
+  debugger;
+  pj.data = function (data) {
+    if (cb) {
+      cb(data);
+    }
+  }
+  pj.loadScript(url);
+}
+}
 pj.data = pj.returnData;
 
   
