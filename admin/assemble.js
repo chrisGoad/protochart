@@ -23,11 +23,12 @@ var minify = require('minify');
 var zlib = require('zlib');    
 
 var dom_files = ["spread","geom","data","dom1","jxon","svg","html","uistub","domstringify"];
-var dom_files = ["spread","geom","data","dom1","jxon","svg","html","uistub","domstringify"];
+var dom_files = ["spread","geom","data","dom1","jxon","svg","html","uistub","domstringify","firebase"];
 //var dom_files = ["geom","dom1","jxon","svg","uistub","domstringify"];
 dom_files = dom_files.map(function (f) { return "dom/"+f;});
 
-var ui_files = ["svg_serialize","ajax","constants","firebase","ui","browser",
+//var ui_files = ["svg_serialize","ajax","constants","firebase","ui","browser",
+var ui_files = ["svg_serialize","ajax","constants","ui","browser",
                 //"page",
                 "save","dom2","controls","svgx","tree1","tree2","lightbox"];
   
@@ -142,7 +143,7 @@ function mk_pjdom(cb) {
 
 function mk_pjui(cb) { 
   var fls = ui_files;
-  var rs = "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
+  var rs = "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,fb=pj.fb,ui=pj.ui;\n"+
  // var rs = "(function (pj) {\n\nvar om=pj.om,geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
             '"use strict"\n'+
              mextract(fls) + "\n})(prototypeJungle);\n"
@@ -245,7 +246,7 @@ function mk_insert(cb) {
 }
 function mk_pjeditor(cb) { 
   var fls = editor_files;
-  var rs = "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;tree=pj.tree;lightbox=pj.lightbox;\n"+
+  var rs = "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui, fb=pj.fb,tree=pj.tree,lightbox=pj.lightbox;\n"+
  // var rs = "(function (pj) {\n\nvar om=pj.om,geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
             '"use strict"\n'+
              mextract(fls,1) + "\n})(prototypeJungle);\n"

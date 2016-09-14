@@ -119,7 +119,7 @@ fb.userRef = function () {
 
 //  .'s are replaced by %2E in the store; this puts the dots back in
 var putInDots  = function (src) {
-  for (k in src) {
+  for (var k in src) {
     var v = src[k];
     if (typeof v === 'object') {
       var child = src[k];

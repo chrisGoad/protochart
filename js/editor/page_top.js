@@ -15,7 +15,7 @@ var fileBut,signInButton,signOutButton;
 
 
 var setSignInOutButtons1 = function () { 
-  if (ui.currentUser) {
+  if (fb.currentUser) {
     signInButton.style.display = "none";
     signOutButton.style.display = "inline";
   } else {
@@ -26,16 +26,16 @@ var setSignInOutButtons1 = function () {
 
 
 ui.setSignInOutButtons = function () {
-  ui.setCurrentUser(setSignInOutButtons1);
+  fb.setCurrentUser(setSignInOutButtons1);
   return;
-  if (!ui.currentUser) {
+  if (!fb.currentUser) {
     var  auth = firebase.auth();
-    ui.currentUser = auth.currentUser;
-    if (!ui.currentUser) {
+    fb.currentUser = auth.currentUser;
+    if (!fb.currentUser) {
       debugger;
       auth.onAuthStateChanged(function(user) {
         debugger;
-        ui.currentUser = user;
+        fb.currentUser = user;
         setSignInOutButtons1();
       });
       return;
@@ -47,7 +47,7 @@ ui.setSignInOutButtons = function () {
 
 ui.signIn = function  () {
   debugger;
-  if (ui.currentUser) {
+  if (fb.currentUser) {
     ui.setSignInOutButtons();
     return;
   }
@@ -59,7 +59,7 @@ ui.signIn = function  () {
   //auth().signInWithPopup(provider).then(function(result) {
   auth().signInWithRedirect(provider).then(function(result) {
     debugger;
-    ui.currentUser = result.user;
+    fb.currentUser = result.user;
     ui.setSignInOutButtons();
   }).catch(function(error) {
   console.log('error');
@@ -67,10 +67,10 @@ ui.signIn = function  () {
 }
 
 ui.signOut = function () {
-  if (ui.currentUser) {
+  if (fb.currentUser) {
     var auth = firebase.auth();
     auth.signOut().then(function () {
-      ui.currentUser = undefined;
+      fb.currentUser = undefined;
       ui.setSignInOutButtons();
     })
   }

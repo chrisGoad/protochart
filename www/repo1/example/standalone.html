@@ -10,20 +10,32 @@
 /*
 http://127.0.0.1:3000/repo1/example/standalone.html
 */
+
+pj.viewItem = function (url) {
+  document.addEventListener('DOMContentLoaded',function () {
+    debugger;
+    pj.require(url,function (errorMessage,item) {
+      debugger;
+      var root = pj.svg.Root.mk(document.getElementById("svgDiv"));
+    //var root = pj.svg.Element.mk('<g/>');// the root of the diagram we are assembling
+      root.set("contents", item);
+      pj.updateParts(root);
+      root.fitContents();
+  });
+});
   
-document.addEventListener('DOMContentLoaded',function () {
+
+/*document.addEventListener('DOMContentLoaded',function () {
   debugger;
-  //pj.require('https://prototypejungle.org/repo1/shape/arc_arrow.js',function (errorMessage,arrowPP) {
-  //pj.require('https://prototypejungle.org/repo1/example/simple_diagram.js',function (errorMessage,item) {
   pj.require('/repo1/example/simple_diagram.js',function (errorMessage,item) {
     debugger;
     var root = pj.svg.Root.mk(document.getElementById("svgDiv"));
-    //var root = pj.svg.Element.mk('<g/>');// the root of the diagram we are assembling
     root.set("contents", item);
     pj.updateParts(root);
     root.fitContents();
   });
 });
+*/
 </script>
 <div id="svgDiv" style="width:400px;height:200px;border:solid thin black"></div>
 </body>

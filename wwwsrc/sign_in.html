@@ -7,7 +7,7 @@
 
 <script>
 	debugger;
-pj.ui.initFirebase();
+pj.fb.initFirebase();
 var auth = firebase.auth;
 
 
@@ -75,8 +75,8 @@ ready(function () {
 	setHandler('google',google_sign_in);
 	setHandler('twitter',twitter_sign_in);
 	setHandler('facebook',facebook_sign_in);
-	pj.ui.setCurrentUser(function () {
-		if (pj.ui.currentUser) {
+	pj.fb.setCurrentUser(function () {
+		if (pj.fb.currentUser) {
       message.innerHTML = 'You are signed in';
     }
 	})

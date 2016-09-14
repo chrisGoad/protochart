@@ -448,7 +448,7 @@ setPathLine = function (nd) {
   pathLine.$empty();
   var first = false;
   if (1 || (itemsMode === "open")) {
-    var uid = parent.pj.ui.currentUser.uid;
+    var uid = parent.pj.fb.currentUser.uid;
     pth.unshift('['+uid+']');//pj.itemHost);
     first = true;
   }

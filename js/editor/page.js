@@ -420,7 +420,7 @@ ui.uploadBut.$click(function () {
 });
   
 ui.changeDataSourceBut.$click(function () {
-   ui.getDirectory(function (list) {
+   fb.getDirectory(function (list) {
      ui.popChooser(list,'dataSource');
   });
 })
@@ -472,8 +472,8 @@ ui.loadAndViewData = function (path) {
     if ((ext === 'js') || (ext === 'json')) {
       if (pj.beginsWith(path,'/')) {
          var rpath = path.replace('.',pj.dotCode);
-         var uid = ui.currentUser.uid;
-         var url = ui.firebaseHome+'/'+uid+'/directory'+rpath+'.json';
+         var uid = fb.currentUser.uid;
+         var url = fb.firebaseHome+'/'+uid+'/directory'+rpath+'.json';
          var displayUrl = '['+uid+']'+path;
        } else {
          pj.error('CASE NOT HANDLED YET');
@@ -528,7 +528,7 @@ ui.chooserReturn = function (v) {
        });
        return;
      }
-     var storeRefString = ui.storeRefString();
+     var storeRefString = fb.storeRefString();
       var url = '/' + storeRefString +  v.path;
       var page = 'edit.html';//pj.devVersion?'editd.html':'edit.html';
       var dst = '/'+page+'?'+(pj.endsIn(url,'.js')?'source=':'item=')+url;
@@ -611,7 +611,7 @@ ui.ownedItemPath = function (itemSource) {
   if (!itemSource) {
     return undefined;
   }
-  var uid = ui.currentUser.uid;
+  var uid = fb.currentUser.uid;
   var secondSlash = itemSource.indexOf('/',1);
   var owner = itemSource.substring(1,secondSlash);
   if (uid !== owner) {
@@ -627,7 +627,7 @@ ui.setFselDisabled = function () {
       fsel.disabled = {};
    }
    var disabled = fsel.disabled;
-   disabled.new = disabled.insertOwn = disabled.save = disabled.saveAs = disabled.saveAsSvg  = !ui.currentUser;
+   disabled.new = disabled.insertOwn = disabled.save = disabled.saveAs = disabled.saveAsSvg  = !fb.currentUser;
    if (!ui.itemSource) {
      disabled.save = true;
     //code
@@ -660,7 +660,7 @@ ui.completeInsert = function (svgPoint) {
   ui.insertItem(ui.nowInserting.url,ui.nowInserting.name,svgPoint);
 }
 var listAndPop = function (opt) {
-  ui.getDirectory(function (list) {
+  fb.getDirectory(function (list) {
     ui.popChooser(list,opt);
   });
 }
@@ -745,7 +745,7 @@ fsel.onSelect = function (n) {
     case "saveAs":
     case "saveAsSvg":
     case "viewSource":
-      ui.getDirectory(function (list) {
+      fb.getDirectory(function (list) {
         debugger;
         ui.popChooser(list,opt);
       });

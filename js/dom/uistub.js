@@ -11,6 +11,7 @@ ui.watch = function () {}
 ui.freeze = function (){}
 ui.freezeExcept = function (){}
 ui.hide = function () {}
+ui.show = function () {}
 ui.hideExcept = function () {}
 ui.hideInstance = function () {}
 ui.hideInInstance = function () {}

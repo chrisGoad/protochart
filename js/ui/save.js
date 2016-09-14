@@ -62,18 +62,18 @@ pj.saveString = function (path,str,cb) {
   //var nm = svg?pj.beforeLastChar(fnm,'.'):fnm;
   var nm = fnm.replace('.',pj.dotCode);
   //var directoryRef = pj.useS?ui.directoryRef().child('s'):ui.directoryRef();
-  var storeRefString = ui.storeRefString();
+  var storeRefString = fb.storeRefString();
   var fullPath = storeRefString + path;//path.replace('.',pj.dotCode);
   if (svg || json) {
-    var storageRef = ui.storageRef.child(ui.storageRefString()+'/'+path);
+    var storageRef = fb.storageRef.child(fb.storageRefString()+'/'+path);
   } else {
-    var store = ui.rootRef.child(storeRefString+(dir?dir:''));
+    var store = fb.rootRef.child(storeRefString+(dir?dir:''));
     //var store = dir?storeRef.child(dir):storeRef;
     var upd = {};
     upd[nm] = str;
   }
  
-  var directory = ui.rootRef.child(ui.directoryRefString()+(dir?dir:''));//dir?directoryRef.child(dir):directoryRef;
+  var directory = fb.rootRef.child(fb.directoryRefString()+(dir?dir:''));//dir?directoryRef.child(dir):directoryRef;
   var updd = {};
   updd[nm] = 1;
   var updateDirectory = function (rs) {
@@ -83,7 +83,7 @@ pj.saveString = function (path,str,cb) {
   }
   if (svg || json) {
     var blob = new Blob([str]);
-    var uploadTask = storageRef.put(blob, svg?ui.svgMetadata:ui.jsonMetadata);
+    var uploadTask = storageRef.put(blob, svg?fb.svgMetadata:fb.jsonMetadata);
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,null,null,function() {
       var url = updd[nm] = ui.removeToken(uploadTask.snapshot.downloadURL);
       updateDirectory(url);

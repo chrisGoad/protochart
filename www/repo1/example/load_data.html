@@ -16,14 +16,17 @@ document.addEventListener('DOMContentLoaded',function () {
   debugger;
   //pj.require('https://prototypejungle.org/repo1/shape/arc_arrow.js',function (errorMessage,arrowPP) {
   //pj.require('https://prototypejungle.org/repo1/example/simple_diagram.js',function (errorMessage,item) {
-  pj.require('/repo1/chart/bar.js','[TcYg4ep5s5TrvfxG5CWr11vjZZu1]/data/metal_densities.json',function (erm,graphP,data) {
+  pj.require('/repo1/startchart/bar.js','[TcYg4ep5s5TrvfxG5CWr11vjZZu1]/data/metal_densities.json',function (erm,item,data) {
 
  // pj.require('/repo1/example/simple_diagram.js',function (errorMessage,item) {
     debugger;
     var root = pj.svg.Root.mk(document.getElementById("svgDiv"));
     //var root = pj.svg.Element.mk('<g/>');// the root of the diagram we are assembling
     root.set("contents", item);
+   // item.graph.update();
+   debugger;
     item.graph.setData(data);
+    
     root.fitContents();
   });
 });
