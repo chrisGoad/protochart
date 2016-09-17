@@ -18,7 +18,8 @@
 <script>
 (function () {
 var ui = pj.ui;
-pj.ui.initFirebase();
+var fb = pj.fb;
+fb.initFirebase();
 debugger;
 
 var storageRef,filenameInput,selectedFile,message,errorMessage,path,downloadURL;
@@ -28,7 +29,7 @@ var selectFile = function () {
   errorMessage.text('')
 
   //var selectedFile = document.getElementById('input').files[0];
-  if (!ui.currentUser) {
+  if (!fb.currentUser) {
     return;
   }
   selectedFile = $('#input')[0].files[0];
@@ -54,7 +55,7 @@ var doUpload = function () {
   var ename = name.replace('.',pj.dotCode);
   //var dotPath = '/data/'+ename;
   path = '/data/'+name;
-  var storageRef = ui.storageRef.child(ui.storageRefString()+path);
+  var storageRef = fb.storageRef.child(fb.storageRefString()+path);
   var uploadTask = storageRef.put(selectedFile);//, metadata);
   uploadTask.on('state_changed', function(snapshot){
       console.log('Bytes transferred',snapshot.bytesTransferred);
@@ -76,7 +77,7 @@ var doUpload = function () {
        return;
      }
      downloadURL = ui.removeToken(uploadTask.snapshot.downloadURL);
-     ui.addToDirectory('/data',ename,downloadURL,function () {
+     fb.addToDirectory('/data',ename,downloadURL,function () {
       message.text('The upload to /data/'+name+' is complete');
       $('#install').show();
       afterUpload();
@@ -88,8 +89,8 @@ var doUpload = function () {
 $('document').ready(function () {
   errorMessage= $('#errorMessage');
   message = $('#message');
-  ui.setCurrentUser(function () {
-    if (!ui.currentUser) {
+  fb.setCurrentUser(function () {
+    if (!fb.currentUser) {
       errorMessage.text('You are not logged in');
     }
   });

@@ -467,9 +467,14 @@ ui.loadAndViewData = function (path) {
   debugger;
   var ext = pj.afterLastChar(path,'.');
   var path0 = path[0];
-  var viaDatabase = path0 === '/';  // url has the form [uid]path .. that is, it is a reference via the user's database, which in turn points to storage
+  
+  //var viaDatabase = path0 === '/';  // url has the form [uid]path .. that is, it is a reference via the user's database, which in turn points to storage
+  var viaDatabase = path0 === '[';  // url has the form [uid]path .. that is, it is a reference via the user's database, which in turn points to storage
   if (viaDatabase) {
     if ((ext === 'js') || (ext === 'json')) {
+      var url = pj.indirectUrl(path);
+      var displayUrl = path;
+      /*
       if (pj.beginsWith(path,'/')) {
          var rpath = path.replace('.',pj.dotCode);
          var uid = fb.currentUser.uid;
@@ -478,6 +483,7 @@ ui.loadAndViewData = function (path) {
        } else {
          pj.error('CASE NOT HANDLED YET');
        }
+       */
        pj.httpGet(url,function (erm,rs) {
          var cleanUp = ui.removeToken(JSON.parse(rs));
          ui.getData(cleanUp,displayUrl,function () {
@@ -772,7 +778,6 @@ var toRightOffset = geom.Point.mk(20,10);
 
 var whereToInsert,positionForInsert;
 var afterInsert = function (e,rs) {
-  debugger;
   var irs = rs.instantiate();
   pj.root.set(whereToInsert,irs);
   if (positionForInsert) {
@@ -808,12 +813,10 @@ var afterInsert = function (e,rs) {
 }
   
 ui.insertItem = function (path,where,position,kind,cb) {
-  debugger;
   insertKind = kind;
   positionForInsert = position;
   whereToInsert = where;
   pj.install(path,function (erm,rs) {
-    debugger;
     afterInsert(erm,rs);
     if (cb) {cb()}
   });
@@ -822,7 +825,6 @@ ui.insertItem = function (path,where,position,kind,cb) {
 var installSettings;
 
 var doReplacement = function (e,rs) {
-  debugger;
   var irs = rs.instantiate();
   if (installSettings) {
     irs.set(installSettings);
@@ -837,7 +839,6 @@ ui.replaceItem = function (path,settings) {
 }
 
 var insertOwn = function (v) {
-  debugger;
   ui.insertItem('/'+v.path,v.where);
 }
   
@@ -943,13 +944,11 @@ function mkLink(url) {
 
  
 ui.saveItem = function (path,cb,aspectRatio) { // aspectRatio is only relevant for svg, cb only for non-svg
-  debugger;
   var needRestore = !!cb;
   var savingAs = true;
   var isSvg = pj.endsIn(path,'.svg');
   ui.unselect();
   pj.saveItem(path,pj.root,function (err,path) {
-    debugger;
     // todo deal with failure
     if (err) {
       ui.displayTemporaryError(ui.messageElement,'the save failed, for some reason',5000);

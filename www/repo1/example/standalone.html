@@ -1,41 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Standalone example for PrototypeJungle</title>
+<title>Standalone example for ProtoChart</title>
 <body>
 <script src="http://prototypejungle.org/js/pjcore-0.9.3.js"></script>
+<!--
 <script src="https://protochart.org/js/pjdom-0.9.3.js"></script>
+-->
+<script src="/js/pjdom-0.9.3.js"></script>
 
 <script>
 /*
 http://127.0.0.1:3000/repo1/example/standalone.html
 */
 
-pj.viewItem = function (url) {
-  document.addEventListener('DOMContentLoaded',function () {
-    debugger;
-    pj.require(url,function (errorMessage,item) {
-      debugger;
-      var root = pj.svg.Root.mk(document.getElementById("svgDiv"));
-    //var root = pj.svg.Element.mk('<g/>');// the root of the diagram we are assembling
-      root.set("contents", item);
-      pj.updateParts(root);
-      root.fitContents();
-  });
-});
-  
+pj.viewItem('/repo1/example/simple_diagram.js','svgDiv');
 
-/*document.addEventListener('DOMContentLoaded',function () {
-  debugger;
-  pj.require('/repo1/example/simple_diagram.js',function (errorMessage,item) {
-    debugger;
-    var root = pj.svg.Root.mk(document.getElementById("svgDiv"));
-    root.set("contents", item);
-    pj.updateParts(root);
-    root.fitContents();
-  });
-});
-*/
 </script>
 <div id="svgDiv" style="width:400px;height:200px;border:solid thin black"></div>
 </body>

@@ -16,6 +16,7 @@ ui.hideExcept = function () {}
 ui.hideInstance = function () {}
 ui.hideInInstance = function () {}
 pj.Object.__setFieldType = function () {}
+pj.Object.__setUIStatus = function () {}
 
 //end extract
 

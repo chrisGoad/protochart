@@ -240,7 +240,6 @@ item.update = function () {
   
   /* GENERATE AND ADD THE GRIDLINES */
   gridLines = pj.resetComputedArray(this,'gridLines');
-  debugger;
   if (this.showGridLines) {
     gridLineP = this.gridLineP;
    // gridLineP.__show();

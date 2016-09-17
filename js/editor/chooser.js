@@ -292,7 +292,7 @@ var actOnSelectedItem = function (deleteRequested) {
     setError({text:"No item selected",div1:true});
     return
   }
-  var pth = (fpth?("/"+fpth):"") +"/"+selectedItemName;
+  var pth = currentUid() + (fpth?("/"+fpth):"") +"/"+selectedItemName;
   if (itemsMode === "open"  || itemsMode === "dataSource") {
     if (deleteRequested) {
       afterYes = function () {
@@ -442,14 +442,19 @@ function selectItemLine(iel) {
   selectedItemLine = el; 
 }
 
+var currentUid = function () {
+  return '['+ parent.pj.fb.currentUser.uid+ ']';
+};
+
 setPathLine = function (nd) {
   var pth = nd.__pathOf();
   var pel = pathLine.__element;   
   pathLine.$empty();
   var first = false;
   if (1 || (itemsMode === "open")) {
-    var uid = parent.pj.fb.currentUser.uid;
-    pth.unshift('['+uid+']');//pj.itemHost);
+    //var uid = parent.pj.fb.currentUser.uid;
+    //pth.unshift('['+uid+']');//pj.itemHost);
+    pth.unshift(currentUid());
     first = true;
   }
   var cnd = fileTree;

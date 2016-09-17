@@ -18,6 +18,7 @@ item.width = 100;
 item.height = 100;
 item.fill = 'red';
 item.stroke = 'green';
+item['stroke-width'] = 4;
 item.extentEvent = pj.Event.mk('extentChange');
 
 //item.set('__signature',pj.Signature.mk({points:['geom.Point'],height:'N',fill:'S',stroke:'S','stroke-width':'N'}));

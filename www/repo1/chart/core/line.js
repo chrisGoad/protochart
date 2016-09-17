@@ -17,6 +17,7 @@ item['stroke-width'] = 4;
 item.set('__signature',pj.Signature.mk({'stroke-opacity':'N','stroke-width':'N'}));
 
 item.set('lineP',lineP.instantiate());
+ui.hide(item.lineP,['fill','width']);
 item.lineP.__hide();
 item.set('lines', pj.Spread.mk(item.lineP));
 
@@ -73,13 +74,32 @@ item.planeMap = function (p) {
   
 }
 
+
+
+// propagate changes in colors to the bars over to the legend
+
 item.listenForUIchange = function (ev) {
   if (ev.id === "UIchange") {
+    if (ev.property === 'stroke') {
+      var nd = ev.node;
+      var pr = nd.parent().parent();
+      debugger;
+      if (pr.name() === 'lines') {
+        var ndindex = Number(nd.name().substr(1));
+        var catName = pr.categories[ndindex];
+        var lga = pj.ancestorWithProperty(pr,'legend')
+        if (lga) {
+          lga.legend.setColorOfCategory(catName,nd.stroke,true);
+        }
+      }
+     // return;
+    }
     this.update();
     this.__draw();
     pj.tree.refresh();
   }
 }
+
 
 item.addListener("UIchange","listenForUIchange");
 /*
@@ -129,7 +149,7 @@ item.lines.bind = function () {
     var line = this.selectMark(i);
     var element = elements[i];
     var c = element.category;
-    pj.transferState(line,top);
+    //pj.transferState(line,top);
     var points = element.points.map(function (p) {return top.planeMap(p)});
     line.set('points',pj.Array.mk(points));
     line.update();

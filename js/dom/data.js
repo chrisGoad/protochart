@@ -335,6 +335,72 @@ dat.Series.toNNC = function () {
   rs.elementType = eltype;
   return rs;
 }
+
+
+dat.toCategorized = function (dt) {
+  var rs =  Object.create(dat.Series);
+  var flds,ln,categorize,els,i,domainId,domainType,domainV,cts,ct,nels,fld0,fld1,fld2,nflds,eltype;
+  if (dt.title) {
+    rs.title = dt.title;
+  }
+  flds = dt.fields;
+  els = dt.elements;
+  var el0 = els[0];
+  var propNames = Object.getOwnPropertyNames(el0);
+  
+ 
+  debugger;
+  /* if there is only one field, then there is nothing to do; this is a primitive series.  
+   *  for now, the categories are the ids of the fields after the 0th (which is the domain)
+   */
+  ln = flds.length;
+  if (ln < 2) return this;
+  
+  categorize = ln >= 3;
+  domainId = flds[0];
+  //domainType = flds[0].type;
+  if (categorize) {
+    //cts = pj.resetComputedArray(rs,"categories");
+    var cts = pj.Array.mk();
+    var categoryCaptions = pj.Object.mk();
+    for (i=1;i<ln;i++) {
+      ct = flds[i];//.id;
+      cts.push(ct);
+      categoryCaptions[ct] = ct;//flds[i].label;
+    }
+  }
+  nels = pj.Array.mk(); 
+  els.forEach(function (el) {
+    var domainV = el[domainId];
+    for (i=1;i<ln;i++) {
+      var fld = flds[i];
+      var fid = fld;//fld.id; 
+      var nel = pj.Object.mk();
+      nel.domain = domainV;
+      nel.range = el[fid]; 
+      if (categorize) nel.category = fid;//cts[i-1];  
+      nels.push(nel);
+    } 
+  });
+
+  fld0 = pj.Object.mk({id:domainId,role:'domain',type:flds[0].type});
+  fld1 = pj.Object.mk({id:'value',role:'range',type:flds[1].type});
+  if (categorize) {
+    fld2 = pj.Object.mk({id:'category',type:'string'});
+    nflds = pj.Array.mk([fld0,fld1,fld2]);
+  } else {
+    nflds = pj.Array.mk([fld0,fld1]);      
+  }
+  rs.set('fields',nflds);
+  rs.set("elements",nels);
+  if (categorize) {
+    rs.set("categories",cts);
+    rs.set("categoryCaptions",categoryCaptions);
+  }
+  eltype = (domainType === "string")?"S,N":"N,N";
+  rs.elementType = eltype;
+  return rs;
+}
   // this converts incoming data to a form where each mark has the form {points:,[category:]}
 dat.Series.to_pointArrays = function () { 
   var rs =  Object.create(dat.Series);
@@ -350,9 +416,11 @@ dat.Series.to_pointArrays = function () {
   nels = pj.Array.mk(); // each will have the form {category:,points:},
   if (categorize) {
     cts = pj.Array.mk();
+    var categoryCaptions = pj.Object.mk();
     for (i=1;i<ln;i++) {
       var ct = flds[i].id;
       cts.push(ct);
+      categoryCaptions[ct] = flds[i].label;
       nel = pj.Object.mk({category:ct,points:pj.Array.mk()});
       nels.push(nel);
     }
@@ -380,7 +448,10 @@ dat.Series.to_pointArrays = function () {
   }
   rs.set('fields',nflds);
   rs.set("elements",nels);
-  if (categorize) rs.set("categories",cts); 
+  if (categorize) {
+    rs.set("categories",cts);
+    rs.set("categoryCaptions",categoryCaptions);
+  }
   rs.elementType = "pointArray";
   return rs;
 }
@@ -649,7 +720,7 @@ dat.badDataErrorKind = {};
 
 dat.internalizeData = function (dt,markType) {
   debugger;
-  var ok = dat.checkIncomingData(dt);
+  var ok = 1 || dat.checkIncomingData(dt);
   if (!ok) {
     throw {kind:dat.badDataErrorKind,message:'bad data'}
   }
@@ -662,8 +733,14 @@ dat.internalizeData = function (dt,markType) {
   }
   if (dt.containsPoints) {
     pdt = dat.Series.mk(dt);
-  } else if (dt.fields || dt.rows) {
+  } else if (dt.fields || dt.rows || dt.elements) {
     debugger;
+    if ( 1 && ((markType === 'NNC')||(markType === "[N|S],N"))){
+      //pdt = pdt.toNNC();
+      pdt = dat.toCategorized(dt);
+      pdt.__internalized = true;
+      return pdt;
+    }
     pdt = dat.Series.mk(dt);
     flds = pdt.fields;
     if ((markType === 'NNC')||(markType === "[N|S],N")){
@@ -694,6 +771,7 @@ pj.dataInternalizer = dat.internalizeData;
 
 pj.Object.setData = function (xdt,doUpdate) {
   //var isArray = Array.isArray(xdt);
+  this.__idata = undefined;
   var isNode = pj.isNode(xdt);
   var fromExternal,dt,lifted;
   fromExternal = pj.getval(xdt,'__sourceUrl');
