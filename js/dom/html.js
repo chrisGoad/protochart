@@ -198,26 +198,10 @@ html.Element.$setStyle = function (att,value) {
 
 html.Element.$hide = function () {
   this.$setStyle('display','none');
-  /*return;
-  var cst = dom.getStyle(this);
-  var eel;
-  cst.display = "none";
-  eel = this.__element;
-  if (eel) {
-    eel.style.display = "none";
-  }*/
 }
 
 html.Element.$show = function () {
   this.$setStyle('display','');
-  /*return;
-  var cst = dom.getStyle(this);
-  var eel;
-  cst.display = "";
-  eel = this.__element;
-  if (eel) {
-    eel.style.display = "";
-  }*/
 }
 
 html.Element.setVisibility = function (v) {

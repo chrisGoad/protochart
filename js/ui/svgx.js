@@ -13,9 +13,9 @@
 
 var controlActivity = undefined;
 var cZoomFactor;
-  ui.needsUpdate = false; // this should be set if an update is expected with a mouseUp 
+var selectedPreShift;
 
-  
+ui.needsUpdate = false; // this should be set if an update is expected with a mouseUp 
 var draggedControlName = 0;
 var draggedCustomControlName = 0;
 var surrounded = undefined;
@@ -32,7 +32,6 @@ svg.Element.__setSurrounders  = function (fromControl) {
   }
   rt = svg.main.contents;
   if (this.__draggable || (this.__adjustable && this.__setExtent)) {
-  //if (this.__setExtent) {
     b = ui.computeControlBounds(this);//ui.setControlled(this);
   } else {
     b = this.__bounds(rt);
@@ -145,11 +144,10 @@ svg.initDiv = function (dv) {
 svg.surrounderP = svg.Element.mk('<rect fill="rgba(0,0,0,0.4)"  x="0" y="0" width="100" height="10"/>');
 svg.surrounderP["pointer-events"] = "none";
 
-  pj.selectCallbacks = [];
+pj.selectCallbacks = [];
 
   // what to do when an element is selected by clicking on it in graphics or tree
 pj.Object.__select = function (src,dontDraw) { // src = "svg" or "tree"
-  console.log('select',src);
   ui.closeSidePanel();
   pj.selectedNodePath =this.__pathOf(pj.root);
   if (pj.selectedNode && (pj.selectedNode !== this) && pj.selectedNode.__whenUnselected) {
@@ -162,17 +160,13 @@ pj.Object.__select = function (src,dontDraw) { // src = "svg" or "tree"
     ui.clearControl();
   }
   ui.nowAdjusting = this.__draggable || (this.__adjustable && (this.__setExtent || this.__controlPoints));
-  //ui.nowAdjusting =  (this.__setExtent || this.__controlPoints);
-
   if (src === "svg") {
-
     var thisHere = this;
     pj.selectCallbacks.forEach(function (c) {
       c(thisHere);
     });
   }
   if (ui.nowAdjusting) {
-        //ui.whatToAdjust = undefined;
         ui.setControlled(this);
         ui.updateControlBoxes(1);
         ui.hideSurrounders();
@@ -214,11 +208,6 @@ ui.unselect = function () {
  
   }
   ui.hideSurrounders();
-
-  /* if (ui.replaceMode) {
-      ui.replaceMode = 0;
-      ui.layout();
-  }*/
 }
   
 //  refresh the whole UI, 
@@ -289,80 +278,75 @@ svg.Root.addSurrounders = function () {
   
   
    // for selection in the inspector, and hovering generally
-pj.md = 0;
 
 var mouseDownListener = function (root,e) {
-  console.log('mouseDown');
   if (ui.hideFilePulldown) {
     ui.hideFilePulldown();
   }
-  if (pj.md) {
-    debugger;
+  var trg,id,cp,xf,iselnd,oselnd,b,xf,xfip,dra,rfp,idx,clickedPoint;
+  svgRoot = root;
+  ui.mouseDownEvent = e;
+  e.preventDefault();
+  trg = e.target;
+  id = trg.id;
+  cp = root.cursorPoint(e);
+  xf = root.contents.transform;
+  clickedPoint = xf.applyInverse(cp);// in coordinates of content
+  if (ui.nowInserting) {
+    pj.log('control','Completing insert of ',ui.nowInserting.name,JSON.stringify(cp),JSON.stringify(clickedPoint));
+    ui.completeInsert(clickedPoint,cp);
+    return;
   }
-    var trg,id,cp,xf,iselnd,oselnd,b,xf,xfip,dra,rfp,idx,clickedPoint;
-    svgRoot = root;
-    ui.mouseDownEvent = e;
-    e.preventDefault();
-    trg = e.target;
-    id = trg.id;
-    cp = root.cursorPoint(e);
-    xf = root.contents.transform;
-    clickedPoint = xf.applyInverse(cp);// in coordinates of content
-    if (ui.nowInserting) {
-      pj.log('control','Completing insert of ',ui.nowInserting.name,JSON.stringify(cp),JSON.stringify(clickedPoint));
-      ui.completeInsert(clickedPoint,cp);
-      return;
+  root.refPoint = cp; // refpoint is in svg coords (ie before the viewing transformation)
+  root.clickedPoint = clickedPoint;// in coordinates of content
+  oselnd = trg.__prototypeJungleElement;
+  if (oselnd) {
+    if (ui.protoOutline && ui.protoOutline.isPrototypeOf(oselnd)) {
+      oselnd = undefined;
     }
-    root.refPoint = cp; // refpoint is in svg coords (ie before the viewing transformation)
-    root.clickedPoint = clickedPoint;// in coordinates of content
-    oselnd = trg.__prototypeJungleElement;
-    if (oselnd) {
-      if (ui.protoOutline && ui.protoOutline.isPrototypeOf(oselnd)) {
-        oselnd = undefined;
-      }
-    }
-    pj.log('control',"svg","mousedown ",id);
-    if (oselnd) {
-      pj.log('control',"ZUUUB");
-      iselnd = ui.selectableAncestor(oselnd);
+  }
+  pj.log('control',"svg","mousedown ",id);
+  if (oselnd) {
+    pj.log('control',"ZUUUB");
+    iselnd = ui.selectableAncestor(oselnd);
 
-      if (oselnd.__parent === shifter) {
-        pj.log('control','control',"SHIFTER111RRR!!");
-        controlActivity = 'shifting';
-        selectedPreShift = pj.selectedNode;
-        ui.hideSurrounders();
-        pj.log('control','control','controlActivity set to ',controlActivity);
-        dra = controlled;
-      } else if (iselnd.__controlBox) {
-        dra = iselnd;
-        controlActivity = 'draggingControl';
-        pj.log('control','controlActivity set to ',controlActivity);
-        //ui.showAdjustSelectors();
-        draggedControlName = iselnd.__name;
-        pj.log('control','dragging '+draggedControlName);
-      } else if (protoCustomBox && protoCustomBox.isPrototypeOf(iselnd)) {
-        dra = iselnd;
-        idx = parseInt(iselnd.__name.substr(1));
-       //ui.showAdjustSelectors(idx);
-        controlActivity = 'draggingCustomControl';
-        pj.log('control','controlActivity set to ',controlActivity);
-        draggedCustomControlName = iselnd.__name;
-        root.refControlledPos = ui.controlled.__getTranslation().copy();
-        pj.log('control','dragging custom control '+draggedCustomControlName);
-      } else {
-        iselnd.__select("svg");
-        pj.log('control',"DRA",dra);
+    if (oselnd.__parent === shifter) {
+      pj.log('control','control',"SHIFTER111RRR!!");
+      controlActivity = 'shifting';
+      selectedPreShift = pj.selectedNode;
+      ui.hideSurrounders();
+      pj.log('control','control','controlActivity set to ',controlActivity);
+      dra = controlled;
+    } else if (iselnd.__controlBox) {
+      dra = iselnd;
+      controlActivity = 'draggingControl';
+      pj.log('control','controlActivity set to ',controlActivity);
+      //ui.showAdjustSelectors();
+      draggedControlName = iselnd.__name;
+      pj.log('control','dragging '+draggedControlName);
+    } else if (protoCustomBox && protoCustomBox.isPrototypeOf(iselnd)) {
+      dra = iselnd;
+      idx = parseInt(iselnd.__name.substr(1));
+     //ui.showAdjustSelectors(idx);
+      controlActivity = 'draggingCustomControl';
+      pj.log('control','controlActivity set to ',controlActivity);
+      draggedCustomControlName = iselnd.__name;
+      root.refControlledPos = ui.controlled.__getTranslation().copy();
+      pj.log('control','dragging custom control '+draggedCustomControlName);
+    } else {
+      iselnd.__select("svg");
+      pj.log('control',"DRA",dra);
+    }
+    if (dra) {
+      root.dragee = dra;
+      pj.log('control','dragee on');
+      rfp = geom.toGlobalCoords(dra);
+      pj.log("control",'dragging ',dra.__name,'refPos',rfp.x,rfp.y);
+      root.refPos = rfp;
+      if (dra.startDrag) {
+        dra.startDrag(rfp);
       }
-      if (dra) {
-        root.dragee = dra;
-        pj.log('control','dragee on');
-        rfp = geom.toGlobalCoords(dra);
-        pj.log("control",'dragging ',dra.__name,'refPos',rfp.x,rfp.y);
-        root.refPos = rfp;
-        if (dra.startDrag) {
-          dra.startDrag(rfp);
-        }
-      } else if (!clickedInBox) {
+    } else if (!clickedInBox) {
       delete root.dragee;
       pj.log('control','dragee off');
       delete root.refPos;
@@ -387,14 +371,12 @@ var mouseDownListener = function (root,e) {
 
 ui.points = [];
 var mouseMoveListener = function (root,e) {
-
   var cp,pdelta,tr,s,refPoint,delta,dr,trg,id,rfp,s,npos,drm,xf,clickedPoint;
   cp = root.cursorPoint(e);
   xf = root.contents.transform;
   clickedPoint = xf.applyInverse(cp);// in coordinates of content
   ui.points.push({a:cp,b:clickedPoint})
   e.preventDefault();
- // pj.log('control','control','mousemove  controlActivity',controlActivity,root.dragee,cp);
   if (controlActivity === 'panning') { 
     pdelta = cp.difference(root.refPoint);
     tr = root.contents.__getTranslation();
@@ -458,16 +440,11 @@ ui.updateOnMouseUp = true;
 
 var mouseUpOrOutListener = function (root,e) {
   var cp,xf,clickedPoint;
-    cp = root.cursorPoint(e);
-    xf = root.contents.transform;
-    clickedPoint = xf.applyInverse(cp);// in coordinates of content
-    ui.lastPoint = {a:cp,b:clickedPoint};
- 
+  cp = root.cursorPoint(e);
+  xf = root.contents.transform;
+  clickedPoint = xf.applyInverse(cp);// in coordinates of content
+  ui.lastPoint = {a:cp,b:clickedPoint};
   if (controlActivity === 'draggingControl') {
-    //if (controlled.__extentEvent) {
-    //  debugger;
-    //  controlled.__extentEvent.emit();
-    //}
     if (controlled.__stopAdjust) {
       controlled.__stopAdjust();
     }
@@ -484,7 +461,6 @@ var mouseUpOrOutListener = function (root,e) {
   pj.log('control','dragee off');
   delete root.refTranslation;
   svg.mousingOut = true;
-  //if (ui.updateOnMouseUp || (0 && controlActivity)) {
   if (ui.updateOnMouseUp || controlActivity) {
     svg.main.updateAndDraw();
   }
@@ -495,7 +471,6 @@ var mouseUpOrOutListener = function (root,e) {
   pj.log('control','controlActivity set to ',controlActivity);
   ui.showControl();
   svg.mousingOut = false;
-
 }
 
 svg.Root.activateInspectorListeners = function () {

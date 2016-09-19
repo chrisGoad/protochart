@@ -3,13 +3,13 @@
 
 
 // html components for the UI : pulldown (select), and tab; some utilities too
-  dom.Select = pj.Object.mk();
-  
-  dom.Select.mk = function (o) {
-    var rs = Object.create(dom.Select);
-    pj.extend(rs,o);
-    return rs;
-  }
+dom.Select = pj.Object.mk();
+
+dom.Select.mk = function (o) {
+  var rs = Object.create(dom.Select);
+  pj.extend(rs,o);
+  return rs;
+}
   
 dom.Select.build = function () {
   var el = this.domEl;
@@ -81,7 +81,6 @@ dom.Select.updateDisabled = function () {
   for (i=0;i<ln;i++) {
     d = disabled[opIds[i]];
     opel = opEls[i];
-    //var oel = opel.__element;
     if (d) {
       opel.$css('color','gray');
     } else {
@@ -116,7 +115,6 @@ dom.popFromButton = function (nm,button,toPop) {
   var p,pr,pof,ht,ofs,rofL,rofT;
   dom.unpop(nm);
   var p = dom.popped;
-
   if (p[nm]) {
     toPop.$css({"display":"none"});
     p[nm] = false;
@@ -266,13 +264,6 @@ dom.processInput = function (inp,nd,k,inherited,computeWd,colorInput) { //colorI
     dom.afterSetValue(nd);
     nwd = computeWd(String(nv));
     if (inp) inp.$css({'width':nwd+"px"});
-    /*
-    if (nd.__mark) {
-      marks = nd.__parent.__parent;
-      marks.assertModified(nd);
-    }
-    ui.assertObjectsModified();
-    */
     return true;
   }
 }

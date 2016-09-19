@@ -23,9 +23,7 @@ var minify = require('minify');
 //var compressor = require('node-minify');
 var zlib = require('zlib');    
 
-//var dom_files = ["spread","geom","data","dom1","jxon","svg","html","uistub","domstringify"];
 var dom_files = ["spread","geom","data","dom1","jxon","svg","html","uistub","domstringify","firebase","view"];
-//var dom_files = ["geom","dom1","jxon","svg","uistub","domstringify"];
 dom_files = dom_files.map(function (f) { return "dom/"+f;});
 
 //var ui_files = ["svg_serialize","ajax","constants","firebase","ui","browser",
@@ -77,8 +75,6 @@ function mextract(fls) {
 function mkPath(which,version,mini) {
   
   return "www/js/"+which+"-"+version+(mini?".min":"")+".js";
-  //return (toDev?"www/djs/":"www/js/")+which+"-"+version+(mini?".min":"")+".js";
-
 }
 
 

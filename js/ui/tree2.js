@@ -2,10 +2,8 @@
   
   
 // This is one of the code files assembled into pjui.js.
-  
-  
-      
-  // for widgetlines whose forNode is an Array, check that counts match up on node and widget
+   
+// for widgetlines whose forNode is an Array, check that counts match up on node and widget
 
 tree.WidgetLine.checkRanges = function () {
   var nd = this.forNode;
@@ -21,7 +19,6 @@ tree.WidgetLine.checkRanges = function () {
   return rs;
 }
   
- 
 //  only works and needed on the workspace side, not on protos, hence no ovr
 // showProto shows the __values of __children, as inherited
 
@@ -74,9 +71,9 @@ tree.WidgetLine.reExpand = function (force) {
   this.expand();
   ch.__reExpanding = false;
 }
-  // assure that the __children are visible; unless there are more than tree.WidgetLine.maxChildren.
-  //In this case, display only the target
-  //  tree.WidgetLine.expand = function (targetName,showTargetOnly) {
+
+// assure that the __children are visible; unless there are more than tree.WidgetLine.maxChildren.
+//In this case, display only the target
   
 tree.WidgetLine.expand = function (ovr,noEdit,__atFrontier) {
   var nd = this.forNode();
@@ -161,7 +158,7 @@ tree.WidgetLine.expand = function (ovr,noEdit,__atFrontier) {
     return;
   }
   rs = undefined;
-  if (newCh) { //new __children
+  if (newCh) {
     toIter =   function (tc,k) {
       addLine(ch,nd,k,tc);
     }   
@@ -284,7 +281,7 @@ pj.Object.__expandToHere = function () {
   }
 }
   
-  pj.Array.__expandToHere = pj.Object.__expandToHere;
+pj.Array.__expandToHere = pj.Object.__expandToHere;
  
   
 tree.WidgetLine.contract = function () {
@@ -360,9 +357,9 @@ tree.WidgetLine.toggle = function () {
   } else {
     this.expand();
   }
-  tree.expandTopsLike(this);
- 
+  tree.expandTopsLike(this); 
 }
+
 pj.Array.expandWidgetLine = pj.Object.expandWidgetLine;
 pj.Array.contractWidgetLine = pj.Object.contractWidgetLine;
 pj.Array.toggleWidgetLine =  pj.Object.toggleWidgetLine;
@@ -435,7 +432,7 @@ tree.showProtoChain = function (nd) {
         if (typeof ov === 'object') {
           ov[p] = true;
         } else {
-          debugger;
+          pj.error('unexpected');
         }
       } else if (pj.treeProperty(nd,p)) {
         if (!pv) { // this branch did not come from a prototype
@@ -520,7 +517,6 @@ tree.withTypeName = function (nd,nm,top) {
         ntu = tree.pathToTerm(rp,true);
       } else {
         pj.error('unexpected');
-        //ntu = tree.pathToTerm(nd.__pathOf());
       }
     }
   } else {
@@ -557,7 +553,6 @@ var adjusteeFound = false;
   
   
 tree.setWhatToAdjust = function (iindex) {
-  //var index = (pj.selectedNode.inheritsAdjustment())?iindex:0;
   pj.log('adjust','setWhatToAdust',iindex);
   var index = (adjustRequestedFor === undefined)?iindex:adjustRequestedFor;
   var n;
@@ -573,18 +568,16 @@ tree.setWhatToAdjust = function (iindex) {
  
   
 var addAdjustSelector = function (div,itm) {
-    pj.log('adjust','addAdjustSelector');
-    if (adjustmentOwnedBy) {
-      return;
-    }
+  pj.log('adjust','addAdjustSelector');
+  if (adjustmentOwnedBy) {
+    return;
+  }
   adjustmentOwnedBy = (itm.__ownsExtent && itm.__ownsExtent())?itm:undefined;
   var adjustingEl = html.Element.mk('<span style="padding-left:10px;font-style:italic">Adjusting this:</span>');
   var adjustingCheckbox,idx;
   div.addChild(adjustingEl);
-  //adjustingEl.$hide();
   adjustingCheckbox = html.Element.mk('<input style="position:relative;top:3px" type="checkbox" />');
   div.addChild(adjustingCheckbox);
-  //adjustingCheckbox.$hide();
   tree.adjustingSubjects.push(itm);
   tree.adjustingCheckboxes.push(adjustingCheckbox);
   tree.adjustingEls.push(adjustingEl);
@@ -595,7 +588,6 @@ var addAdjustSelector = function (div,itm) {
       tree.setWhatToAdjust();
     }
   });
- // ui.showAdjustSelectors();
 }
 
 // should be called when a particular custom control box is clicked, with the index of that box
@@ -626,14 +618,6 @@ ui.showAdjustSelectors = function () {
     } else  {
       el.$show();
       checkbox.$show();
-      /*if (idx === undefined) {  // for extent controllers
-        // default is the selected item, if there is no "holds" function
-        holdsControl = itm.__holdsExtent?itm.__holdsExtent():i===0;
-      } else {
-        holdsControl =itm.__holdsControlPoint?itm.__holdsControlPoint(idx,i===0):i===0;
-      }*/
-      //thisIsAdjustee = ((i === ln-1) && !adjusteeFound) || (i === adjustRequestedFor) || holdsControl || !Object.getPrototypeOf(itm).__inWs();
-    //  thisIsAdjustee = (itm === adjustmentOwnedBy) || (startsWithMark && (i === 2));
       thisIsAdjustee = (itm === adjustmentOwnedBy) || (i === ln - 1);
       if (thisIsAdjustee) {
         adjusteeFound = true;
@@ -710,33 +694,7 @@ tree.initShapeTreeWidget = function () {
   tree.attachShapeTree(pj.root);
   tree.mainTop.expand();
   tree.showProtoChain(pj.root);
-
 }
-// this is for the dual panel file browser
-  
-function pathsToTree (fls) {
-  var sfls = fls.map(function (fl) {return fl.split("/")});
-  var rs = {};
-  sfls.forEach(function (sfl) {
-    var  cnd = rs;
-    var ln = sfl.length;
-    var nm,nnd;
-    for (var i=0;i<ln;i++) {
-      nm = sfl[i];
-      nnd = cnd[nm];
-      if (!nnd) {
-        if (i === (ln-1)) {
-          cnd[nm] = "leaf";
-        } else {
-          cnd[nm] = nnd = {};
-        }
-      }
-      cnd = nnd;
-    }
-  });
-  return rs;
-}
-
 
 tree.itemTextFun = function (nd) {
   var nm = (typeof tnm === "undefined")?"root":tnm;
@@ -818,17 +776,12 @@ tree.showItem = function (itm,mode,noSelect,noName) {
     var revertBut = subdiv.addChild(html.Element.mk('<div class="roundButton">revert to prototype </div>'));
     revertBut.addEventListener("click",function () {
       var spread = itm.__parent.__parent;
-      debugger;
       spread.unmodify(itm);
-      //itm.__revertToPrototype(propertiesNotToRevert);
-      debugger;
       spread.__update();
       spread.__draw();
       pj.tree.refresh();
       ui.nowAdjusting = false;
       ui.clearControl();
-      //this.__setSurrounders();// highlight
-      //pj.ui.unselect();
     });
   }
   tr = tree.attachTreeWidget({div:subdiv.__element,root:itm,textFun:tree.shapeTextFun,noToggle:notog});
@@ -861,7 +814,6 @@ tree.refresh = function () {
   var shownItem = tree.shownItem;
   if (shownItem) {
     tree.showItemAndChain(shownItem,'auto',true);
-    //tree.showProtoChain(shownItem);
   }
 }
 
@@ -889,7 +841,7 @@ tree.refresh = function () {
   return undefined;
 }
   
-  // returns false if at root, true if there is another parent to go
+// returns false if at root, true if there is another parent to go
 tree.showParent = function (top,force) {
   var sh,pr;
   // are we climbing from a different start point?
@@ -910,7 +862,6 @@ tree.showParent = function (top,force) {
       }
     }
     tree.showItemAndChain(pr,"auto");
-    //tree.showProtoChain(pr);
     return [pr !== pj.root,true];
   }
   return [false,false];
@@ -918,7 +869,6 @@ tree.showParent = function (top,force) {
 
 tree.showTop = function (force) {
   if (force) {
-    debugger;
     tree.showItemAndChain(pj.root,"auto",'noSelect','noName');
   } else {
     tree.showParent(true);

@@ -234,7 +234,6 @@ dat.Series.computeCategories = function () {
     return undefined;
   }
   els = this.elements;
-  //cts = pj.resetComputedArray(this,'categories');
   cts = pj.Array.mk();
   cto = {};
   perEl = function (el) {
@@ -336,28 +335,20 @@ dat.toCategorized = function (dt) {
   flds = dt.fields;
   els = dt.elements;
   var el0 = els[0];
-  //var propNames = Object.getOwnPropertyNames(el0);
-  
- 
-  debugger;
   /* if there is only one field, then there is nothing to do; this is a primitive series.  
    *  for now, the categories are the ids of the fields after the 0th (which is the domain)
    */
   ln = flds.length;
   if (ln < 2) return this;
-  
   categorize = ln >= 3;
   domainId = fieldId(flds[0]);
-  //domainType = flds[0].type;
-  //if (categorize) {
-    rs.setupCategories(dt);
-  //}
+  rs.setupCategories(dt);
   nels = pj.Array.mk(); 
   els.forEach(function (el) {
     var domainV = el[domainId];
     for (i=1;i<ln;i++) {
       var fld = flds[i];
-      var fid = fld;//fld.id; 
+      var fid = fieldId(fld);
       var nel = pj.Object.mk();
       nel.domain = domainV;
       nel.range = el[fid]; 
@@ -365,29 +356,13 @@ dat.toCategorized = function (dt) {
       nels.push(nel);
     } 
   });
-/*
-  fld0 = pj.Object.mk({id:domainId,role:'domain',type:flds[0].type});
-  fld1 = pj.Object.mk({id:'value',role:'range',type:flds[1].type});
-  if (categorize) {
-    fld2 = pj.Object.mk({id:'category',type:'string'});
-    nflds = pj.Array.mk([fld0,fld1,fld2]);
-  } else {
-    nflds = pj.Array.mk([fld0,fld1]);      
-  }
-  rs.set('fields',nflds);
-  */
   rs.set("elements",nels);
-  //if (categorize) {
-  //  rs.set("categories",cts);
-  //  rs.set("categoryCaptions",categoryCaptions);
- // }
   eltype = (domainType === "string")?"S,N":"N,N";
   rs.elementType = eltype;
   return rs;
 }
   // this converts incoming data to a form where each mark has the form {points:,[category:]}
 dat.to_pointArrays = function (dt) {
-  debugger;
   var rs =  Object.create(dat.Series);
   var flds = dt.fields;
   // if there is only one field, then there is nothing to do; this is a primitive series.
@@ -401,16 +376,7 @@ dat.to_pointArrays = function (dt) {
   nels = pj.Array.mk(); // each will have the form {category:,points:},
   rs.setupCategories(dt);
   if (categorize) {
-
-/*  if (categorize) {
-    cts = pj.Array.mk();
-    var categoryCaptions = pj.Object.mk();
-    */
     for (i=1;i<ln;i++) {
-      //var fldi = flds[i];
-      //var ct = fieldId(fldi);
-      //cts.push(ct);
-      //categoryCaptions[ct] = fieldLabel(fldi);
       nel = pj.Object.mk({category:rs.categories[i-1],points:pj.Array.mk()});
       nels.push(nel);
     }
@@ -428,22 +394,7 @@ dat.to_pointArrays = function (dt) {
       nel.points.push(pnt);
     } 
   });
-  /*
-  fld0 = pj.Object.mk({id:domain,role:'domain',type:flds[0].type});
-  fld1 = pj.Object.mk({id:'value',role:'range',type:flds[1].type});
-  if (categorize) {
-    fld2 = pj.Object.mk({id:'category',type:'string'});
-    nflds = pj.Array.mk([fld0,fld1,fld2]);
-  } else {
-    nflds = pj.Array.mk([fld0,fld1]);      
-  }
-  rs.set('fields',nflds);
-  */
   rs.set("elements",nels);
-  //if (categorize) {
-  //  rs.set("categories",cts);
-  //  rs.set("categoryCaptions",categoryCaptions);
- // }
   rs.elementType = "pointArray";
   return rs;
 }
@@ -455,20 +406,7 @@ var fieldsById = function (fields) {
     rs[id] = field;
   });
 }
-/*
-dat.Series.computeCategoryCaptions = function () {
-  debugger;
-  var ccc = this.categoryCaptions;
-  if (ccc) return ccc;
-  var cats = this.categories;
-  if (!cats) return;
-  var byId = fieldsById(this.fields);
-  
-  var rs = pj.Object.mk();
-  cats.forEach(function (c) {rs[c]=byId[c].label;});
-  this.categoryCaptions = rs;
-  return rs;
-}*/
+
 
   // formats: "ymd" (eg "1982-2-3"), or "year". In future, will support "monthName"(eg"Jan") "md" (eg "10-27") "m"year". Defaults to ymd
 
@@ -496,7 +434,7 @@ dat.dayOrdinalToString = function (o,format) {
 }
     
   // the number of days since 1970-1-1
-  var dayMilliseconds = 60*60*24 * 1000;
+var dayMilliseconds = 60*60*24 * 1000;
 dat.toDayOrdinal = function(dts) {
   var dtn,sp,y,m,d,rs;
   if (typeof(dts) === 'number') {
@@ -516,7 +454,6 @@ dat.toDayOrdinal = function(dts) {
     }
   }
   rs = Math.floor(dtn/dayMilliseconds);
-  //var fdo = dat.dayOrdinalToString(rs);
   return rs;
 }
    
@@ -647,7 +584,8 @@ dat.Series.scale = function (xScale,yScale) {
   return dat.Series.map(scaleDatum);
 }
   
-  dat.Series.domainType = function () {return "string"}; // for now
+dat.Series.domainType = function () {return "string"}; // for now
+
  // often, for labels we don't need the whole series, only domain values.  This
  // returns the domain values as a series
 dat.Series.extractDomainValues = function () {
@@ -699,9 +637,6 @@ dat.checkIncomingData = function (dt) {
   if (dt.fields && dt.elements) {
     return 'table';
   }
-  if (dt.rows && dt.columns) {
-    return 'table';
-  }
   if (dt.vertices && dt.edges) {
     return 'graph';
   }
@@ -711,8 +646,7 @@ dat.checkIncomingData = function (dt) {
 dat.badDataErrorKind = {};
 
 dat.internalizeData = function (dt,markType) {
-  debugger;
-  var ok = 1 || dat.checkIncomingData(dt);
+  var ok = dat.checkIncomingData(dt);
   if (!ok) {
     throw {kind:dat.badDataErrorKind,message:'bad data'}
   }
@@ -736,37 +670,12 @@ dat.internalizeData = function (dt,markType) {
   pdt.__internalized = true;
   return pdt;
 }
-/*
-    pdt = dat.Series.mk(dt);
-    flds = pdt.fields;
-    if ((markType === 'NNC')||(markType === "[N|S],N")){
-      pdt = pdt.toNNC();
-      categories = pdt.categories;
-    } else if (markType === "pointArray") {
-      pdt = pdt.to_pointArrays();
-      categories = pdt.computeCategories();
-    }
-    if (dt.title) {
-      pdt.title = dt.title;
-    }
-    //if (categories){
-    //  pdt.computeCategoryCaptions();
-    //}
-    pdt.convertFields();
-  } else {
-    pdt = pj.lift(dt);
-  }
-  pdt.__internalized = true;
-  return pdt;
-}
-  */
-//pj.dataInternalizer = dat.internalizeData;
+
   
 // data for x will be present either in x.data, or x.__idata, if there is an internalization step; choose __idata if present
 
 
 pj.Object.setData = function (xdt,doUpdate) {
-  //var isArray = Array.isArray(xdt);
   this.__idata = undefined;
   var isNode = pj.isNode(xdt);
   var fromExternal,dt,lifted;
@@ -806,7 +715,7 @@ pj.Object.getData  = function () {
     return this.__idata;
   }
   
-  if (this.markType) { // if markType is asserted, then an internalized form of the data is wante
+  if (this.markType) { // if markType is asserted, then an internalized form of the data is wanted
     var internaldt =  dat.internalizeData(this.data, this.markType);
     internaldt.__computed = 1; // so it won't get saved
     internaldt.__internalized = 1;
@@ -818,27 +727,16 @@ pj.Object.getData  = function () {
 }
 
 
-//pj.Object.getData = function () {
-//  return this.__dataInInternalForm();
-  //var idt = this.__idata;
-  //return idt?idt:this.data;
-//}
 
 pj.Object.__dataSource = function () {
   var dat = this.__get('data');
   if (dat) {
     while (dat && dat.__get) {
-      //if (dat.__get('__sourcePath')) {
-      //  return pj.fullUrl(dat.__get('__sourceRelto'),dat.__get('__sourcePath'));
-        //return dat.__get('__sourceRepo') + "|" + dat.__sourcePath;
-     // }
       var url = dat.__get('__sourceUrl');
       if (url) {
         return url;
-        //return dat.__get('__sourceRepo') + "|" + dat.__sourcePath;
       }
       dat = Object.getPrototypeOf(dat);
-      //code
     }
   }
 }
@@ -864,7 +762,6 @@ dat.findDataSource = function (iroot) {
 pj.getDataJSONP = function (url,cb) {
   
 ui.getDataJSONP = function (url,cb) {
-  debugger;
   pj.data = function (data) {
     if (cb) {
       cb(data);

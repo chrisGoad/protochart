@@ -3,7 +3,6 @@
 
 var tree =pj.set("tree",pj.Object.mk());
 
-
 svg.Element.__setFieldType("fill","svg.Rgb");
 svg.Element.__setFieldType("stroke","svg.Rgb");
 svg.Element.__setFieldType("backgroundColor","svg.Rgb");
@@ -20,7 +19,7 @@ tree.fullyExpandThreshold = 20;
 tree.highlightColor = "rgb(100,140,255)"
 tree.viewableStringMaxLength = 45;
 tree.newTreeWidget = function (o) {
-    pj.setProperties(this,o,["textProto","rootPos"]);
+  pj.setProperties(this,o,["textProto","rootPos"]);
 }
   // ground level operators
   
@@ -34,7 +33,6 @@ mline.set("note",html.Element.mk('<span style="margin-right:5px;color:blue;curso
 mline.set("toggle",html.Element.mk('<span style="cursor:pointer;color:black">&#9655;</span>'));
       
 mline.set("theName",html.Element.mk('<span style="padding-right:20px;color:black;font-size:small"/>')); 
-pj.nonPrim = nonPrim; // for debugging
 tree.wline = wline;
 
 tree.dpySelected = html.Element.mk('<div style="color:black"/>');
@@ -54,8 +52,8 @@ tree.WidgetLine.forParentNode = function () {
   var pnp = this.parentNodePath;
   var rs = pj.evalXpath(pj.root,pnp);
   if (rs === '__modified') { 
-      pnp[pnp.length-2] = 'modifications';
-      rs = pj.evalXpath(pj.root,pnp);
+    pnp[pnp.length-2] = 'modifications';
+    rs = pj.evalXpath(pj.root,pnp);
   }
   return rs;
 }
@@ -76,7 +74,6 @@ pj.Object.__mkWidgetLine = function (options) {
   if (tree.onlyShowEditable && this.__mfrozen) return;
   top = options.top;
   thisHere = this;
-  ww = wline; // for debugging
   rs = Object.create(tree.WidgetLine);
   el = nonPrim.instantiate();
   el.main.$css("font-size","small"); // fixStyles
@@ -86,7 +83,6 @@ pj.Object.__mkWidgetLine = function (options) {
     rs.forProp = this.__name;
   }
   m = el.main;
-
   isLNode = pj.Array.isPrototypeOf(this);
   if (!isLNode && (this.forProto || this.noToggle)) {
     tg = m.toggle;
@@ -98,18 +94,14 @@ pj.Object.__mkWidgetLine = function (options) {
   }
   rs.__treeTop = !!top;
   noteSpan = m.note;
-   
   if (this.__getTheNote()) {
-    
     notePop = function () {rs.popNote()};
     noteSpan.$click(notePop);
     noteSpan.$show();
   } else {
     noteSpan.$hide();
   }
-
   txt = tree.withTypeName(this,this.__name,top);
-
   thisHere = this;
   tspan = m.toggle;
   if (this.noToggle) {
@@ -119,27 +111,26 @@ pj.Object.__mkWidgetLine = function (options) {
   }  else {
     tspan.$click(function (){rs.toggle();});
   }
- 
   nspan = m.theName;
   nspan.$html(txt);
   hp = this.__hasTreeProto();
   clr = "black";
   nspan.style.color = clr;
   m.addEventListener("mouseover",function (e) {
-      var inheritors;
-      m.$css({"background-color":"rgba(0,100,255,0.2)"});
-      if (pj.Array.isPrototypeOf(thisHere)) {
-        svg.highlightNodes(thisHere);
-      } else { 
-        inheritors = pj.inheritors(thisHere,function (x) {
-          return x.__get("__element");
-        });
-        svg.highlightNodes(inheritors);
-      }
+    var inheritors;
+    m.$css({"background-color":"rgba(0,100,255,0.2)"});
+    if (pj.Array.isPrototypeOf(thisHere)) {
+      svg.highlightNodes(thisHere);
+    } else { 
+      inheritors = pj.inheritors(thisHere,function (x) {
+        return x.__get("__element");
+      });
+      svg.highlightNodes(inheritors);
+    }
   });
   m.addEventListener("mouseout",function (e) {
-      m.$css({"background-color":"white"});
-      svg.unhighlight();
+    m.$css({"background-color":"white"});
+    svg.unhighlight();
   });
   nspan.$click(function () {
     rs.selectThisLine("tree");
@@ -154,7 +145,7 @@ pj.Object.__mkWidgetLine = function (options) {
 
 pj.Array.__mkWidgetLine = pj.Object.__mkWidgetLine;
   
-  // operations on the widget tree, as opposed to the dom tree
+// operations on the widget tree, as opposed to the dom tree
 tree.WidgetLine.treeChild = function (id) {
   var fc = this.__parent.forChildren;
   var elc;
@@ -312,7 +303,7 @@ tree.WidgetLine.downChain = function (returnNodes) {
   return this.upOrDownChain(returnNodes,false);
 }
   
-  // now find the widget lines which represent the prim fields which inherit from the child named k of this
+// now find the widget lines which represent the prim fields which inherit from the child named k of this
 tree.WidgetLine.inheritors = function (k) {
   var upc = this.upChain();
   var rs = [];
@@ -496,14 +487,13 @@ tree.frozenProperties = {dataSource:1};
   
 tree.hiddenProperty = function (p) {
   if (typeof p !== "string") return false;
-  if (tree.hiddenProperties[p]) return 1;
+  if (tree.hiddenProperties[p]) return true;
   return (pj.beginsWith(p,"__fieldType")||pj.beginsWith(p,"__inputFunction__")||pj.beginsWith(p,"__status")||
           pj.beginsWith(p,"__uiWatched")|| pj.beginsWith(p,"__note"));
 }
   
 pj.Object.__fieldIsEditable = function (k) {
   var ch,tp;
-  if (k === 'dimension') console.log('IS EDITABLE ',k);
   if (tree.frozenProperties[k]) {
     return false;
   }
@@ -512,10 +502,8 @@ pj.Object.__fieldIsEditable = function (k) {
   tp = typeof ch;
   if (k==="data") return false;
   if (!this.__inWs()) {
-    if (k === 'dimension')  console.log(k,' NOT EDITABLE BECAUSE WS');
     return false;
   }
-  if (k === 'dimension') console.log(k,' is in WS');
   if (tp === "function") return false;
   return !this.__fieldIsFrozen(k)
 }
@@ -532,7 +520,6 @@ tree.hasEditableField = function (nd,overriden) { // hereditary'
   var k,ch;
   for (k in nd) {
     if (nd.__fieldIsEditable(k,overriden)) return true;
-  
     ch = nd[k];
     if (pj.isNode(ch) && tree.hasEditableField(ch,chovr)) return true;
   }
@@ -562,45 +549,44 @@ tree.WidgetLine.popNote= function () {
  
 var dontShowFunctionsFor = [pj.geom];
     
-  function externalizeString (s) {
-    var t = tree.viewableStringMaxLength;
-    if (s.length > t) {
-      s = s.slice(0,t) +"...";
-    }
-    return '"'+s+'"';
+function externalizeString (s) {
+  var t = tree.viewableStringMaxLength;
+  if (s.length > t) {
+    s = s.slice(0,t) +"...";
   }
+  return '"'+s+'"';
+}
     
-  function dataString(dt) {
-    var tp = typeof dt;
-    var nms,a,v,c,tp;
-    if ((tp === "string") || (tp === "number") ) return dt;
-    if (pj.Object.isPrototypeOf(dt)) {
-      nms = Object.getOwnPropertyNames(dt);
-      a = [];
-      nms.forEach(function (k) {
-        if (!pj.internal(k)) {
-          v = dt[k];
-          if (v === null) v = "null";
-          c = "";
-          tp = typeof v;
-          if (tp !== "object") {
-            c += k+':';
-            if (tp === "string") {
-              c += externalizeString(v);
-            } else if (tp === "number") {
-              c += pj.nDigits(v, 2);
-            } else {
-              c += v;
-            }
-            a.push(c);
+function dataString(dt) {
+  var tp = typeof dt;
+  var nms,a,v,c,tp;
+  if ((tp === "string") || (tp === "number") ) return dt;
+  if (pj.Object.isPrototypeOf(dt)) {
+    nms = Object.getOwnPropertyNames(dt);
+    a = [];
+    nms.forEach(function (k) {
+      if (!pj.internal(k)) {
+        v = dt[k];
+        if (v === null) v = "null";
+        c = "";
+        tp = typeof v;
+        if (tp !== "object") {
+          c += k+':';
+          if (tp === "string") {
+            c += externalizeString(v);
+          } else if (tp === "number") {
+            c += pj.nDigits(v, 2);
+          } else {
+            c += v;
           }
+          a.push(c);
         }
-        //code
-      });
-      if (a.length > 0) {
-        return "{"+a.join(",")+"}";
       }
+    });
+    if (a.length > 0) {
+      return "{"+a.join(",")+"}";
     }
+  }
   }
   
   /* the correspondence between widgetLines and nodes is represented on the widgetLine side by the xpaths of the associated
@@ -621,9 +607,6 @@ pj.Array.__fieldIsHidden = function (k) { return false;}
   
 // should  property k of this be shown? Returns 0, "prim" "function" "ref" or "node"
 pj.Object.__showInTreeP = function (k,overriden) {
-  if (k === 'fill') {
-    debugger;
-  }
   var dataValue,hidden,vl,tp,isFun,editable,isob,isnd;
   if (this.__coreProperty(k)) return false; // a  property defined down in core modules of the proto chain.
   if (tree.hiddenProperty(k)) return false;
@@ -633,15 +616,9 @@ pj.Object.__showInTreeP = function (k,overriden) {
   }
   hidden = this.__fieldIsHidden(k); // hidden from this browser
   if (hidden) return false;
-  if (ui.forDraw && 0) {
-    if (overriden || !(this.__atProtoFrontier() || this.hasOwnProperty(k))) {
-      return false;
-    }
-  }
   vl = this[k];
   tp = typeof vl;
   isFun = tp === "function";
-
   if (isFun) {
     if (!tree.showFunctions) return false;
     if (dontShowFunctionsFor.indexOf(this.__parent()) >= 0) return false;// excludes eg geom functions
@@ -685,7 +662,6 @@ pj.Object.__mkPrimWidgetLine = function (options) { // for constants (strings, n
   var frozen = nd.__fieldIsFrozen(k);
   var el = html.Element.mk('<div style="padding-bottom:2px"></div>');
   var isFun,txt,qm,sp,vl,ovrEl,inheritedEl,editable,onInput,doInherit,cp,cl,handleInput,inheritEl,notePop,inpwd,inp,enterH,ftp;
-
   el.set('w',rs);
   el.$click(function () {
     rs.selectThisLine("tree");
@@ -704,7 +680,6 @@ pj.Object.__mkPrimWidgetLine = function (options) { // for constants (strings, n
     sp.$click(notePop);
   } else {
     sp =  html.Element.mk('<span style="padding-right:5px;font-size:small">'+txt+'</span>');
-
   }
   el.set("title",sp);
   ftp = nd.__getFieldType(k);
@@ -733,11 +708,8 @@ pj.Object.__mkPrimWidgetLine = function (options) { // for constants (strings, n
     el.set('inherit',inheritEl);
     rs.inherit = inheritEl;
   }
-  
-
-    //  the input field, and its handler
+  //  the input field, and its handler
   onInput = function (chv) {
-    debugger;
     var rsinh,event;
     if (typeof chv === "string") {
       page.alert(chv);
@@ -754,16 +726,12 @@ pj.Object.__mkPrimWidgetLine = function (options) { // for constants (strings, n
         if (rs.inherited) rs.inherited.$hide(); // this field is no longer inherited, if it was before
         if (rs.inherit) rs.inherit.$show();
       }
-      //if (nd.__getUIWatched(k)) { //  || svg.isStateProperty(nd,k))) { 
-        event = pj.Event.mk('UIchange',nd);
-         event.property=k;
-         event.emit();
-      //}
+      event = pj.Event.mk('UIchange',nd);
+      event.property=k;
+      event.emit();
       pj.tree.refresh();
       svg.main.updateAndDraw();
       pj.tree.refreshValues();
-      //svg.draw();
-
     }
   }   
   doInherit = function () {
@@ -812,7 +780,6 @@ pj.Object.__mkPrimWidgetLine = function (options) { // for constants (strings, n
     } else {
       sel[2].selected = true;
     }
-    //sel.selectedindex = 1;
     el.set('select',sel);
     sel.addEventListener("change",function () {
       var idx = sel.__element.selectedIndex;
@@ -821,14 +788,11 @@ pj.Object.__mkPrimWidgetLine = function (options) { // for constants (strings, n
       dom.afterSetValue(nd);
       onInput(true);      
     });
-
-    //sel.selectedIndex = 2;
-
     rs.kind = "boolean";
     return rs;
   }
-    // the remaining case
-    //put in a text input field 
+  // the remaining case
+  //put in a text input field 
   inpwd = 100;// this gets replaced anyway when the value is measured
   inp = html.Element.mk('<input type="input" value="" style="font-size:8pt;font:tree.inputFont;background-color:#e7e7ee;width:'+
                            inpwd+'px;margin-left:10pt"/>');
@@ -841,7 +805,7 @@ pj.Object.__mkPrimWidgetLine = function (options) { // for constants (strings, n
     if((e.key === 13)||(e.keyCode === 13)) {
        handleInput();
     }
-   }
+  }
   inp.addEventListener("blur",handleInput);
   el.set("inputField",inp);
   rs.kind = "input";
@@ -849,13 +813,12 @@ pj.Object.__mkPrimWidgetLine = function (options) { // for constants (strings, n
   return rs;
 }
 
-// TO HERE
 pj.Array.__mkPrimWidgetLine = pj.Object.__mkPrimWidgetLine;
 
 // it is convenient to erase "inherited" when the user starts to type into the field
  
 tree.stringLengthLimit = 60;
-  // for prim widget lines only
+// for prim widget lines only
 tree.WidgetLine.updateValue = function (options) {
   var el = this.__parent;
   var ind = options.node;
@@ -970,8 +933,7 @@ tree.mkRangeWidgetLine = function (nd,lb,ub,increment) {
   cl = function () {
     rs.toggle();
   };
-  tspan.$click(cl);
- 
+  tspan.$click(cl); 
   return rs;
 }
   
@@ -998,11 +960,6 @@ tree.WidgetLine.visible = function () {
   pr = this.treeParent();
   return pr.visible() && pr.expanded;
 }
-
-// the workspace tree might have been recomputed or otherwise modified, breaking the two-way links between widgetlines
-// and nodes. This fixes them up, removing subtrees where there are mismatches. It also installs new __values into primwidgetlines.
-
-// returns true if this line does not have a match in the workspace, that is, if the parent needs reexpansion
 
 // first parent which is not a range; that is, parent if ranges are passed through
 

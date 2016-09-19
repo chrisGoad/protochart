@@ -5,33 +5,8 @@ var s3SaveCallback;
 
 
 // This is one of the code files assembled into pjui.js. 
-/*
-ui.messageCallbacks.s3Save = function (rs) {
-  debugger;
-  //if (itemSaved) restoreAfterSave();
-  if (s3SaveCallback) {
-    var cb = s3SaveCallback;
-    s3SaveCallback = undefined;
-    
-    cb(rs);
-  }
-}
 
-  var s3SaveUseWorker = 1;// use the worker iframe
-  */
-  pj.maxSaveLength = 50000; // same as maxLengths for storage_server
-/*pj.saveAnonString = function (str,contentType,cb) {
-  var errmsg,dt;
-  if (str.length > pj.maxSaveLength) {
-    errmsg = 'SizeFail' ;
-    cb({status:'fail',msg:'SizeFail'});
-    return;
-  }
-  dt = {value:str,contentType:contentType};
-  s3SaveCallback = cb;
-  ui.sendWMsg(JSON.stringify({apiCall:"/api/anonSave",postData:dt,opId:"s3Save"}));
-}*/
-// ctype : json or svg
+pj.maxSaveLength = 50000; 
 
 ui.removeToken = function (url) { // the token is not needed, because our bucket gives open read access
   var rs;
@@ -44,28 +19,21 @@ ui.removeToken = function (url) { // the token is not needed, because our bucket
   return rs;
 }
 
-pj.saveString = function (path,str,cb) {
-  debugger;
-  
+pj.saveString = function (path,str,cb) {  
   var dir = pj.pathExceptLast(path);
   var fnm = pj.pathLast(path);
   var svg = pj.endsIn(fnm,'.svg');
   var json = pj.endsIn(fnm,'.json');
-
-  //var nm = svg?pj.beforeLastChar(fnm,'.'):fnm;
   var nm = fnm.replace('.',pj.dotCode);
-  //var directoryRef = pj.useS?ui.directoryRef().child('s'):ui.directoryRef();
   var storeRefString = fb.storeRefString();
   var fullPath = storeRefString + path;//path.replace('.',pj.dotCode);
   if (svg || json) {
     var storageRef = fb.storageRef.child(fb.storageRefString()+'/'+path);
   } else {
     var store = fb.rootRef.child(storeRefString+(dir?dir:''));
-    //var store = dir?storeRef.child(dir):storeRef;
     var upd = {};
     upd[nm] = str;
   }
- 
   var directory = fb.rootRef.child(fb.directoryRefString()+(dir?dir:''));//dir?directoryRef.child(dir):directoryRef;
   var updd = {};
   updd[nm] = 1;
@@ -92,11 +60,8 @@ pj.saveString = function (path,str,cb) {
   }
 }
 
-  pj.forFB = true;
-
 pj.saveItem = function (path,itm,cb,aspectRatio) {
   var str;
-  debugger;
   if (pj.endsIn(path,'.svg')) {
     str = svg.main.svgString(400,40,aspectRatio);
   } else {

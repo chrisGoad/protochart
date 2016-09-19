@@ -200,8 +200,6 @@ svg.Root.width = function () {
   var rs;
   var element = this.__element;
   if (element) {
-    //rs = element.offsetWidth;
-    debugger;
     rs = element.clientWidth;
     if (rs === undefined) {
       return parseFloat(element.attributes.width.nodeValue);
@@ -766,7 +764,6 @@ svg.Root.fitContentsTransform = function (fitFactor) {
  
   
 svg.Root.fitContents = function (fitFactor,dontDraw) {
-  debugger;
   var cn = this.contents;
   var sr = cn.surrounders;
   var ff,fitAdjust,cxf,xf;

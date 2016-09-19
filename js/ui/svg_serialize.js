@@ -88,9 +88,6 @@ svg.Root.aspectRatio= function () {
 
  // write out a complete svg file for this root
 svg.Root.svgString = function (viewWd,padding,aspectRatio) {
- // var ff = 0.8;
- // var pd = (1 - ff)/2
- alert(aspectRatio);
   var cn = this.contents;
   cn.__removeIfHidden(); 
   var bnds = cn.__bounds();

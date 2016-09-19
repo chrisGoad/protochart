@@ -134,26 +134,7 @@ var putInDots  = function (src) {
  * This special value is added, as well as some initial sample data files */
 
 // sample data
-/*
-ui.metalData = `{
-  "title":"Density in grams per cubic centimeter",
-  "fields":[{"id":"metal","type":"string"},{"id":"density","type":"number"}],
-  "elements":[["Lithium",0.53],["Copper",9],["Silver",10.5],["Gold",19.3]]
-}`;
 
-
-ui.tradeData = `{
-  "title":"US-China Trade Balance in Billions",
-  "fields":[
-    {"id":"year","type":"number"},
-    {"id":"Imports","type":"number"},
-    {"id":"Exports","type":"number"},
-    {"id":"Deficit","type":"number"}
-  ],
-  "elements":[[1980,291,272,19],[1995,616,535,81],[2000,1450,1073,377],[2010,2337,1842,495]]
-}`;
-*/
-// ui.tradeData = `whatever`; breaks minify
 fb.metalData = '{\n'+
 '  "title":"Density in grams per cubic centimeter",\n'+
 '  "fields":[{"id":"metal","type":"string"},{"id":"density","type":"number"}],\n'+
@@ -173,23 +154,14 @@ fb.tradeData = '{\n'+
 '}';
 
 fb.initializeStore = function (cb) {
-  debugger;
- // var directory = {directory:
   var directory =  {data:{'metal_densities.json':1,'trade_balance.json':1}};
-//                  s:{data:{metal_densities:fb.metalData,
-//                           trade_balance:fb.tradeData}
-//                  };
-   // fb.userRef().update(directory).then(function () {
-      //fb.directory = fb.addExtensions(directory);
-      pj.saveString('/data/metal_densities.json',fb.metalData,function() {
-        pj.saveString('/data/trade_balance.json',fb.tradeData,function() {        
-          cb(directory)});
-      });
-      //cb(directory)})                  
+  pj.saveString('/data/metal_densities.json',fb.metalData,function() {
+    pj.saveString('/data/trade_balance.json',fb.tradeData,function() {        
+      cb(directory)});
+  });
 }
 
 fb.getDirectory = function (cb) {
-  debugger;
   if (fb.directory) {
     cb(fb.directory);
     return;
@@ -197,17 +169,13 @@ fb.getDirectory = function (cb) {
   var directoryRef = fb.directoryRef();
   if (directoryRef) {
     directoryRef.once("value").then(function (snapshot) {
-      
       var rs = snapshot.val();
       if (rs === null) {
         fb.initializeStore(cb);
         return;
       } else {
-        fb.directory = putInDots(rs);//rs.s)//fb.addExtensions(rs);
-        debugger;
+        fb.directory = putInDots(rs);
       }
-       // console.log('directory found');
-        //fb.directory = (fb.directory === 'empty')?{}:fb.directory;
       cb(fb.directory);
     });
   } else {
@@ -219,7 +187,6 @@ fb.getDirectory = function (cb) {
 
 
 fb.deleteFromUiDirectory = function (path) {
-  debugger;
   var splitPath = path.split('/');
   var cd = fb.directory;
   if (!cd) {
@@ -237,35 +204,28 @@ fb.deleteFromUiDirectory = function (path) {
 
 
 fb.deleteFromDatabase =  function (path,cb) {
-  debugger;
   var removePromise;
-  //var directoryTopRef = fb.directoryRef();
   var dotPath = path.replace('.',pj.dotCode);
   var deleteFromDirectory = function () {
     var directoryRef = fb.rootRef.child(fb.directoryRefString() + dotPath);//directoryTopRef.child(dotPath);
     var removePromise = directoryRef.remove();
     removePromise.then(function () {
-      debugger;
       fb.deleteFromUiDirectory(path);
     });
   }
    var deleteFromStore = function () {
     var storeRef = fb.rootRef.child(fb.storeRefString()+dotPath);
-    //var storeRef = fb.storeRef().child(dotPath);
     var removePromise = storeRef.remove();
     removePromise.then(function () {
-      debugger;
       deleteFromDirectory(path);
     });
   }
   var ext = pj.afterLastChar(path,'.',true);
   if (ext) {
     fb.directoryValue(path,function (err,rs) {
-      debugger;
       var storageRef = fb.storage.refFromURL(rs);
       var deletePromise = storageRef.delete();
       deletePromise.then(function () {
-        debugger;
         deleteFromDirectory();
       })
     });
@@ -277,13 +237,11 @@ fb.deleteFromDatabase =  function (path,cb) {
 
 
 fb.addToDirectory = function (parentPath,name,link,cb) {
-  //var isSvg = pj.endsIn('.svg');
   var directoryRef = fb.directoryRef();
   var uv,pRef;
   if (directoryRef) {
     pRef = directoryRef.child(parentPath);
     uv = {};
-    //var name = isSvg?pj.beforeLastChar(iname,'.'):iname;
     uv[name] = link;
     pRef.update(uv,cb);
   }
@@ -291,13 +249,9 @@ fb.addToDirectory = function (parentPath,name,link,cb) {
 
 
 fb.directoryValue = function (path,cb) {
-  debugger;
   var uid = fb.currentUser.uid;
-  //var dburl = pj.databaseUrl(uid,path)'?callback=pj.returnStorage'
-  //var childPath = 'svg'+path.substr(0,path.length-4);
   var directoryRef = fb.rootRef.child(fb.directoryRefString()+path.replace('.',pj.dotCode));
   directoryRef.once("value",function (snapshot) {
-    debugger;
     var rs = snapshot.val();
     cb(null,rs);
   });
@@ -316,7 +270,6 @@ fb.testStore = function () {
   var uid = encodeURIComponent(fb.authData.uid);
   var directoryRef = new Firebase(fb.firebaseHome+'/'+uid+'/directory');
   directoryRef.set({});return;
-//return;
   directoryRef.update({'a':'def'});
 }
 
@@ -330,6 +283,5 @@ pj.indirectUrl = function (iurl) { // deals with urls of the form [uid]path
     var uid = iurl.substr(1,closeBracket-1);
     var path = iurl.substring(closeBracket+1).replace('.',pj.dotCode)
      return pj.databaseUrl(uid,path)
-    //return {uid:uid,path:path,url:pj.databaseUrl(uid,path)};
   }
 }

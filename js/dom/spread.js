@@ -26,7 +26,6 @@ pj.Spread.fixupCategories = function (icategories) {
   var mc = this.categorizedPrototypes;
   if (!mc) {
     mc = this.set('categorizedPrototypes',pj.Object.mk());
-    //pj.declareComputed(mc);
   }
   var mp = this.masterPrototype;
   var thisHere = this;
@@ -178,7 +177,6 @@ var buildInstanceSupply = function(marks,ip,dt,byCategory) { // for dataless spr
     isArray = true;
     size = count;
   }
-  //var ln = this.numElements;
   var nomarks = (!marks) || (marks.length === 0); // marks.length === 0 will hold when loading a saved spread
   if (nomarks) {
     return this.numElements === size?'nomarks':false;
@@ -410,7 +408,6 @@ pj.Spread.colorOfCategory = function (category) {
   } else {
     rs = protoForCategory.fill;
   }
-  console.log('color of category',category,rs);
   return rs;
 }
   
@@ -498,7 +495,6 @@ pj.Spread.replacePrototype = function (newProto) {
   pj.transferState(newProto,oldProto);
   newProto.__adjustable = !!oldProto.__adjustable;
   newProto.__draggable = !!oldProto.__draggable;
-  //newProto.__hide();
   categories = this.data.categories;
   if (categories) {
     cp = this.categorizedPrototypes;
@@ -511,7 +507,6 @@ pj.Spread.replacePrototype = function (newProto) {
     categories.forEach(perCategory);
     perCategory('defaultPrototype')
   }
- // newProto.fill = this.masterPrototype.fill;
   this.set('masterPrototype',newProto);
   this.marks.remove();
   var mods = this.modifications;

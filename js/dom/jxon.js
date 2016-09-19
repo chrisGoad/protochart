@@ -31,8 +31,6 @@ function getJXONTree (oXMLParent,forXML) {
   var vResult = dom.Element.__mkFromTag(tag);
   if (oXMLParent.attributes) { // cg added the check for existence of method
     // cg also modified this to stash in attributes rather than things named @att
-    //var atts = pj.Object.mk();
-    //vResult.set("attributes",atts);
     for (nLength; nLength < oXMLParent.attributes.length; nLength++) {
       var oAttrib = oXMLParent.attributes.item(nLength);
       var attName = oAttrib.name;//.toLowerCase();
@@ -42,7 +40,6 @@ function getJXONTree (oXMLParent,forXML) {
         vResult.set("style",st);
       } else if (attName === "id") {
         vResult.__name = attValue; 
-        //nodeId = attValue;
       } else if (attName === "transform") {
         var gxf = svg.stringToTransform(attValue);
         if (gxf) {

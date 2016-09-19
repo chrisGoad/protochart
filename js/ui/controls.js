@@ -191,7 +191,6 @@ ui.updateCustomBoxes = function (points) {
       svgRoot.refPos = sps;
       draggedCustomControlName = nm;
       idx = parseInt(nm.substr(1));
-//      ui.showAdjustSelectors(idx);
       svgRoot.clickedPoint = undefined;
     }
     boxes[nm].__moveto(sps);
@@ -306,9 +305,6 @@ ui.updateControlBoxes = function (firstCall) {
         firstCall = true;
       }
     }
-    //if (nm == 'extent') {
-    //  showBox = 0;
-    //}
     if (showBox) {
       if (firstCall) box.__show();
       if (nm === 'outline') {
@@ -329,7 +325,7 @@ ui.updateControlBoxes = function (firstCall) {
       box.__draw();
     }
   }
-  for (nm in controlPoints) {
+  for (var nm in controlPoints) {
     updateControlBox(nm);
   }
   updateControlBox('outline');
@@ -346,7 +342,7 @@ ui.hideControl = function () {
   var boxes = pj.root.__controlBoxes;
   var nm;
   if (boxes) {
-    for (nm in controlPoints) {
+    for (var nm in controlPoints) {
       if (boxes[nm]) {
         boxes[nm].__hide();
       }

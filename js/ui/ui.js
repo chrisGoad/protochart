@@ -13,25 +13,6 @@ var fb = pj.fb;
 
 // This is one of the code files assembled into pjui.js. 
 
-/*
-ui.toItemDomain = function (url) {
-  var dm;
-  if (ui.useCloudFront || ui.useS3) {
-    dm = ui.useCloudFront?ui.cloudFrontDomain:ui.s3Domain;
-    return url.replace("prototypejungle.org",dm);
-  } else {
-    return url;
-  }
-}
-*/
-//ui.itemHost = "http://"+ui.itemDomain;//"http://prototypejungle.org";
-// this is used in install when the s3Domain is wanted
-/*
-pj.urlMap = function (u) {
-  return u.replace(ui.itemDomain,ui.s3Domain);
-}
-pj.inverseUrlMap = function (u) {return u.replace(ui.s3Domain,ui.itemDomain);}
-*/
 pj.defineFieldAnnotation("Note");
 
 ui.setNote = function (nd,prop,nt) {
@@ -45,22 +26,11 @@ pj.defineFieldAnnotation("FieldType");
 pj.defineFieldAnnotation('UIStatus'); // the status of this field
 pj.defineFieldAnnotation('InstanceUIStatus');// the status of fields that inherit from this one - ie properties of instances.
 pj.defineFieldAnnotation("UIWatched");
-
-/* @remove
-ui.watch = function (nd,k) {
-  if (typeof k === "string") {
-    nd.__setUIWatched(k,1);
-  } else {
-    k.forEach(function (j) {
-      nd.__setUIWatched(j,1);
-    });
-  }
-}*/
   
  
   
-  // when a mark is instantiated, some of its fields are should not be modified in the instance,
-  // though they may be in the prototype
+// when a mark is instantiated, some of its fields are should not be modified in the instance,
+// though they may be in the prototype
   
 pj.Object.__fieldIsHidden = function (k) {
   var status,proto,istatus;
@@ -96,9 +66,10 @@ pj.Object.__fieldIsFrozen = function (k) {
   return (status === 'frozen');
 }
  
-// a field can be frozen, liquid, hidden, (or neither).  Hidden fields do not even appear in the UI.
-  // Frozen fields cannot be modified from the UI. liquid fields can be modified
-  // from the UI even if they are fields of computed values.
+/* a field can be frozen, liquid, hidden, (or neither).  Hidden fields do not even appear in the UI.
+*  frozen fields cannot be modified from the UI. liquid fields can be modified
+*  from the UI even if they are fields of computed values.
+*/
   
 ui.freeze = function (nd,flds) {
   var tpf = typeof flds;
@@ -212,7 +183,6 @@ pj.Object.__setOutputF = function (k,lib,fn) {
 
 
 pj.Object.__getOutputF = function (k) {
-  //var nm = "__outputFunction__"+k;
   var pth = this.__getOutF(k);
   if (pth) return pj.__evalPath(pj,pth);
 }
