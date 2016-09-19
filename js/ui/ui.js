@@ -1,11 +1,5 @@
-// extensions of pj for prototypejungle  (beyond pjcs)
-(function (pj) {
-  var ui = pj.ui;
-  
-  
-// This is one of the code files assembled into pjui.js. //start extract and //end extract indicate the part used in the assembly
 
-//start extract
+// This is one of the code files assembled into pjui.js. 
 
 /*
 ui.toItemDomain = function (url) {
@@ -561,7 +555,3 @@ ui.displayTemporaryError = function(el,msg,itimeout) {
   ui.displayMessage(el,msg,true);
   window.setTimeout(function () {el.$hide();},timeout);
 }
-
-//end extract
-
-})(prototypeJungle);

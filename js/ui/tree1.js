@@ -1,14 +1,5 @@
-(function (pj) {
 
-  
-var ui = pj.ui;
-var dom = pj.dom;
-var html = pj.html;
-var geom  = pj.geom;
-var svg = pj.svg;
-  
-// This is one of the code files assembled into pjui.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
+// This is one of the code files assembled into pjui.js.
 
 var tree =pj.set("tree",pj.Object.mk());
 
@@ -81,7 +72,7 @@ pj.Object.__getTheNote = function () {
 pj.Array.__getTheNote = pj.Object.__getTheNote;
   
 pj.Object.__mkWidgetLine = function (options) {
-  var top,thisHere,ww,rs,el,m,isLnode,tg,pth,noteSpan,notePop,txt,tspan,nspan,hp,clr;
+  var top,thisHere,ww,rs,el,m,isLNode,tg,pth,noteSpan,notePop,txt,tspan,nspan,hp,clr;
   if (tree.onlyShowEditable && this.__mfrozen) return;
   top = options.top;
   thisHere = this;
@@ -357,7 +348,7 @@ tree.WidgetLine.fieldIsOverridden = function () {
  
 // selectChild is at the Element level. this is at the tree level
 tree.WidgetLine.treeSelect = function (nm) {
-  var rc,chel;
+  var fc,chel;
   if (this.__prim) return undefined;
   fc = this.__parent.forChildren;
   if (fc) {
@@ -693,7 +684,7 @@ pj.Object.__mkPrimWidgetLine = function (options) { // for constants (strings, n
   var prnd = nd;
   var frozen = nd.__fieldIsFrozen(k);
   var el = html.Element.mk('<div style="padding-bottom:2px"></div>');
-  var isFun,txt,qm,sp,vl,ovrEl,inheritedEl,editable,onInput,handleInput,inheritEl,notePop,inpwd,inp,enterH,ftp;
+  var isFun,txt,qm,sp,vl,ovrEl,inheritedEl,editable,onInput,doInherit,cp,cl,handleInput,inheritEl,notePop,inpwd,inp,enterH,ftp;
 
   el.set('w',rs);
   el.$click(function () {
@@ -1044,7 +1035,3 @@ tree.WidgetLine.childrenPastRanges = function (rs) {
   });                 
   }
   
-//end extract
-
-})(prototypeJungle);
-

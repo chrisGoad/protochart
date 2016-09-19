@@ -1,9 +1,6 @@
-(function (pj) {
-  var geom = pj.geom;
- 
-// This is one of the code files assembled into pjdom.js. //start extract and //end extract indicate the part used in the assembly
 
-//start extract
+// This is one of the code files assembled into pjdom.js. 
+
 
 var dom = pj.set("dom",pj.Object.mk());
 var svg =  pj.set("svg",pj.Object.mk());
@@ -770,8 +767,4 @@ dom.parentElementHeight = function (node) {
     return cel.offsetHeight;
   }
 }
-
-//end extract
-
-})(prototypeJungle);
 

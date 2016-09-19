@@ -1,9 +1,6 @@
-(function (pj) {
-var geom  = pj.geom;
-var dom = pj.dom;
 
-// This is one of the code files assembled into pjdom.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
+// This is one of the code files assembled into pjdom.js.
+
 var html =  pj.set("html",pj.Object.mk());
 
 html.set("Element",Object.create(dom.Element)).__namedType(); // dom elements other than svg
@@ -301,8 +298,3 @@ html.Element.$empty = function () {
     ch.remove();
   },true); // iterate over objects only
 }
-
-//end extract
-
-
-})(prototypeJungle);

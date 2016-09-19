@@ -1,10 +1,5 @@
-// extensions of pj for prototypejungle  (beyond pjcs)
-(function (pj) {
 
-
-// This is one of the code files assembled into pjdom.js. //start extract and //end extract indicate the part used in the assembly
-
-//start extract
+// This is one of the code files assembled into pjdom.js. 
 
 
 pj.viewItem = function (url,inDiv) {
@@ -21,7 +16,6 @@ pj.viewItem = function (url,inDiv) {
   });
 }
 
-//end extract
 
 })(prototypeJungle);
 

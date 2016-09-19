@@ -3,11 +3,10 @@
 */
 /*
  * Inputs:
- *   scale:LinearScale
+ *   scale:LinearScale Required
  *   showTicks:boolean
  *   showLine:boolean
  *   showGridLines:boolean
- *   gridLineLength:number (0 means no gridlines)
 *   at10s:boolean  ; if at10s, then the tick pattern is big ticks at multiples of 10,
  *                    smaller at 5s, and smallest at 1s. Otherwise the big ticks are at 5s
  *   bigTickImageInterval:number

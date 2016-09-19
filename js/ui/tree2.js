@@ -1,18 +1,7 @@
-// This code could use reorg/simplification, for clarity
-(function (pj) {
 
   
-var ui = pj.ui;
-var dom = pj.dom;
-var geom  = pj.geom;
-var tree = pj.tree;
-var html = pj.html;
   
-  
-  
-// This is one of the code files assembled into pjui.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
-
+// This is one of the code files assembled into pjui.js.
   
   
       
@@ -92,7 +81,7 @@ tree.WidgetLine.reExpand = function (force) {
 tree.WidgetLine.expand = function (ovr,noEdit,__atFrontier) {
   var nd = this.forNode();
   var tp,isProto,isLNode,el,ch,newCh,lb,up,incr,toIter,nln,lg10,incr,dt,addLine,
-    addRangeLine,addRanges;
+    addRangeLine,addRanges,finishOff,rs;
   if (tree.onlyShowEditable && !tree.hasEditableField(nd,ovr)) return false;
   tp = this.treeTop();
   isProto = tp.protoTree && (!tree.protoPanelShowsRef);
@@ -142,7 +131,7 @@ tree.WidgetLine.expand = function (ovr,noEdit,__atFrontier) {
   }
 
   addRanges= function (nd,lb,ub,incr) {
-    var rk,rv,nln,ci,cub,lb,ub,incr,nln,lg10,dt;
+    var rk,rv,nln,ci,cub,nln,lg10,dt;
     if (incr < 10) {
       for (rk=lb;rk<=ub;rk++) {
         rv = nd[rk];
@@ -394,7 +383,7 @@ tree.attachTreeWidget = function (options) {
 }
  
 pj.Object.__atProtoFrontier = function () { // the next fellow in the prototype chain is outside the ws
-  prnd = Object.getPrototypeOf(this);
+  var prnd = Object.getPrototypeOf(this);
   return (!prnd.__parent)||(!prnd.__inWs());
 }
 pj.Array.__atProtoFrontier = function () {
@@ -443,7 +432,11 @@ tree.showProtoChain = function (nd) {
       var pv = prnd[p];
       var covr;
       if (pj.isAtomic(v)||(typeof v === "function")) {
-        ov[p] = true;
+        if (typeof ov === 'object') {
+          ov[p] = true;
+        } else {
+          debugger;
+        }
       } else if (pj.treeProperty(nd,p)) {
         if (!pv) { // this branch did not come from a prototype
           return;
@@ -452,7 +445,9 @@ tree.showProtoChain = function (nd) {
         if (!covr) {
           ovr[p] = covr = {};
         }
-        addToOvr(v,pv,covr);
+        if (typeof covr === 'object') {
+          addToOvr(v,pv,covr);
+        }
       }
     });
   }
@@ -980,10 +975,3 @@ tree.selectionHasParent = function () {
   return (sh && (sh!==pj.root));
 }
    
-
-//end extract
-
-  
-  
-})(prototypeJungle);
-

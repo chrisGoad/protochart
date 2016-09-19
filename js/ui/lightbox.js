@@ -1,13 +1,4 @@
-
-
-
-(function (pj) { 
-  
-var html = pj.html;
- 
- 
-// This is one of the code files assembled into pjui.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
+// This is one of the code files assembled into pjui.js
 
 var lightbox = pj.Object.mk();
 pj.lightbox = lightbox;
@@ -175,7 +166,6 @@ lightbox.newLightbox =  function (rect,content) {
   return rs;
 }
   
-//end extract
 
 })(prototypeJungle);
 

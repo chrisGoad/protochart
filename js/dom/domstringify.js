@@ -1,11 +1,6 @@
-(function (pj) {
-var ui = pj.ui;
-var dat = pj.dat;
-var dom = pj.dom;
 
   
-// This is one of the code files assembled into pjui.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
+// This is one of the code files assembled into pjui.js. 
 
   
 // some state of an item is not suitable for saving (eg all of the dom links). This sta
@@ -39,8 +34,3 @@ var restoreAfterSave = function (itm) {
 }
     
 pj.afterStringify.push(restoreAfterSave);
-
-//end extract
-
- 
-})(prototypeJungle);

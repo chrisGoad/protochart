@@ -150,6 +150,7 @@ item.lines.bind = function () {
     var element = elements[i];
     var c = element.category;
     //pj.transferState(line,top);
+    debugger;
     var points = element.points.map(function (p) {return top.planeMap(p)});
     line.set('points',pj.Array.mk(points));
     line.update();
@@ -166,13 +167,12 @@ item.update = function () {
   var categories,elements,cnt,max;
   //if (!(this.data && this.__newData)) return;
   if (!this.data) return;
-  /*his.rangeMax = this.data.max('range');
+  this.rangeMax = this.data.max('range');
   this.domainMin = this.data.min('domain');
   this.domainMax = this.data.max('domain');
-  var domainValues = this.data.extractDomainValues();
-  categories = this.data.categories;
-  elements  = this.data.elements;
-  */
+  //var domainValues = this.data.extractDomainValues();
+  //categories = this.data.categories;
+  //elements  = this.data.elements;
   var dt = this.getData();
   if (this.__newData) {
     pj.resetComputedObject(this,"lineByCategory");

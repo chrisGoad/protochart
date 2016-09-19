@@ -1,10 +1,6 @@
-// extensions of pj for prototypejungle  (beyond pjcs)
-(function (pj) {
-  
-  
-// This is one of the code files assembled into pjdom.js. //start extract and //end extract indicate the part used in the assembly
 
-//start extract
+  
+// This is one of the code files assembled into pjdom.js. 
 
 
 
@@ -337,6 +333,3 @@ pj.indirectUrl = function (iurl) { // deals with urls of the form [uid]path
     //return {uid:uid,path:path,url:pj.databaseUrl(uid,path)};
   }
 }
-//end extract
-
-})(prototypeJungle);

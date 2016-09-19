@@ -1,15 +1,6 @@
 
-(function (pj) {
   
-  var ui = pj.ui;
-  var geom  = pj.geom;
-  var svg = pj.svg;
-  var html = pj.html;
-
-  
-// This is one of the code files assembled into pjui.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
-
+// This is one of the code files assembled into pjui.js.
 
 // properties of a node relevant to mouse control. __draggable,__unselectable,__adjustPrototype
 
@@ -508,7 +499,7 @@ var mouseUpOrOutListener = function (root,e) {
 }
 
 svg.Root.activateInspectorListeners = function () {
-  var del,thisHere;
+  var cel,thisHere;
   if (this.inspectorListenersActivated) {
     return;
   }
@@ -553,10 +544,3 @@ svg.Root.initButtons = function () {
   this.minusbut.addEventListener("mouseup",svg.stopZooming);
   this.minusbut.addEventListener("mouseleave",svg.stopZooming);
 }
-
-//end extract
-
-
-})(prototypeJungle);
-
-  

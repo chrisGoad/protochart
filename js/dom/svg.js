@@ -1,10 +1,5 @@
    
-  (function (pj) {
-  var geom  = pj.geom;
-  var dom = pj.dom;
-  var svg = pj.svg;
-// This is one of the code files assembled into pjdom.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
+// This is one of the code files assembled into pjdom.js.
  
 svg.surroundersEnabled = true;
 
@@ -1100,6 +1095,3 @@ svg.parseColor  =  function (color) {
   }
 }
 
-
-//end extract
-})(prototypeJungle);

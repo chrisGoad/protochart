@@ -1,10 +1,5 @@
-(function (pj) {
-  
 
-// This is one of the code files assembled into pjui.js. //start extract and //end extract indicate the part used in the assembly
-
-
-//start extract
+// This is one of the code files assembled into pjui.js. 
   
 
 pj.sessionId = function () {
@@ -73,9 +68,3 @@ pj.checkUp = function (cb) {
     cb({status:"fail",msg:"systemDown"});
   });
 }
-
-
-//end extract
-
-  
-})(prototypeJungle);

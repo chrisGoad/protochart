@@ -1,9 +1,6 @@
 
-(function(pj){
-  var dom = pj.dom;
   
-// This is one of the code files assembled into pjdom.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
+// This is one of the code files assembled into pjdom.js. 
 
   // turning DOM object into JSON trees
 // from https://developer.mozilla.org/en-US/docs/JXON
@@ -85,7 +82,3 @@ dom.domToElement = function (dm,forXML) {
   var rs = forXML||dom.alwaysXMLparse?tr: tr[2][1];// wrapped in html/body if parsing html
   return  rs;
 }
-
-//end extract
-
-})(prototypeJungle);

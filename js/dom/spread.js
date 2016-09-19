@@ -1,9 +1,8 @@
 
 
 (function (pj) {
-  
+"use strict";
 // This is one of the code files assembled into pjdom.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
 
 /* For data with categories a separate prototype is produced for each category.
 
@@ -530,7 +529,4 @@ pj.Spread.replacePrototype = function (newProto) {
 
 }
 
-//end extract
-
-})(prototypeJungle);
 

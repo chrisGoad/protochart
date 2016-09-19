@@ -1,13 +1,5 @@
-(function (pj) {
-  
-var ui = pj.ui;
-var dom = pj.dom;
-var html = pj.html;
 
-
-  
-// This is one of the code files assembled into pjui.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
+// This is one of the code files assembled into pjui.js. 
 
 
 // html components for the UI : pulldown (select), and tab; some utilities too
@@ -309,9 +301,4 @@ dom.measureText = function (txt,font) {
   sp.$hide();
   return rs;
   }
- 
-//end extract
-
-
-})(prototypeJungle);
  

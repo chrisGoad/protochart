@@ -1,14 +1,18 @@
 
 (function (pj) {
-  
+"use strict";
+
+var dom = pj.dom;
 var ui = pj.ui;
 var geom  = pj.geom;
+var dat = pj.dat;
 var svg = pj.svg;
 var html = pj.html;
+var fb = pj.fb;
+
 
   
-// This is one of the code files assembled into pjui.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
+// This is one of the code files assembled into pjui.js.
 
 // svg serialization:for writing out the svg dom as a string, so that it can be shown independent of prototypejungle
 /* Example use:
@@ -121,8 +125,3 @@ svg.Root.svgString = function (viewWd,padding,aspectRatio) {
  //======= end serialize svg
  
  
-//end extract
-
-
-})(prototypeJungle);
-

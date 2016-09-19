@@ -1,17 +1,10 @@
-(function (pj) {
-  
-var ui = pj.ui;
-var dat = pj.dat;
-var dom = pj.dom;
 
 
 var s3SaveState;// retains state while waiting for the save to complete
 var s3SaveCallback;
 
 
-// This is one of the code files assembled into pjui.js. //start extract and //end extract indicate the part used in the assembly
-
-//start extract
+// This is one of the code files assembled into pjui.js. 
 /*
 ui.messageCallbacks.s3Save = function (rs) {
   debugger;
@@ -113,7 +106,3 @@ pj.saveItem = function (path,itm,cb,aspectRatio) {
   pj.saveString(path,str,cb);
 }
 
-
-//end extract
- 
-})(prototypeJungle);

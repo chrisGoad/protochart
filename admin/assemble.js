@@ -16,6 +16,8 @@ var what = process.argv[2]; // should be core,dom,ui,inspect or rest (topbar,cho
 var versions = require("./versions.js");
 //var util = require('../ssutil.js');
 
+var dontExtract = 0;
+ 
 var fs = require('fs');
 //var s3 = require('../s3');
 var minify = require('minify');
@@ -58,7 +60,11 @@ function fullName(f) {
 function extract(fl) {
   var fln = fullName(fl);
   console.log("Reading from ",fln);
+  
   var cn = ""+fs.readFileSync(fln);
+  if (dontExtract) {
+    return cn;
+  }
   var sex0 = cn.indexOf("\n//start extract");
   if (sex0 < 0) {
     return cn;
@@ -131,7 +137,7 @@ function mkModule(which,version,contents,cb) {
 */                    
                      
                  
-
+/*
 function mk_pjdom(cb) { 
   var fls = dom_files;
   var rs =
@@ -139,14 +145,22 @@ function mk_pjdom(cb) {
   mkModule("pjdom",versions.pjdom,rs,cb);
   
 }
+*/
+
+function mk_pjdom(cb) { 
+  var fls = dom_files;
+  var rs =mextract(fls) ;
+  mkModule("pjdom",versions.pjdom,rs,cb);
+  
+}
 
 
 function mk_pjui(cb) { 
   var fls = ui_files;
-  var rs = "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,fb=pj.fb,ui=pj.ui;\n"+
+  dontExtract = 1;
+ // var rs = "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,fb=pj.fb,ui=pj.ui;\n"+
  // var rs = "(function (pj) {\n\nvar om=pj.om,geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
-            '"use strict"\n'+
-             mextract(fls) + "\n})(prototypeJungle);\n"
+  var rs =        mextract(fls);
   mkModule('pjui',versions.pjui,rs,cb);
 
 }

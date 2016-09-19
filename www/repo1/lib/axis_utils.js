@@ -18,9 +18,7 @@ if (axisV) {
   axisV.set('scale',dat.LinearScale.mk());
 }  else {
   axis = main.axis;
-  //axis.orientation = 'horizontal';
 }
-axis.set('scale',dat.LinearScale.mk());
 axis.__show();
 axis.set('scale',dat.LinearScale.mk());
 

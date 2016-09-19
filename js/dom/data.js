@@ -1,9 +1,4 @@
-(function (pj) {
-  var geom = pj.geom;
 
-// This is one of the code files assembled into pjdom.js. //start extract and //end extract indicate the part used in the assembly
-
-//start extract
 
   var dat = pj.set("dat",pj.Object.mk());
   dat.__builtIn = true;
@@ -336,6 +331,18 @@ dat.Series.toNNC = function () {
   return rs;
 }
 
+var fieldId = function (field) {
+  return (typeof field === 'object')?field.id:field;
+}
+
+
+var fieldLabel = function (field) {
+  if (typeof field === 'object') {
+    return field.label?field.label:field.id;
+  } else {
+    return field;
+  }
+}
 
 dat.toCategorized = function (dt) {
   var rs =  Object.create(dat.Series);
@@ -402,25 +409,27 @@ dat.toCategorized = function (dt) {
   return rs;
 }
   // this converts incoming data to a form where each mark has the form {points:,[category:]}
-dat.Series.to_pointArrays = function () { 
+dat.to_pointArrays = function (dt) {
+  debugger;
   var rs =  Object.create(dat.Series);
-  var flds = this.fields;
+  var flds = dt.fields;
   // if there is only one field, then there is nothing to do; this is a primitive series.
   //  for now, the categories are the ids of the fields after the 0th (which is the domain) 
   var ln = flds.length;
   var categorize,els,i,domain,nel,nels,cts,ctd,nel,fld0,fld1,fld2,nflds;
   if (ln < 2) return this; 
   var categorize = ln >= 3;
-  els = this.elements;
-  domain = flds[0].id;
+  els = dt.elements;
+  domain = fieldId(flds[0]);
   nels = pj.Array.mk(); // each will have the form {category:,points:},
   if (categorize) {
     cts = pj.Array.mk();
     var categoryCaptions = pj.Object.mk();
     for (i=1;i<ln;i++) {
-      var ct = flds[i].id;
+      var fldi = flds[i];
+      var ct = fieldId(fldi);
       cts.push(ct);
-      categoryCaptions[ct] = flds[i].label;
+      categoryCaptions[ct] = fieldLabel(fldi);
       nel = pj.Object.mk({category:ct,points:pj.Array.mk()});
       nels.push(nel);
     }
@@ -431,8 +440,8 @@ dat.Series.to_pointArrays = function () {
     var domainV = el[domain];
     var fld,fid,pnt,nel;
     for (i=1;i<ln;i++) {
-      fld = flds[i];
-      fid = fld.id;
+      fldi = flds[i];
+      fid =  fieldId(fldi);
       pnt = geom.Point.mk(domainV,el[fid]);
       nel = nels[i-1];
       nel.points.push(pnt);
@@ -740,6 +749,10 @@ dat.internalizeData = function (dt,markType) {
       pdt = dat.toCategorized(dt);
       pdt.__internalized = true;
       return pdt;
+    } if (markType === "pointArray") {
+      pdt = dat.to_pointArrays(dt);
+        pdt.__internalized = true;
+      return pdt;
     }
     pdt = dat.Series.mk(dt);
     flds = pdt.fields;
@@ -880,7 +893,3 @@ ui.getDataJSONP = function (url,cb) {
 pj.data = pj.returnData;
 
   
-//end extract   
-  
-  
-})(prototypeJungle);

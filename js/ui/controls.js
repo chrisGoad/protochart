@@ -6,19 +6,9 @@
 // If it does, it should also have an  __enactBounds method which causes the item
 // to lie within those bounds.
 
-(function (pj) {
-  var actionHt;
-  
-  var ui = pj.ui;
-  var dom = pj.dom;
-  var html = pj.html;
-  var geom = pj.geom;
-  var svg = pj.svg;
-  var tree = pj.tree;
-  var lightbox = pj.lightbox;
  
-// This is one of the code files assembled into pjdraw.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
+// This is one of the code files assembled into pjui.js.
+
 var proportion; // y/x
 var controlled;
 var controlPoints; // in global coords
@@ -548,8 +538,3 @@ ui.dragCustomControl = function (controlled,nm,ipos) {
    ui.needsUpdate = true;
 }
   
-//end extract
-
-
-})(prototypeJungle);
-

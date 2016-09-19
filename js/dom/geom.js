@@ -1,9 +1,4 @@
  
-(function (pj) {
-  
-// This is one of the code files assembled into pjdom.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
-
 var geom = pj.set("geom",pj.Object.mk());
 geom.__builtIn = true;
 geom.set("Point",pj.Object.mk()).__namedType;
@@ -916,6 +911,3 @@ geom.Rectangle.randomPoint = function () {
   return geom.Point.mk(x,y);
 }
   
-//end extract
-})(prototypeJungle);
-
