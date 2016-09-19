@@ -279,7 +279,7 @@ dom.processInput = function (inp,nd,k,inherited,computeWd,colorInput) { //colorI
 
 dom.afterSetValue = function (node) {
   if (node.__mark) { // part of a spread
-    marks = node.__parent.__parent;
+    var marks = node.__parent.__parent;
     marks.assertModified(node);
   }
   ui.assertObjectsModified();  

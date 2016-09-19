@@ -253,8 +253,25 @@ dat.Series.computeCategories = function () {
   return cts;
 }
 
-/* in the data, elements might be 2d, as in bar or scatter charts,  or lines as in line charts.
- * Each chart type has a dataElementType, which at the moment might be "NNC","SNC" or "[P]C" 
+/*
+ * Incoming data is "internalized" to make it more convenient to work with. How this works:
+
+ * Each chart type might have markType. The only alternatives are "N" (meaning number), or "pointArray" (eg a polyline)
+ * N means that the mark conveys a numerical value.  Numerical marks are always placed along a domain
+ * (which might be horizontal or vertical), and that placement conveys another number : the domain value
+ * Incoming data has the form {title:, fields: , elements: }.
+ *  The first field is treated as the domain, and the remaining fields specify a series of range values for each domain value.
+ *  Often, as with bar a scatter charts, for each domain value, there is one mark allocated for each range value.
+ *
+ *   Data internalization computesa new data series from the incoming data, where there a separate data element for each range value.
+ *   Specifically, each incoming element {domain:v,range1:r1,...,rangen:rN} is turned into N elements:
+ *  {domain:v,range:r1,category:range1},... {domain:v,range:rN,category:rangen}.
+ *  Then, in building the chart, one mark is created for each element of the internalized series
+ *  In the case of the bar graph, and scatter graphs, the marks are assigned a color to indicate their category.
+ *  
+ *  For point arrays, the idea is similar: rearrange the data so that there is one data  element per mark.
+ *  
+ * pointArrays give a mapping from a series of domain values to their corresponding range values.
  * "NNC" means that each element has fields domain:number range:number category:string
  * SNC means that the elements have fiedls domain:string range:number category:string
  * "[P]C" means that elements have fields points:array(Point) C:category
@@ -271,66 +288,6 @@ dat.Series.computeCategories = function () {
  * this works for SNC too
  */
   
-dat.Series.toNNC = function () {
-  var rs =  Object.create(dat.Series);
-  var flds,ln,categorize,els,i,domainId,domainType,domainV,cts,ct,nels,fld0,fld1,fld2,nflds,eltype;
-  if (this.title) {
-    rs.title = this.title;
-  }
-  flds = this.fields;
-  /* if there is only one field, then there is nothing to do; this is a primitive series.  
-   *  for now, the categories are the ids of the fields after the 0th (which is the domain)
-   */
-  ln = flds.length;
-  if (ln < 2) return this;
-  
-  categorize = ln >= 3;
-  els = this.elements;
-  domainId = flds[0].id;
-  domainType = flds[0].type;
-  if (categorize) {
-    //cts = pj.resetComputedArray(rs,"categories");
-    var cts = pj.Array.mk();
-    var categoryCaptions = pj.Object.mk();
-    for (i=1;i<ln;i++) {
-      ct = flds[i].id;
-      cts.push(ct);
-      categoryCaptions[ct] = flds[i].label;
-    }
-  }
-  nels = pj.Array.mk(); 
-  els.forEach(function (el) {
-    var domainV = el[domainId];
-    for (i=1;i<ln;i++) {
-      var fld = flds[i];
-      var fid = fld.id; 
-      var nel = pj.Object.mk();
-      nel.domain = domainV;
-      nel.range = el[fid]; 
-      if (categorize) nel.category = fid;//cts[i-1];  
-      nels.push(nel);
-    } 
-  });
-
-  fld0 = pj.Object.mk({id:domainId,role:'domain',type:flds[0].type});
-  fld1 = pj.Object.mk({id:'value',role:'range',type:flds[1].type});
-  if (categorize) {
-    fld2 = pj.Object.mk({id:'category',type:'string'});
-    nflds = pj.Array.mk([fld0,fld1,fld2]);
-  } else {
-    nflds = pj.Array.mk([fld0,fld1]);      
-  }
-  rs.set('fields',nflds);
-  rs.set("elements",nels);
-  if (categorize) {
-    rs.set("categories",cts);
-    rs.set("categoryCaptions",categoryCaptions);
-  }
-  eltype = (domainType === "string")?"S,N":"N,N";
-  rs.elementType = eltype;
-  return rs;
-}
-
 var fieldId = function (field) {
   return (typeof field === 'object')?field.id:field;
 }
@@ -344,16 +301,42 @@ var fieldLabel = function (field) {
   }
 }
 
+dat.Series.setupCategories = function (dt) {
+  var nflds;
+  var flds = dt.fields;
+  var ln = flds.length;
+  var categorize = ln >= 3;
+  var domainId = fieldId(flds[0]);
+  if (categorize) {
+    var cts = pj.Array.mk();
+    var categoryCaptions = pj.Object.mk();
+    for (var i=1;i<ln;i++) {
+      var fld = flds[i];
+      var ct = fieldId(fld);
+      cts.push(ct);
+      categoryCaptions[ct] = fieldLabel(fld);
+    }
+    this.set("categories",cts);
+    this.set("categoryCaptions",categoryCaptions);
+  }
+  var fld0 = pj.Object.mk({id:domainId,role:'domain',type:flds[0].type});
+  var fld1 = pj.Object.mk({id:'value',role:'range',type:flds[1].type});
+  if (categorize) {
+    var fld2 = pj.Object.mk({id:'category',type:'string'});
+    nflds = pj.Array.mk([fld0,fld1,fld2]);
+  } else {
+    nflds = pj.Array.mk([fld0,fld1]);      
+  }
+  this.set('fields',nflds);
+}
+
 dat.toCategorized = function (dt) {
   var rs =  Object.create(dat.Series);
   var flds,ln,categorize,els,i,domainId,domainType,domainV,cts,ct,nels,fld0,fld1,fld2,nflds,eltype;
-  if (dt.title) {
-    rs.title = dt.title;
-  }
   flds = dt.fields;
   els = dt.elements;
   var el0 = els[0];
-  var propNames = Object.getOwnPropertyNames(el0);
+  //var propNames = Object.getOwnPropertyNames(el0);
   
  
   debugger;
@@ -364,18 +347,11 @@ dat.toCategorized = function (dt) {
   if (ln < 2) return this;
   
   categorize = ln >= 3;
-  domainId = flds[0];
+  domainId = fieldId(flds[0]);
   //domainType = flds[0].type;
-  if (categorize) {
-    //cts = pj.resetComputedArray(rs,"categories");
-    var cts = pj.Array.mk();
-    var categoryCaptions = pj.Object.mk();
-    for (i=1;i<ln;i++) {
-      ct = flds[i];//.id;
-      cts.push(ct);
-      categoryCaptions[ct] = ct;//flds[i].label;
-    }
-  }
+  //if (categorize) {
+    rs.setupCategories(dt);
+  //}
   nels = pj.Array.mk(); 
   els.forEach(function (el) {
     var domainV = el[domainId];
@@ -389,7 +365,7 @@ dat.toCategorized = function (dt) {
       nels.push(nel);
     } 
   });
-
+/*
   fld0 = pj.Object.mk({id:domainId,role:'domain',type:flds[0].type});
   fld1 = pj.Object.mk({id:'value',role:'range',type:flds[1].type});
   if (categorize) {
@@ -399,11 +375,12 @@ dat.toCategorized = function (dt) {
     nflds = pj.Array.mk([fld0,fld1]);      
   }
   rs.set('fields',nflds);
+  */
   rs.set("elements",nels);
-  if (categorize) {
-    rs.set("categories",cts);
-    rs.set("categoryCaptions",categoryCaptions);
-  }
+  //if (categorize) {
+  //  rs.set("categories",cts);
+  //  rs.set("categoryCaptions",categoryCaptions);
+ // }
   eltype = (domainType === "string")?"S,N":"N,N";
   rs.elementType = eltype;
   return rs;
@@ -422,15 +399,19 @@ dat.to_pointArrays = function (dt) {
   els = dt.elements;
   domain = fieldId(flds[0]);
   nels = pj.Array.mk(); // each will have the form {category:,points:},
+  rs.setupCategories(dt);
   if (categorize) {
+
+/*  if (categorize) {
     cts = pj.Array.mk();
     var categoryCaptions = pj.Object.mk();
+    */
     for (i=1;i<ln;i++) {
-      var fldi = flds[i];
-      var ct = fieldId(fldi);
-      cts.push(ct);
-      categoryCaptions[ct] = fieldLabel(fldi);
-      nel = pj.Object.mk({category:ct,points:pj.Array.mk()});
+      //var fldi = flds[i];
+      //var ct = fieldId(fldi);
+      //cts.push(ct);
+      //categoryCaptions[ct] = fieldLabel(fldi);
+      nel = pj.Object.mk({category:rs.categories[i-1],points:pj.Array.mk()});
       nels.push(nel);
     }
   } else {
@@ -440,13 +421,14 @@ dat.to_pointArrays = function (dt) {
     var domainV = el[domain];
     var fld,fid,pnt,nel;
     for (i=1;i<ln;i++) {
-      fldi = flds[i];
-      fid =  fieldId(fldi);
+      var fldi = flds[i];
+      var fid =  fieldId(fldi);
       pnt = geom.Point.mk(domainV,el[fid]);
       nel = nels[i-1];
       nel.points.push(pnt);
     } 
-  }); 
+  });
+  /*
   fld0 = pj.Object.mk({id:domain,role:'domain',type:flds[0].type});
   fld1 = pj.Object.mk({id:'value',role:'range',type:flds[1].type});
   if (categorize) {
@@ -456,11 +438,12 @@ dat.to_pointArrays = function (dt) {
     nflds = pj.Array.mk([fld0,fld1]);      
   }
   rs.set('fields',nflds);
+  */
   rs.set("elements",nels);
-  if (categorize) {
-    rs.set("categories",cts);
-    rs.set("categoryCaptions",categoryCaptions);
-  }
+  //if (categorize) {
+  //  rs.set("categories",cts);
+  //  rs.set("categoryCaptions",categoryCaptions);
+ // }
   rs.elementType = "pointArray";
   return rs;
 }
@@ -742,18 +725,18 @@ dat.internalizeData = function (dt,markType) {
   }
   if (dt.containsPoints) {
     pdt = dat.Series.mk(dt);
-  } else if (dt.fields || dt.rows || dt.elements) {
-    debugger;
-    if ( 1 && ((markType === 'NNC')||(markType === "[N|S],N"))){
-      //pdt = pdt.toNNC();
-      pdt = dat.toCategorized(dt);
-      pdt.__internalized = true;
-      return pdt;
-    } if (markType === "pointArray") {
-      pdt = dat.to_pointArrays(dt);
-        pdt.__internalized = true;
-      return pdt;
-    }
+  } else if (markType === 'N') {
+    pdt = dat.toCategorized(dt);
+  } else if (markType === "pointArray") {
+    pdt = dat.to_pointArrays(dt);
+  }
+  if (dt.title) {
+    pdt.title = dt.title;
+  }
+  pdt.__internalized = true;
+  return pdt;
+}
+/*
     pdt = dat.Series.mk(dt);
     flds = pdt.fields;
     if ((markType === 'NNC')||(markType === "[N|S],N")){
@@ -776,8 +759,8 @@ dat.internalizeData = function (dt,markType) {
   pdt.__internalized = true;
   return pdt;
 }
-  
-pj.dataInternalizer = dat.internalizeData;
+  */
+//pj.dataInternalizer = dat.internalizeData;
   
 // data for x will be present either in x.data, or x.__idata, if there is an internalization step; choose __idata if present
 

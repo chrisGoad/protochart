@@ -1,20 +1,7 @@
-(function (pj) {
-  var actionHt; 
-  
-var ui = pj.ui;
-var dom = pj.dom;
-var html = pj.html;
-var geom = pj.geom;
-var svg = pj.svg;
-var tree = pj.tree;
-var lightbox = pj.lightbox;
 
   
-// This is one of the code files assembled into pjui.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
+// This is one of the code files assembled into pjui.js.
 
-
-var geom = pj.geom;
 var treePadding = 0;
 var bkColor = "white";
 var docDiv;
@@ -25,6 +12,7 @@ var uiDiv,editDiv,topbarDiv,obDivTitle;
 var msgPadding = "5pt";
 var inspectDom = false;
 var uiWidth;
+var insertKind;
 ui.fitMode = false;
 ui.editMode = false;
 ui.insertMode = false;
@@ -39,7 +27,9 @@ var buttonSpacingStyle = "margin-left:10px";
 var mainTitleDiv = html.wrap('mainTitle','div');
 // note that in a few cases, the new slightly more compact method of making a dom.El from a parsed string is employed. 
   var test=html.Element.mk('<div class="roundButton">Top</div>');
-  
+
+var actionDiv,cols;
+
 var mpg = ui.mpg =  html.wrap("main",'div',{style:{position:"absolute","margin":"0px",padding:"0px"}}).addChildren([
   topbarDiv = html.wrap('topbar','div',{style:{position:"absolute",height:"10px",left:"0px","background-color":"bkColor",margin:"0px",padding:"0px"}}).addChildren([
     
@@ -1088,9 +1078,4 @@ ui.disableButton = function (bt) {
   
 ui.itemSaved = true; 
  
-//end extract
-
-
-})(prototypeJungle);
-
 

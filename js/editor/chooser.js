@@ -1,15 +1,5 @@
-// at some point, this code will be reworked based on a structured description of the desired DOM rather than construction by code
-(function (pj) {
-  
-var ui = pj.ui;
-var dom = pj.dom;
-var html = pj.html;
 
-// This is one of the code files assembled into pjchooser.js. //start extract and //end extract indicate the part used in the assembly
-
-
-//start extract
-
+// This is one of the code files assembled into pjchooser.js. 
 var mpg; // main page
 var mpg = html.Element.mk('<div style="position:absolute;margin:0px;padding:0px"/>');
 
@@ -48,6 +38,12 @@ var noItemSelectedError = false;
 
 var newUserInitialPath = "sys/repo0/example";
 
+
+var openB,deleteB,folderPanel,itemsPanel,panels,urlPreamble,fileNameLine,fileName,fileNameExt,errDiv0,errDiv1,yesBut,noBut,newFolderLine,newFolderB,
+    newFolderInput,newFolderOk,closeX,modeLine,bottomDiv,errDiv1Container,forImage,imageDoneBut,forImageDiv,itemsDiv,
+    fileNameSpan,aspectRatioLine,aspectRatioSpan,aspectRatioInput,fpCloseX,fullPageDiv,fullPageText,noNewFolderTextEntered,selectedFolderPath,
+    selectedItemKind;
+    
 function initVars() {
   itemLines = [];
   itemLinesByName = {}
@@ -60,9 +56,6 @@ function initVars() {
 
   
   
-var openB,deleteB,folderPanel,itemsPanel,panels,urlPreamble,fileNameLine,fileName,fileNameExt,errDiv0,errDiv1,yesBut,noBut,newFolderLine,newFolderB,
-    newFolderInput,newFolderOk,closeX,modeLine,bottomDiv,errDiv1Container,forImage,imageDoneBut,forImageDiv,itemsDiv,
-    fileNameSpan,aspectRatioLine,aspectRatioSpan,aspectRatioInput,fpCloseX,fullPageText;
 var itemsBrowser =  html.Element.mk('<div  style="position:absolute;width:100%;height:100%"/>');
 itemsBrowser.addChildren([
   modeLine = html.Element.mk('<div style="padding:10px;width:100%;text-align:center">Mode</div>'),
@@ -265,7 +258,7 @@ var actOnSelectedItem = function (deleteRequested) {
     var fEx = fileExists(nm);
    
     //if ((itemsMode === "saveAs") || (itemsMode === "saveAsSvg")) {
-    topId = itemsMode;
+    var topId = itemsMode;
     afterYes = function() {
       debugger;
       var ar =  Number(aspectRatioInput.$prop("value"));
@@ -370,7 +363,7 @@ var keys;
 function popItems() { 
   debugger;
   keys = parent.pj.ui.chooserKeys;  // the file tree
-  mode = itemsMode;
+  var mode = itemsMode;
   //disableButton(deleteB);
   aspectRatioLine.$hide();
   if  ((mode === "saveAs") || (mode === "saveAsSvg") ) {
@@ -446,7 +439,7 @@ var currentUid = function () {
   return '['+ parent.pj.fb.currentUser.uid+ ']';
 };
 
-setPathLine = function (nd) {
+var setPathLine = function (nd) {
   var pth = nd.__pathOf();
   var pel = pathLine.__element;   
   pathLine.$empty();
@@ -511,7 +504,7 @@ function checkQuickClick (fromDbl) {
   if (!fromDbl) shiftClickTimes();    
 }
  
-setSelectedItem = function(nm) {
+var setSelectedItem = function(nm) {
   selectedItemName = nm;
   if (noItemSelectedError) {
     clearError();
@@ -529,7 +522,7 @@ setSelectedItem = function(nm) {
 }
   
  
-setSelectedFolder = function (ind,fromPathClick) {
+var setSelectedFolder = function (ind,fromPathClick) {
   if (typeof ind === "string") {
     var nd = pj.evalPath(fileTree,ind);
   } else {
@@ -677,8 +670,6 @@ ui.genMainPage = function (options) {
   forDraw = options.fordraw;
   popItems();//options.item,options.mode,options.codeBuilt);
 }
-
-//end extract
 
 
 })(prototypeJungle);

@@ -16,7 +16,6 @@ var what = process.argv[2]; // should be core,dom,ui,inspect or rest (topbar,cho
 var versions = require("./versions.js");
 //var util = require('../ssutil.js');
 
-var dontExtract = 0;
  
 var fs = require('fs');
 //var s3 = require('../s3');
@@ -30,17 +29,19 @@ var dom_files = ["spread","geom","data","dom1","jxon","svg","html","uistub","dom
 dom_files = dom_files.map(function (f) { return "dom/"+f;});
 
 //var ui_files = ["svg_serialize","ajax","constants","firebase","ui","browser",
-var ui_files = ["svg_serialize","ajax","constants","ui","browser",
+var ui_files = ["ui","svg_serialize","browser",
                 //"page",
                 "save","dom2","controls","svgx","tree1","tree2","lightbox"];
   
 ui_files = ui_files.map(function (f) { return "ui/"+f;});
 
-var chooser_files = ["ui/ajax","ui/ui","ui/constants","editor/chooser"];
+//var chooser_files = ["ui/ajax","ui/ui","ui/constants","editor/chooser"];
+var chooser_files = ["ui/ui","editor/chooser"];
 
 var view_files = ["ui/poster","ui/constants","ui/min_ui","ui/view"];
 
-var editor_files = ["editor/constants","editor/page_top","editor/page","editor/init"];
+//var editor_files = ["editor/constants","editor/page_top","editor/page","editor/init"];
+var editor_files = ["editor/page_top","editor/page","editor/init"];
 
 function doGzip(file,cb) {
   console.log("gzipping ",file);
@@ -57,24 +58,6 @@ function fullName(f) {
   return 'js/'+f+".js";
 }
 
-function extract(fl) {
-  var fln = fullName(fl);
-  console.log("Reading from ",fln);
-  
-  var cn = ""+fs.readFileSync(fln);
-  if (dontExtract) {
-    return cn;
-  }
-  var sex0 = cn.indexOf("\n//start extract");
-  if (sex0 < 0) {
-    return cn;
-  }
-  var sex = sex0 + ("//start extract".length + 2);
-  var eex = cn.indexOf("\n//end extract")-1;
-  var ex = cn.substring(sex,eex);
-  return ex;
-}
-
 function getContents(fl) {
   var fln = fullName(fl);
   console.log("Reading from ",fln);
@@ -85,13 +68,13 @@ function getContents(fl) {
 function mextract(fls) {
   var rs = "";
   fls.forEach(function (fl) {
-    rs += extract(fl);
+    rs += getContents(fl);
   });
   return rs;
 }
 
 
-function mkS3Path(which,version,mini) {
+function mkPath(which,version,mini) {
   
   return "www/js/"+which+"-"+version+(mini?".min":"")+".js";
   //return (toDev?"www/djs/":"www/js/")+which+"-"+version+(mini?".min":"")+".js";
@@ -99,16 +82,12 @@ function mkS3Path(which,version,mini) {
 }
 
 
-function mkLocalFile(which,version,mini) {
-  return "/home/ubuntu/staging/www/js/"+which+"-"+version+(mini?".min":"")+".js";
-}
-
 function mkModule(which,version,contents,cb) {
   console.log('mkModule',which,version);
   var rs = contents;
-  var path = mkS3Path(which,version,0);
-  var minpath = mkS3Path(which,version,1);
-  var gzPath =  mkS3Path(which,version,1);
+  var path = mkPath(which,version,0);
+  var minpath = mkPath(which,version,1);
+  var gzPath =  mkPath(which,version,1);
   console.log("Saving to path ",path);
   fs.writeFileSync(path,rs);
   minify(path,function (err,compressed) {
@@ -137,15 +116,7 @@ function mkModule(which,version,contents,cb) {
 */                    
                      
                  
-/*
-function mk_pjdom(cb) { 
-  var fls = dom_files;
-  var rs =
-  '\nwindow.prototypeJungle =  (function () {\n\"use strict"\n'+mextract(fls) + "\nreturn pj;\n})();\n";
-  mkModule("pjdom",versions.pjdom,rs,cb);
-  
-}
-*/
+
 
 function mk_pjdom(cb) { 
   var fls = dom_files;
@@ -167,61 +138,10 @@ function mk_pjui(cb) {
 
 
 
-function mk_pjpage(cb) { 
-  var fls = page_files;
-  var rs = "(function (pj) {\n\nvar om=pj.om,geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;tree=pj.tree;lightbox=pj.lightbox;\n"+
- // var rs = "(function (pj) {\n\nvar om=pj.om,geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
-            '"use strict"\n'+
-             mextract(fls) + "\n})(prototypeJungle);\n"
-  mkModule('pjpage',versions.pjpage,rs,cb);
 
-}
-
-
-
-function mk_pjinspect(cb) {
-  var fls = inspect_files;
-  var rs = "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;lightbox=pj.lightbox,tree=pj.tree\n"+
-            '"use strict"\n'+
-             mextract(fls) + "\n})(prototypeJungle);\n"
-  mkModule('pjinspect',versions.pjinspect,rs,cb);
-}
-
-
-function mk_pjdev(cb) {
-  var fls = dev_files;
-  var rs = "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;lightbox=pj.lightbox,tree=pj.tree\n"+
-            '"use strict"\n'+
-             mextract(fls) + "\n})(prototypeJungle);\n"
-  mkModule('pjdev',versions.pjdev,rs,cb);
-}
-
-function mk_pjdraw(cb) {
-  var fls = draw_files;
-  var rs = "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;lightbox=pj.lightbox,tree=pj.tree\n"+
-
-// var rs = "(function (pj) {\n\nvar dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
-            '"use strict"\n'+
-             mextract(fls) + "\n})(prototypeJungle);\n"
-  mkModule('pjdraw',versions.pjdraw,rs,cb);f
-
-}
-// used to support the top bar for website pages
-/* OBSOLETE function mk_topbar(cb) {
-  var fls = topbar_files;
-  console.log("Files:",fls);
-  var rs =
-  '\nwindow.prototypeJungle = {};\n(function (pj) {\n\"use strict"\n'+mextract(fls) + "\nreturn pj;\n})(prototypeJungle);\n";
-  mkModule("topbar",versions.topbar,rs,cb);
-
-}
-*/
 function mk_pjchooser(cb) {
   var fls = chooser_files;
-  var rs = "(function (pj) {\n\nvar dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
-            '"use strict"\n'+
-             mextract(fls) + "\n})(prototypeJungle);\n"
-  
+  var rs = mextract(fls);
   mkModule("pjchooser",versions.pjchooser,rs,cb);
 
 }
@@ -260,19 +180,14 @@ function mk_insert(cb) {
 }
 function mk_pjeditor(cb) { 
   var fls = editor_files;
-  var rs = "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui, fb=pj.fb,tree=pj.tree,lightbox=pj.lightbox;\n"+
+  var rs =// "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui, fb=pj.fb,tree=pj.tree,lightbox=pj.lightbox;\n"+
  // var rs = "(function (pj) {\n\nvar om=pj.om,geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
-            '"use strict"\n'+
-             mextract(fls,1) + "\n})(prototypeJungle);\n"
+            //'"use strict"\n'+
+             mextract(fls);//+ "\n})(prototypeJungle);\n"
   mkModule('pjeditor',versions.editor,rs,cb);
 
 }
 
-function mk_bubbles(cb) {
-  var fln = fullName("app/bubbles");
-  var cn = ""+fs.readFileSync(fln)
-  mkModule("pjbubbles",versions.pjworker,cn,cb);
-}
 
 
 var afn = function (d,cb) {

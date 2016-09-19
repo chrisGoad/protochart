@@ -1,23 +1,6 @@
-(function (pj) {
-  "use strict"
-   
-   var ui = pj.ui;
-  var dom = pj.dom;
-  var geom = pj.geom;
-  var svg = pj.svg;
-  var html = pj.html;
-  var tree = pj.tree;
-  var lightbox = pj.lightbox;
-  //var page = pj.page;
-  var dat = pj.dat;
+
   
-// This is one of the code files assembled into pjui.js. //start extract and //end extract indicate the part used in the assembly
-//start extract
-/*
-  ui.messageCallbacks.insertChart = function (v) {
-    debugger;
-  }
-  */
+// This is one of the code files assembled into pjui.js. 
   var mpg = ui.mpg;
   /*
    ui.checkSignedIn = function (cb) {
@@ -242,8 +225,6 @@ ui.setSaved = function (){}; // stub called from ui
                 if (ui.fitMode) svg.main.fitContents();
               });   
   }
-
-//end extract
 
 })(prototypeJungle);
 

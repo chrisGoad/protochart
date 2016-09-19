@@ -3,7 +3,7 @@ pj.require('../../shape/circle.js','../component/labels.js','../../lib/color_uti
 
 var ui=pj.ui,geom=pj.geom,svg=pj.svg;
 var item = pj.svg.Element.mk('<g/>');
-item.markType = '[N|S],N';
+item.markType = 'N';
 item.width = 1000;
 item.height = 500;
 item.padding = 5; // percent to leave on either side in width

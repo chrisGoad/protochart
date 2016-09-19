@@ -4,7 +4,7 @@ var ui=pj.ui;
 var geom=pj.geom;
 
 var item = pj.svg.Element.mk('<g/>');
-item.markType = '[N|S],N';
+item.markType = 'N';
 item.__adjustable = true;
 item.__draggable = true;
 

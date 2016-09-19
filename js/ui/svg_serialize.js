@@ -1,15 +1,4 @@
 
-(function (pj) {
-"use strict";
-
-var dom = pj.dom;
-var ui = pj.ui;
-var geom  = pj.geom;
-var dat = pj.dat;
-var svg = pj.svg;
-var html = pj.html;
-var fb = pj.fb;
-
 
   
 // This is one of the code files assembled into pjui.js.

@@ -12,7 +12,7 @@
 // There are, in the general case, three objects involved: pj.selectedNode, shiftee, and controlled
 
 var controlActivity = undefined;
-
+var cZoomFactor;
   ui.needsUpdate = false; // this should be set if an update is expected with a mouseUp 
 
   

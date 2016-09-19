@@ -31,7 +31,7 @@ item.orientation = 'horizontal'; // bars run horizontally, and are stacked verti
  
 */
 //item.requiresData = 1;
-item.markType = '[N|S],N';
+item.markType = 'N';
 
 item.barSep = 40; 
 item.groupSep = 55;  // separation between a bar group (for one domain value)
