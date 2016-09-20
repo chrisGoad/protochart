@@ -12,7 +12,7 @@ pj.require('../diagram/graph.js','[TcYg4ep5s5TrvfxG5CWr11vjZZu1]/data/cayley_d3.
 
   item.graph.arrowP.update();
   item.graph.circleP.update();
-  item.graph.setData(data);
+  item.graph.__setData(data);
   pj.returnValue(undefined,item);
 });
 /*

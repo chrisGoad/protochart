@@ -51,8 +51,8 @@ item.updateAxes = function (main,flip) {
     item.updateAxis(main);
     return;
   }
-  if (!main.data) return;
-  var data = main.getData();
+  if (!main.__data) return;
+  var data = main.__getData();
   core.orientation = main.orientation;
   var numericalDomain = data.numericalDomain();
   core.numericalDomain = numericalDomain;
@@ -113,7 +113,7 @@ item.updateAxis = function (main) {
   }
   axis.orientation = main.orientation;
   var horizontal = axis.orientation === 'horizontal';
-  var data = main.getData();
+  var data = main.__getData();
   var mainHeight = main.extent.y - main.axisSep;
   var gridlineLength = horizontal?main.extent.y:main.extent.x;//  - eyy;
   var mainWidth = main.extent.x;

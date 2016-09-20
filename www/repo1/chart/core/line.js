@@ -102,46 +102,11 @@ item.listenForUIchange = function (ev) {
 
 
 item.addListener("UIchange","listenForUIchange");
-/*
-item.update = function () {
-  var svg = pj.svg;
-  var thisHere = this;
-  var lineP = this.lineP;
-  var horizontal = this.orientation === 'horizontal';
-  var categories,elements,cnt,max;
-  //if (!(this.data && this.__newData)) return;
-  if (!this.data) return;
-  this.rangeMax = this.data.max('range');
-  this.domainMin = this.data.min('domain');
-  this.domainMax = this.data.max('domain');
-  var domainValues = this.data.extractDomainValues();
-  debugger;
-  categories = this.data.categories;
-  elements  = this.data.elements;
-  if (this.__newData) {
-    debugger;
-    this.reset();
-    elements.forEach(function (el) {
-      var c = el.category;
-      var pnts = el.points;
-      var line = lineP.instantiate().__show();
-      var svgPoints = svg.toSvgPoints(el.points,
-        function (p) {return thisHere.planeMap(p)});
-      line.points = svgPoints;
-      thisHere.lines.push(line);
-      thisHere.lineByCategory[c] = line;
-    });
-  }
-  debugger;
-  color_utils.initColors(this);
 
-  //color_utils.setColors(this);
-}
-*/
 item.lines.bind = function () {
   debugger;
-  var categories = this.data.categories;
-  var elements  = this.data.elements;
+  var categories = this.__data.categories;
+  var elements  = this.__data.elements;
   var n = categories.length;
   var i;
   var top = this.__parent;
@@ -165,19 +130,19 @@ item.update = function () {
   //var lineP = this.lineP;
   var horizontal = this.orientation === 'horizontal';
   var categories,elements,cnt,max;
-  //if (!(this.data && this.__newData)) return;
-  if (!this.data) return;
-  this.rangeMax = this.data.max('range');
-  this.domainMin = this.data.min('domain');
-  this.domainMax = this.data.max('domain');
-  //var domainValues = this.data.extractDomainValues();
-  //categories = this.data.categories;
-  //elements  = this.data.elements;
-  var dt = this.getData();
+  //if (!(this.__data && this.__newData)) return;
+  if (!this.__data) return;
+  this.rangeMax = this.__data.max('range');
+  this.domainMin = this.__data.min('domain');
+  this.domainMax = this.__data.max('domain');
+  //var domainValues = this.__data.extractDomainValues();
+  //categories = this.__data.categories;
+  //elements  = this.__data.elements;
+  var dt = this.__getData();
   if (this.__newData) {
     pj.resetComputedObject(this,"lineByCategory");
   }
-  this.lines.setData(this.getData(),true);
+  this.lines.__setData(this.__getData(),true);
   //} else {
   //  this.lines.refresh();
  // }
@@ -189,17 +154,15 @@ item.update = function () {
 item.uupdate = function () {
   var svg = pj.svg;
   var thisHere = this;
-  //var lineP = this.lineP;
   var horizontal = this.orientation === 'horizontal';
   var categories,elements,cnt,max;
-  //if (!(this.data && this.__newData)) return;
-  if (!this.data) return;
-  this.rangeMax = this.data.max('range');
-  this.domainMin = this.data.min('domain');
-  this.domainMax = this.data.max('domain');
-  var domainValues = this.data.extractDomainValues();
-  categories = this.data.categories;
-  elements  = this.data.elements;
+  if (!this.__data) return;
+  this.rangeMax = this.__data.max('range');
+  this.domainMin = this.__data.min('domain');
+  this.domainMax = this.__data.max('domain');
+  var domainValues = this.__data.extractDomainValues();
+  categories = this.__data.categories;
+  elements  = this.__data.elements;
   if (this.__newData) {
     this.reset();
     elements.forEach(function (el) {

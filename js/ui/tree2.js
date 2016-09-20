@@ -173,7 +173,7 @@ tree.WidgetLine.expand = function (ovr,noEdit,__atFrontier) {
       this.rangesForSize = nln;
     } else {
 
-       dt =  nd.data;
+       dt =  nd.__data;
        if (dt) {
          addLine(ch,nd,"data",dt);
        }

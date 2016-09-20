@@ -605,7 +605,7 @@ tag.text.mk = function (txt) {
 }
 tag.text.set("attributes",pj.lift({x:"N",y:"N","font-style":"S","font-weight":"S","font-family":"S","font-size":"N"}));
 tag.text.update = function () {
-  var d = this.data;
+  var d = this.__data;
   var tp = typeof(d);
   if (tp === "number") {
     this.setText(d+"");

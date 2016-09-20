@@ -33,7 +33,7 @@ item.labels.binder = function (label,data,indexInSeries,lengthOfDataSeries) {
   var gap = item.labelGap;
   var  labelHeight,labelWidth,labelBBox,x,y;
   label.__show();
-  label.data = data;
+  label.__data = data;
   label.setText(data);
   labelBBox = label.__getBBox();
   labelWidth= labelBBox.width;
@@ -57,12 +57,12 @@ item.update = function () {
     thisHere = this,
     horizontal = this.orientation === 'horizontal',
     categories,cnt,max;
-  if (!this.data) return;
+  if (!this.__data) return;
   // this is something that should not be inherited
   if (!this.hasOwnProperty('labelSep')) {
     this.set("labelSep",this.labelSep.copy());
   }
-  var L = this.data.elements.length;
+  var L = this.__data.elements.length;
   if (horizontal) {
     this.labelGap = this.width/(L-1);
   } else {
@@ -73,7 +73,7 @@ item.update = function () {
   this.labels.masterPrototype = this.labelP;
   this.labels.__moveto(this.labelSep);
   this.labelP.__editPanelName = 'Prototype for all labels on this axis'
-  this.labels.setData(this.data,true);
+  this.labels.__setData(this.__data,true);
  
 }
 

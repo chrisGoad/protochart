@@ -43,8 +43,8 @@ item.orientation = 'horizontal';
 */
 item.set("theLabels",labelsP.instantiate());
 item.theLabels.__unselectable = true;
-item.theLabels.set("data",Object.create(pj.dat.Series));
-item.theLabels.data.set("elements",pj.Array.mk());
+item.theLabels.set("__data",Object.create(pj.dat.Series));
+item.theLabels.__data.set("elements",pj.Array.mk());
 
 item.set('dataBounds',pj.geom.mkInterval(100,300));
 
@@ -270,7 +270,7 @@ item.update = function () {
   if (this.textOffset === undefined) {
     this.textOffset = horizontal?40:-30;
   }
-  labelElements = this.theLabels.data.elements;
+  labelElements = this.theLabels.__data.elements;
   labelElements.length = 0;
   this.theLabels.orientation = this.orientation;
   bigTickPositions.forEach(function (p) {

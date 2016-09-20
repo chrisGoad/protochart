@@ -8,7 +8,7 @@ pj.require('../chart/bar.js','[TcYg4ep5s5TrvfxG5CWr11vjZZu1]/data/trade_balance.
   var item = pj.svg.Element.mk('<g/>');
   item.set("graph",graphP.instantiate());
   item.graph.orientation = 'horizontal';
-  item.graph.setData(data);
+  item.graph.__setData(data);
   //item.set('title',text.instantiate());
   //item.title.text = 'A simple simple bar chart';
  // barGraph.xdata = barGraph.setData(data);

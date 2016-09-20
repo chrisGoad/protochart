@@ -111,7 +111,7 @@ item.bars.binder = function (bar,data,indexInSeries,lengthOfDataSeries) {
   var datum = item.rangeScaling(data.range);// this is the top of the bar, if vertical
   var barDim = item.barDim;
   var hbarDim = 0.5*barDim;
-  bar.data = datum;
+  bar.__data = datum;
   bar.__editPanelName = 'This bar';
   if (horizontal) {
     bar.width = datum;
@@ -172,11 +172,11 @@ item.update = function () {
     horizontal = this.orientation === 'horizontal',
     categories,cnt,max,data;
   
-  if (!this.data) return;
+  if (!this.__data) return;
   if (!this.bars.masterPrototype) { 
     this.bars.masterPrototype = this.barP;
   }
-  data = this.getData();
+  data = this.__getData();
   this.labelC.orientation = horizontal?'vertical':'horizontal';
   //this.labelC.orientation = this.orientation;
   this.barP.__editPanelName = 'Prototype for all bars';
@@ -214,13 +214,13 @@ item.update = function () {
     this.labelC.width = this.width - groupWidth;
     this.labelC.__moveto(group0center ,this.height+20);
   }
-  this.labelC.setData(domainValues,true);
-  pj.declareComputed(this.labelC.data); // so it won't be saved
+  this.labelC.__setData(domainValues,true);
+  pj.declareComputed(this.labelC.__data); // so it won't be saved
   if (horizontal) {
     this.labelC.__moveto(-20- this.labelC.maxLabelWidth,group0center);
   } 
   this.bars.scale = 1;
-  this.bars.setData(data,true);
+  this.bars.__setData(data,true);
   if (data.categories) {  // so the legend colors can be updated
     // repeated since categorizedPrototypes might not have been around the first time
       color_utils.initColors(this);

@@ -255,7 +255,7 @@ ui.updateFromData =function (idata,url,cb) {
   dt.__requireDepth = 1; // so that it gets counted as a require on externalize
   dataContainer.__idata = undefined;
   try {
-    dataContainer.setData(dt);
+    dataContainer.__setData(dt);
   } catch (e) {
     debugger;
     if (e.kind === dat.badDataErrorKind) {
@@ -666,7 +666,7 @@ ui.hasTitleLegend = function () {
   if (!ds) {
     return {};
   }
-  var dt = ds[0].getData();
+  var dt = ds[0].__getData();
   return {hasTitle:!!dt.title,hasLegend:!!dt.categories};
 }
 

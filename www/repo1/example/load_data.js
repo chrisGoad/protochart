@@ -9,7 +9,7 @@ pj.require('../chart/bar.js','[TcYg4ep5s5TrvfxG5CWr11vjZZu1]/data/metal_densitie
   item.graph.set('extent',pj.geom.Point.mk(500,300));
   pj.loadDataJSONP('[TcYg4ep5s5TrvfxG5CWr11vjZZu1]/data/metal_densities.json',
      function (data) {
-        item.graph.setData(data);
+        item.graph.__setData(data);
      });
   pj.returnValue(undefined,item);
 });

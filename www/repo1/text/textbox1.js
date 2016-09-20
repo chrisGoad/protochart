@@ -13,7 +13,7 @@ item.vPadding = 20;
 item.hPadding = 20;
 item.showBox = false;
 item.multiline = false;
-item.data = 'A quick brown fox jumped over the lazy dog';
+item.__data = 'A quick brown fox jumped over the lazy dog';
 item.set('box',rectangleP.instantiate());
 item.box.__unselectable = true;
 item.box.fill = '#f5f5ff';
@@ -57,7 +57,7 @@ item.__setExtent = function (extent,nm) {
 
 item.update = function (fromSetExtent) {
    if (this.forChart) {
-    this.data = this.forChart.getData().title;
+    this.__data = this.forChart.__getData().title;
   }
   var box = this.box;
   if (this.showBox) {
@@ -83,7 +83,7 @@ item.update = function (fromSetExtent) {
   
   } else if (this.__newData) {
     textarea.width = this.width - 2*this.hPadding;
-    textarea.setText(this.data);
+    textarea.setText(this.__data);
   } else {
     textarea.update();
   }

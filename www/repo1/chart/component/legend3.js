@@ -88,9 +88,9 @@ item.update = function () {
   var thisHere = this;
   console.log('Updating legend ',this.height);
   if (this.forChart) {
-    this.data = this.forChart.getData();
+    this.__data = this.forChart.__getData();
   }
-  var dt = this.getData();
+  var dt = this.__getData();
   if (!dt) return;//not ready
   if (this.showBox) {
     this.rect.__show();
@@ -142,7 +142,7 @@ item.nthColorSpot = function (n) {
 
 
 item.setColorOfCategory = function (category,color) { 
-  var dt = this.getData();
+  var dt = this.__getData();
   if (!dt) return;
   var cats = dt.categories;
   var idx = cats.indexOf(category);
@@ -159,7 +159,7 @@ item.setColorsFromChart = function () {
     return;
   }
   var thisHere = this;
-  this.getData().categories.forEach(function (category) {
+  this.__getData().categories.forEach(function (category) {
     var color = chart.colorOfCategory(category);
     thisHere.setColorOfCategory(category,color);
   })

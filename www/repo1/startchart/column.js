@@ -7,7 +7,7 @@ pj.require('../chart/bar.js','[TcYg4ep5s5TrvfxG5CWr11vjZZu1]/data/metal_densitie
   item.graph.orientation = 'vertical';
   item.graph.axis.bigTickImageInterval = 10;
   item.graph.set('extent',pj.geom.Point.mk(500,300));
-  item.graph.setData(data);
+  item.graph.__setData(data);
   pj.returnValue(undefined,item);
 });
 /*

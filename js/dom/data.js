@@ -675,7 +675,7 @@ dat.internalizeData = function (dt,markType) {
 // data for x will be present either in x.data, or x.__idata, if there is an internalization step; choose __idata if present
 
 
-pj.Object.setData = function (xdt,doUpdate) {
+pj.Object.__setData = function (xdt,doUpdate) {
   this.__idata = undefined;
   var isNode = pj.isNode(xdt);
   var fromExternal,dt,lifted;
@@ -683,53 +683,53 @@ pj.Object.setData = function (xdt,doUpdate) {
   if (!isNode) {
     lifted = pj.lift(xdt);
     // need an Object.create here so that we get a reference on externalization
-    this.set('data',fromExternal?Object.create(lifted):lifted);
+    this.set('__data',fromExternal?Object.create(lifted):lifted);
     this.__newData = true;
   } else {
     dt = fromExternal?Object.create(xdt):xdt;
     if (!dt.parent()) {
-      this.set("data",dt);
+      this.set("__data",dt);
       this.__newData = true;
     } else {
-      if (this.data !== dt) {
-        this.data = dt;
+      if (this.__data !== dt) {
+        this.__data = dt;
         this.__newData = true;
       }
     }
   }
-  this.getData();// gets data into internal form
+  this.__getData();// gets data into internal form
   if (doUpdate)  {
     this.__update();
   }
 }
 // sometimes, data needs processing. In this case, the internalized data is put in __idata
 //pj.Object.__dataInInternalForm  = function () {
-pj.Object.getData  = function () {
-  if (!this.data) {
+pj.Object.__getData  = function () {
+  if (!this.__data) {
     return undefined;
   }
-  if (this.data.__internalized) {
-    return this.data;
+  if (this.__data.__internalized) {
+    return this.__data;
   }
   if (this.__idata) {
     return this.__idata;
   }
   
   if (this.markType) { // if markType is asserted, then an internalized form of the data is wanted
-    var internaldt =  dat.internalizeData(this.data, this.markType);
+    var internaldt =  dat.internalizeData(this.__data, this.markType);
     internaldt.__computed = 1; // so it won't get saved
     internaldt.__internalized = 1;
     this.set("__idata",internaldt);
     this.__newData = true;
     return internaldt;
   }
-  return this.data;
+  return this.__data;
 }
 
 
 
 pj.Object.__dataSource = function () {
-  var dat = this.__get('data');
+  var dat = this.__get('__data');
   if (dat) {
     while (dat && dat.__get) {
       var url = dat.__get('__sourceUrl');

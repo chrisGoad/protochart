@@ -52,7 +52,7 @@ item.displayWords = function (text) {
   } else {
     this.lastText = text;
   }
-  words.setData(pj.Array.mk(text.split(" ")),1);
+  words.__setData(pj.Array.mk(text.split(" ")),1);
   return;
 }
 
@@ -200,7 +200,7 @@ item.update = function (top) {
   console.log("TEXTWIDTH START",this.width);
   // disinherit
   if (this.forChart) {
-    this.text = this.forChart.data.title;
+    this.text = this.forChart.__data.title;
   }
   this.lineSep = Math.max(0,this.lineSep);
   this.width = this.width;// bring up from proto

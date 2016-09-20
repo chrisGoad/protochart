@@ -10,7 +10,7 @@
 var item = pj.Object.mk();
 
 item.initColors = function (target) {
-  var categories = target.data.categories;
+  var categories = target.__data.categories;
   var cnt = 0;
   if (categories) {
     target.categorized = true;

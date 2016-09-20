@@ -30,8 +30,8 @@ item.shifterPlacement = function () {
 
 item.update = function () {
   var core = this.core;
-  if (!this.data) return;
-  var data = this.getData();
+  if (!this.__data) return;
+  var data = this.__getData();
   if (data.categories)   { // the UI should be a bit different for the categorized case
     if (this.__newData) {
       this.barSep = 10;
@@ -46,7 +46,7 @@ item.update = function () {
   core.groupSep = this.groupSep;
   this.axis.orientation = this.core.orientation = this.orientation;
   axisUtils.updateAxes(this);
-  core.setData(data,true);
+  core.__setData(data,true);
   core.bars.__unselectable = true; 
 }
 

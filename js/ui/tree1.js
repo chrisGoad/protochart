@@ -611,7 +611,7 @@ pj.Object.__showInTreeP = function (k,overriden) {
   if (this.__coreProperty(k)) return false; // a  property defined down in core modules of the proto chain.
   if (tree.hiddenProperty(k)) return false;
   if (k === "data") {
-    dataValue = dataString(this.data);
+    dataValue = dataString(this.__data);
     return dataValue?"prim":false;
   }
   hidden = this.__fieldIsHidden(k); // hidden from this browser
@@ -829,7 +829,7 @@ tree.WidgetLine.updateValue = function (options) {
   }
   var atFrontier = this.__atFrontier;
   var k = this.forProp;
-  var ds = (k === 'data')?dataString(nd.data):undefined;
+  var ds = (k === 'data')?dataString(nd.__data):undefined;
   var vl = nd[k]; 
   var ovr = this.fieldIsOverridden(k);
   var ownp = nd.hasOwnProperty(k);

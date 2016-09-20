@@ -77,7 +77,7 @@ item.marks.binder = function (circle,data,indexInSeries,lengthOfDataSeries) {
     categoryCount,group,x,y;
   var numD = item.numericalDomain;
   circle.__editPanelName = 'This mark';
-  circle.data = datum;
+  circle.__data = datum;
   categoryCount = item.categoryCount;
   group = Math.floor(indexInSeries/categoryCount);// which group of data, grouping by domain
   var categoryIndex = indexInSeries%categoryCount;// place the bar vertically
@@ -130,17 +130,17 @@ item.update = function () {
     thisHere = this,
     //horizontal = this.orientation === 'horizontal',
     categories,cnt,max;
-  if (!this.data) return;
+  if (!this.__data) return;
   this.circleP.__editPanelName = 'Prototype for all marks';
-  this.numericalDomain = this.data.numericalDomain();
+  this.numericalDomain = this.__data.numericalDomain();
 
-   this.rangeMax = this.data.max('range');
-    this.domainMax = this.data.max('domain');
-    this.domainMin = this.data.min('domain');
-  var domainValues = this.data.extractDomainValues();
+   this.rangeMax = this.__data.max('range');
+    this.domainMax = this.__data.max('domain');
+    this.domainMin = this.__data.min('domain');
+  var domainValues = this.__data.extractDomainValues();
   //color_utils.initColors(this);
-  if (this.data.categories) {
-     this.categoryCount = this.data.categories.length;
+  if (this.__data.categories) {
+     this.categoryCount = this.__data.categories.length;
   }
   var numD = this.numericalDomain;
   if (!numD) {
@@ -149,22 +149,22 @@ item.update = function () {
     this.labelC.orientation = 'horizontal';
     this.labelC.width = effectiveWidth;//this.width;
     this.labelC.__moveto(this.minX,this.height+this.labelSep);
-    var L = this.data.elements.length;
+    var L = this.__data.elements.length;
     var G = L/(this.categoryCount);
     this.aGroupSep = effectiveWidth/(G-1);
-    this.labelC.setData(domainValues);
+    this.labelC.__setData(domainValues);
     
   }
   this.marks.scale = 1;
-  this.marks.setData(this.data,true);
+  this.marks.__setData(this.__data,true);
   color_utils.initColors(this);
-  if (this.data.categories) {
+  if (this.__data.categories) {
     // so the legend colors can be updated
     // repeated since categorizedPrototypes might not have been around the first time
     color_utils.initColors(this);
      debugger;
     var categorizedPrototypes = this.marks.categorizedPrototypes;
-    this.data.categories.forEach(function (category) {
+    this.__data.categories.forEach(function (category) {
        categorizedPrototypes[category].__editPanelName = 'Marks for '+category;
     });
   }

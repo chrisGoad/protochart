@@ -166,7 +166,7 @@ var buildInstanceSupply = function(marks,ip,dt,byCategory) { // for dataless spr
   
  pj.Spread.inSync = function () {
   var count = this.count;
-  var data = this.data;
+  var data = this.__data;
   var marks = this.marks;
   var elements,isArray,ln,nomarks,size;
   if (data) {
@@ -214,7 +214,7 @@ var buildInstanceSupply = function(marks,ip,dt,byCategory) { // for dataless spr
     
 pj.Spread.sync = function () {
   var count = this.count; // for a dataless spread
-  var data = this.data;
+  var data = this.__data;
   var p,shps,sln,dt,dln,i,isup,categories,elements,isArray,byCategory,thisHere,ins;
   if (!(data || count)) return this;//not ready
   if (data) {
@@ -285,7 +285,7 @@ pj.Spread.sync = function () {
   
 pj.Spread.bind = function () {
   if (!this.binder) return;
-  var d = this.data;
+  var d = this.__data;
   var count = this.count;
   var isArray;
   if (count) {
@@ -319,7 +319,7 @@ pj.Spread.bind = function () {
 }
   
 pj.Spread.update = function () {
-  if (this.data || this.count) {
+  if (this.__data || this.count) {
     this.sync();
     this.bind();
   }
@@ -373,7 +373,7 @@ pj.Spread.refresh = function () {
 
 pj.Spread.setFromData = function (p,fn) {
   this.forEachMark(function (m) {
-    var d = m.data;
+    var d = m.__data;
     var v = fn(d,i);
     m.set(p,v);
   });
@@ -495,7 +495,7 @@ pj.Spread.replacePrototype = function (newProto) {
   pj.transferState(newProto,oldProto);
   newProto.__adjustable = !!oldProto.__adjustable;
   newProto.__draggable = !!oldProto.__draggable;
-  categories = this.data.categories;
+  categories = this.__data.categories;
   if (categories) {
     cp = this.categorizedPrototypes;
     perCategory = function (category) {

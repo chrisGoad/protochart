@@ -18,7 +18,7 @@ item.set('edges',pj.Spread.mk(item.arrowP));
 
 item.vertices.bind = function () {
   debugger;
-  var data = this.data;
+  var data = this.__data;
   var n = data.length;
   for (i=0;i<n;i++) {
     var circle =  this.selectMark(i);
@@ -32,8 +32,8 @@ item.vertices.bind = function () {
 
 item.edges.bind = function () {
   debugger;
-  var data = this.data;
-  var vertices = this.parent().data.vertices;
+  var data = this.__data;
+  var vertices = this.parent().__data.vertices;
   var positionsById = {};
   vertices.forEach(function (vertex) {
     var pos = vertex.position;
@@ -53,8 +53,8 @@ item.edges.bind = function () {
    
 item.update = function () {
   debugger;
-  this.vertices.setData(this.data.vertices,'doUpdate');
-  this.edges.setData(this.data.edges,'doUpdate');
+  this.vertices.__setData(this.__data.vertices,'doUpdate');
+  this.edges.__setData(this.__data.edges,'doUpdate');
 }
 
 pj.returnValue(undefined,item);

@@ -31,9 +31,9 @@ item.shifterPlacement = function () {
 
 
 item.update = function () {
-  if (!this.data) return;
+  if (!this.__data) return;
   axisUtils.updateAxes(this,'flip');
-  this.core.setData(this.getData(),true);
+  this.core.__setData(this.__getData(),true);
 }
 
 item.reset = function () {
