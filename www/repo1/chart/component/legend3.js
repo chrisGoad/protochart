@@ -63,7 +63,7 @@ item.listenForChange = function (ev) {
   }
 }
 
-item.addListener("UIchange","listenForChange");
+item.__addListener("UIchange","listenForChange");
 
 item.layout = function (width,height) {
   var modified = true;

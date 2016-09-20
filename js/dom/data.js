@@ -687,7 +687,7 @@ pj.Object.__setData = function (xdt,doUpdate) {
     this.__newData = true;
   } else {
     dt = fromExternal?Object.create(xdt):xdt;
-    if (!dt.parent()) {
+    if (!dt.__parent) {
       this.set("__data",dt);
       this.__newData = true;
     } else {

@@ -33,7 +33,7 @@ item.vertices.bind = function () {
 item.edges.bind = function () {
   debugger;
   var data = this.__data;
-  var vertices = this.parent().__data.vertices;
+  var vertices = this.__parent.__data.vertices;
   var positionsById = {};
   vertices.forEach(function (vertex) {
     var pos = vertex.position;

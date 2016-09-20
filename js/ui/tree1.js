@@ -621,7 +621,7 @@ pj.Object.__showInTreeP = function (k,overriden) {
   isFun = tp === "function";
   if (isFun) {
     if (!tree.showFunctions) return false;
-    if (dontShowFunctionsFor.indexOf(this.__parent()) >= 0) return false;// excludes eg geom functions
+    if (dontShowFunctionsFor.indexOf(this.__parent) >= 0) return false;// excludes eg geom functions
     return "function";
     
   }

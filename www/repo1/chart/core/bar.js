@@ -148,11 +148,11 @@ item.listenForUIchange = function (ev) {
   if (ev.id === "UIchange") {
     if (ev.property === 'fill') {
       var nd = ev.node;
-      var pr = nd.parent(); 
-      if (pr.name() === 'categorizedPrototypes') {
+      var pr = nd.__parent;
+      if (pr.__name === 'categorizedPrototypes') {
         var lga = pj.ancestorWithProperty(pr,'legend')
         if (lga) {
-          lga.legend.setColorOfCategory(nd.name(),nd.fill,true);
+          lga.legend.setColorOfCategory(nd.__name,nd.fill,true);
         }
       }
      // return;
@@ -163,7 +163,7 @@ item.listenForUIchange = function (ev) {
   }
 }
 
-item.addListener("UIchange","listenForUIchange");
+item.__addListener("UIchange","listenForUIchange");
 
 item.update = function () {
   debugger;

@@ -20,32 +20,12 @@ item.set('__signature',pj.Signature.mk({width:'N',height:'N',fill:'S'}));
 
 item.set('lines', pj.Spread.mk(item.BowedLineP));
 item.lines.__unselectable = true;
-/*
-item.lines.binderr = function (line,notUsed,indexInSeries,lengthOfDataSeries) {
-  var hin = lengthOfDataSeries/2;
-  var y = this.parent().lineSep * indexInSeries;
-  var maxY = this.parent().height;
-  line.set('origin',pj.geom.Point.mk(0,y));
-  //line.height = -(indexInSeries - hin) * 1 + 20 * Math.random();
-  var ht =  50 * (Math.random() - 0.5);
-  if (y+  ht < 0)  {
-    ht = 0;//-ht;
-  }
-  if (y + ht > maxY) {
-    ht = 0;// - ht;
-  }
-  line.height = ht;
-  console.log('ht',line.height);
-  //line.stroke = this.fill;
- line.update();
-  line.__show();
-}
-*/
+
 item.lines.bind = function () {
   debugger;
   var n = this.count;
   var hin = n/2;
-  var parent = this.parent();
+  var parent = this.__parent;
   var vertical = parent.drawVertically
   var maxY = vertical?parent.width:parent.height;
   var hmaxY = 0.5*maxY;

@@ -409,7 +409,7 @@ pj.Object.__protoName = function () {
   var rs,nm;
   if (!pr) return "";
   if (p.__get('__isType')) {
-    var nm = p.name();
+    var nm = p.__name;
     rs = nm?nm:"";
   } else {
     rs = p.__protoName();

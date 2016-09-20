@@ -82,10 +82,10 @@ item.listenForUIchange = function (ev) {
   if (ev.id === "UIchange") {
     if (ev.property === 'stroke') {
       var nd = ev.node;
-      var pr = nd.parent().parent();
+      var pr = nd.__parent.__parent;
       debugger;
-      if (pr.name() === 'lines') {
-        var ndindex = Number(nd.name().substr(1));
+      if (pr.__name === 'lines') {
+        var ndindex = Number(nd.__name.substr(1));
         var catName = pr.categories[ndindex];
         var lga = pj.ancestorWithProperty(pr,'legend')
         if (lga) {
@@ -101,7 +101,7 @@ item.listenForUIchange = function (ev) {
 }
 
 
-item.addListener("UIchange","listenForUIchange");
+item.__addListener("UIchange","listenForUIchange");
 
 item.lines.bind = function () {
   debugger;
