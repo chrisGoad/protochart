@@ -1,7 +1,7 @@
 
 'use strict';
 
-pj.require('../text/textarea1.js','../shape/rectangle1.js',function (erm,textareaP,rectangleP) {
+pj.require('../text/textarea1.js','../shape/rectangle.js',function (erm,textareaP,rectangleP) {
 var geom = pj.geom;
 var svg = pj.svg;
 var ui = pj.ui;

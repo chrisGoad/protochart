@@ -20,31 +20,10 @@ gradient.set('stop4',svg.Element.mk(' <stop offset="100%" stop-color="rgb(20,20,
 var defs = svg.Element.mk('<defs/>');
 item.set('defs',defs);
 item.defs.set('gradient',gradient);//
-//defs.push(linearGradient);
 var rect = svg.Element.mk('<rect x="0" y="50" width="50" height="100" stroke="black" fill="url(#G0)"/>');
-//item.set('main',svg.Element.mk('<g/>').addChildren([defs,rect]));
-item.set('rect',rect);
-//item.main.set('defs',defs);
-//item.main.set('rect',rect);
+item.set('__contents',rect);
 
-//item.set('main',svg.Element.mk('<rect x="0" y="50" width="50" height="100" stroke="black" fill="url(#G0)"/>'));
-/*item.set("main",svg.Element.mk(
-   `<g>
-   <defs>
-    <linearGradient id="G0">
-      <stop offset="0%" stop-color="rgb(20,20,20)" stop-opacity="1" />
-      <stop offset="20%"  stop-color="blue" stop-opacity="1" />
-       <stop offset="50%"  stop-color="rgb(100,100,200)" stop-opacity="1" />
-     <stop offset="80%"  stop-color="blue" stop-opacity="1" />
-      <stop offset="100%" stop-color="rgb(20,20,20)" stop-opacity="1" />
-    </linearGradient>
-  </defs>
-<rect x="0" y="50" width="50" height="100" stroke="black" fill="url(#G0)"/>
-</g>`
-));
-*/
-item.rect.__unselectable = true;
-//item.main.__show();
+item.__contents.__unselectable = true;
 item.width = 100;
 item.height = 100;
 item.fill = 'rgb(0,00,255)';
@@ -69,12 +48,11 @@ item.set('__signature',pj.Signature.mk({width:'N',height:'N',fill:'S',stroke:'S'
 item.setColor = function (color) {
   this.fill = color;
   this.update();
-  //this.main.fill = color;
 }
 
 var count = 0;
 item.update = function () {
-   var rect = this.rect; 
+   var rect = this.__contents; 
   if (this.hasOwnProperty('fill')) {
     var gradient = this.defs.gradient;
     var id = 'g'+(count++);
@@ -84,14 +62,10 @@ item.update = function () {
     gradient.stop3['stop-color'] = this.fill;
     rect.fill = 'url(#'+id+')'
   }
-  //return;
-  //var main = this.main;
-  //pj.transferState(this.main,this,'ownOnly');
   rect.x = -0.5*this.width;
   rect.y = -0.5*this.height;
   rect.width = this.width;
   rect.height = this.height;
- // main.__show();
 }
 
 item.__adjustable = true;
@@ -107,7 +81,6 @@ item.__setExtent = function (extent) {
   this.height = extent.y;
   this.update();
   this.extentEvent.node = this;
-  //event = pj.Event.mk('extentChange',this);
   this.extentEvent.emit();
 }
  
@@ -116,10 +89,8 @@ item.__updateControlPoint = function (idx,pos) {
  
 }
 
-ui.hide(item,['main']);
+ui.hide(item,['__contents']);
 
-//ui.hide(item,['HeadP','shaft','includeEndControls']);
-//ui.hide(item,['head0','head1','LineP','end0','end1']);
 
 pj.returnValue(undefined,item);
 })();

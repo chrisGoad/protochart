@@ -8,11 +8,11 @@ var ui = pj.ui;
 var geom =  pj.geom;
 var item = svg.Element.mk('<g/>');
 
-item.set("main",svg.Element.mk(
+item.set("__contents",svg.Element.mk(
    '<rect x="0" y="0" width="100" height="50" stroke="green" '+
    ' stroke-width="2" fill="red"/>'));
-item.main.__unselectable = true;
-item.main.__show();
+item.__contents.__unselectable = true;
+item.__contents.__show();
 item.width = 100;
 item.height = 100;
 item.fill = 'blue';
@@ -24,15 +24,15 @@ item.set('__signature',pj.Signature.mk({width:'N',height:'N',fill:'S',stroke:'S'
 
 item.setColor = function (color) {
   this.fill = color;
-  this.main.fill = color;
+  this.__contents.fill = color;
 }
 
 item.update = function () {
-  var main = this.main;
-  pj.transferState(this.main,this);//,'ownOnly');
-  main.x = -0.5*this.width;
-  main.y = -0.5*this.height;
-  main.__show();
+  var contents = this.__contents;
+  pj.transferState(contents,this);//,'ownOnly');
+  contents.x = -0.5*this.width;
+  contents.y = -0.5*this.height;
+  contents.__show();
 }
 
 item.__adjustable = true;
@@ -57,7 +57,7 @@ item.__updateControlPoint = function (idx,pos) {
  
 }
 
-ui.hide(item,['main']);
+ui.hide(item,['__contents']);
 
 //ui.hide(item,['HeadP','shaft','includeEndControls']);
 //ui.hide(item,['head0','head1','LineP','end0','end1']);

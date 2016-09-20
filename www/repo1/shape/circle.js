@@ -8,10 +8,10 @@ var ui = pj.ui;
 var geom =  pj.geom;
 var item = svg.Element.mk('<g/>');
 
-item.set("main",svg.Element.mk(
+item.set("__contents",svg.Element.mk(
    '<circle fill="rgb(39, 49, 151)" stroke="black" stroke-width="2" \ r="20" />'));
-item.main.__unselectable = true;
-item.main.__show();
+item.__contents.__unselectable = true;
+item.__contents.__show();
 item.dimension = 100;
 item.fill = 'red';
 item.stroke = 'rgb(0, 128, 117)';
@@ -22,18 +22,17 @@ item.set('__signature',pj.Signature.mk({dimension:'N',fill:'S',stroke:'S','strok
 
 item.setColor = function (color) {
   this.fill = color;
-  this.main.fill = color;
+  this.__contents.fill = color;
 }
 
 
 
 item.update = function () {
-  var main = this.main;
+  var contents = this.__contents;
   if (this.hasOwnProperty('dimension')) {
-    main.r = 0.5 * this.dimension;
+    contents.r = 0.5 * this.dimension;
   }
-  pj.setPropertiesFromOwn(main,this,['fill','stroke','stroke-width']);
- // main.__show();
+  pj.setPropertiesFromOwn(contents,this,['fill','stroke','stroke-width']);
 }
 
 item.__adjustable = true;
@@ -71,7 +70,7 @@ item.__updateControlPoint = function (idx,pos) {
  
 }
 
-ui.hide(item,['main']);
+ui.hide(item,['__contents']);
 
 //ui.hide(item,['HeadP','shaft','includeEndControls']);
 //ui.hide(item,['head0','head1','LineP','end0','end1']);

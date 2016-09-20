@@ -8,13 +8,13 @@ var ui = pj.ui;
 var geom =  pj.geom;
 var item = svg.Element.mk('<g/>');
 
-item.set("main",
+item.set("__contents",
   svg.Element.mk('<path fill="none" stroke="blue"  stroke-opacity="1" stroke-linecap="round" stroke-width="1"/>'));
 
 item.roundOneEnd = false;
 item.roundTop = false;
-item.main.__unselectable = true;
-item.main.__show();
+item.__contents.__unselectable = true;
+item.__contents.__show();
 item.width = 100;
 item.height = 100;
 //item.cornerRadius = 10;  
@@ -31,7 +31,7 @@ var sqrt2 = Math.sqrt(2);
 
 item.setColor = function (color) {
   this.fill = color;
-  this.main.fill = color;
+  this.__contents.fill = color;
 }
 item.update = function () {
   var d,cr;
@@ -76,8 +76,8 @@ item.update = function () {
     d += ' V '+(mhh+cext);// to upper right
   }
   //this.BowedLine['stroke-width'] = this.strokeWidth;
-  this.main.d = d;
-  pj.transferState(this.main,this);
+  this.__contents.d = d;
+  pj.transferState(this.__contents,this);
 }
 
 item.__adjustable = true;

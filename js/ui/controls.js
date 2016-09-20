@@ -177,7 +177,6 @@ ui.updateCustomBoxes = function (points) {
   boxes.__moveto(controlCenter);
   ln = points.length;
   sc = geom.scalingDownHere(controlled);
-  clickedBoxIndex = -1;
   for (i=0;i<ln;i++) {
     nm = "c"+i;
     ps = points[i];
@@ -266,6 +265,7 @@ ui.updateBoxSize = function () {
 var boxesToHideForScaling = {c00:1,c10:1,c20:1,c02:1,c12:1,c22:1,shifter:1};
   
 ui.updateControlBoxes = function (firstCall) {
+  var points;
   pj.log('control','updateControlBoxes')
   var boxes,updateControlBox,showBox,box,extent,corner,element,dst;
   if (!controlled) {
@@ -280,7 +280,7 @@ ui.updateControlBoxes = function (firstCall) {
   if (controlled.__customControlsOnly) return;
   ui.updateControlPoints();
   boxes = pj.root.__controlBoxes;
-  updateControlBox = function(nm) {
+  var updateControlBox = function(nm) {
     showBox = true;
     box = boxes[nm];
     if (proportion) {

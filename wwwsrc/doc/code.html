@@ -33,8 +33,9 @@ $('document').ready(function () {
 <p>
 Sections 2 - 6  describe how to work with <a href="https://prototypejungle.org">deep prototypes</a> ("deep" as in hierarchical).
 This is a general purpose
-JavaScript component technology hosted at prototypejungle.org. Deep prototypes form the material from which all ProtoChart elements are made.
-  The remaining sections concern  construction of 2d shapes (implemented by way  of SVG), and
+JavaScript component technology hosted at prototypejungle.org. Deep prototypes are the material from which all ProtoChart elements are made.
+  The remaining sections concern  construction of 2d shapes (implemented by way  of
+<a href="https://developer.mozilla.org/en-US/docs/Web/SVG">SVG)</a>, and
  binding of visual constructions to data (that is, charting).
 </p>
 
@@ -76,16 +77,16 @@ pj.require('../shape/arrow2.js',function (errorMessage,arrowPP) {
   // first the circles
   item.set('circleP',svg.Element.mk(
    '&lt;circle fill="rgb(39, 49, 151)" stroke="black" stroke-width="2" \ r="5" /&gt;').__hide());
-  item.set("circle1",item.circleP.instantiate()).__show();
-  item.set("circle2",item.circleP.instantiate()).__show();
+  item.set('circle1',item.circleP.instantiate()).__show();
+  item.set('circle2',item.circleP.instantiate()).__show();
   item.circle1.__moveto(p1);
   item.circle2.__moveto(p2);
   // now the arrows 
-  item.set("arrowP",arrowPP.instantiate()).__hide();
+  item.set('arrowP',arrowPP.instantiate()).__hide();
   item.arrowP.stroke = 'orange';
   item.arrowP.radius = 2; // radius of the arc as a multiple of arrow length
-  item.set("arrow1",item.arrowP.instantiate()).__show();
-  item.set("arrow2",item.arrowP.instantiate()).__show();
+  item.set('arrow1',item.arrowP.instantiate()).__show();
+  item.set('arrow2',item.arrowP.instantiate()).__show();
   item.arrow1.setEnds(p1,p2);
   item.arrow2.setEnds(p2,p1);
   pj.returnValue(undefined,item);
@@ -113,7 +114,7 @@ Of course, this requires posting the code somewhere on the web. You can do this 
   <p>
 <i><b>pj</b></i>: The ProtoChart implementation is installed under one global variable,  <cw>prototypeJungle</cw>
 (<a href="https://prototypejungle.org">PrototypeJungle</a> is
-the fraamework within which ProtoChart is built).
+the framework within which ProtoChart is built).
 A shorter synonym for that global, <cw>pj</span>, is also available. If you need <cw>pj</span> for other purposes,
 it can be freed by calling <cw>prototypeJungle.noConflict()</span>
 (this is analogous to <a href="https://api.jquery.com/jquery.noconflict/">jQuery.noConflict()</a>, which frees up $). </p>
@@ -128,17 +129,17 @@ pj.require('../shape/arc_arrow.js',function (errorMessage,arrowPP) { ...
  used for pathnames: ../shape/arc_arrow.js refers to the file arrived at by navigating in the
  <a href="https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths">usual Unix way</a> from the
  directory  in
- which the referring file appears (in this case  https://prototypejungle.org/repo1/example/). pj.require can take arbitrarily
+ which the referring file appears (in this case  https://protochart.org/repo1/example/). pj.require can take arbitrarily
  many arguments:</p>
 <p>
 <precode>
-     pj.require(file1,file2,...,filen,function (errorMessage,var1,var2,...,varn) { ...});
+     pj.require(file1,file2,...,file<sup style="font-size:8pt">n</sup>,function (errorMessage,var1,var2,...,var<sup style="font-size:8pt">n</sup>) { ...});
  </precode>
 
 </p>
 
-The given
- function is called, with variables bound to the components defined by the corresponding files..</p>
+Each variable <cw>var<sup style="font-size:8pt">k</sup></span> is bound to the component defined by the corresponding file <cw>file<sup style="font-size:8pt">k</sup></span>.
+</p>
 <precode>
     var item = svg.Element.mk('&lt;g/&gt;');// the root of the diagram we are assembling
 </precode>
@@ -146,7 +147,7 @@ The given
  
 
 <p><cw>pj.svg.Element.mk</span> creates a deep prototype from
-<a href="https://developer.mozilla.org/en-US/docs/Web/SVG">SVG</a> markup (todo mention limitations).
+<a href="https://developer.mozilla.org/en-US/docs/Web/SVG">SVG</a> markup.
 In what follows, deep prototypes will be referred to as "items".</p>
 
 <precode>
@@ -165,15 +166,16 @@ In what follows, deep prototypes will be referred to as "items".</p>
 <p>For any <cw>item</span>, </p>
 
 <precode>
-    item.set(name,ch);
+    item.set('name',ch);
 </precode>
 
 <p>assigns <cw>ch</span> as the child of <cw>item</span>
-with the given <cw>name</cw>,  so that item.name === child. Items are always trees, not graphs, in their own-property aspect (todo: add link). Thus, for no other item2 does item2.prop === child (see below -todo fix reference).</p>
+with the given <cw>name</cw>,  so that <cw>item.name === ch</span>. Items are always trees, not graphs, in their own-property aspect.
+Thus, for no other <cw>item2</cw> with own property <cw>'prop'</cw> does <cw>item2.prop === ch</cw>.</p>
 <p>Next:</p>
 
 <precode>
-   item.set("circle1",item.circleP.instantiate()).__show();
+   item.set('circle1',item.circleP.instantiate()).__show();
 </pre></code>
 
 <p>
@@ -182,20 +184,23 @@ it  is the analog of <cw>Object.create</span>, but works for trees of arbitrary 
 circles have depth 1,  but arrows, instantiated a few lines later, are of depth 2.  In the case of,
 </p>
 <precode>
-    item.set("arrow1",item.arrowP.instantiate()).__show();
+    item.set('arrow1',item.arrowP.instantiate()).__show();
 </pre></code>
 
 <p>
-arrow1 is, roughly speaking, a tree-wise copy of arrowP, but the copying is only applied to internal nodes; atomic properties
+<cw>arrow1</cw> is, roughly speaking, a tree-wise copy of <cw>arrowP</cw>, but the copying is only applied to internal nodes; atomic properties
 are inherited. There are <a href="http://prototypejungle.org/doc/tech.html#instantiate">details</a>. Anyway, via instantiation, we get two circles and two arrows, which are then given the differing properties appearing in the diagram. The unmodified properties are inherited. Instantiation is used at all levels of charting - for comparatively simple components like arrows, but also for more complex components such as axes, and the sets of data-bound marks (eg bars or bubbles) that make up the core of most charts.
 </p>
-<p>But we have skipped ahead a little. arrowP was defined by: </p>
+<p>But we have skipped ahead a little. <cw>arrowP</cw> was defined by: </p>
 <precode>
-    item.set("arrowP",item.arrowPP.instantiate()).__hide();
+    item.set('arrowP',item.arrowPP.instantiate()).__hide();
 </pre></code>
 
-<p>There is a reason for instantiating arrowPP to arrowP, and then arrowP to arrow1 and arrow2, rather than deriving arrow1
-and arrow2 directly from arrowPP. Namely, arrowPP, having come into being via a require, is an external reference of the item we are building. arrowP, on the other hand, is an internal structure. arrowPP's properties (eg fill or stroke) are not available for modification,whereas arrowP's are.</p>
+<p>There is a reason for instantiating <cw>arrowPP</cw> to <cw>arrowP</cw>, and then <cw>arrowP</cw> to <cw>arrow1</cw> and
+<cw>arrow2</cw>, rather than deriving <cw>arrow1</cw>
+and <cw>arrow2</cw> directly from <cw>arrowPP</cw>. Namely, <cw>arrowPP</cw>, having come into being via a require,
+is an external reference of the item we are building. <cw>arrowP</cw>, on the other hand, is an internal structure.
+<cw>arrowPP</cw>'s properties (eg fill or stroke) are not available for modification,whereas <cw>arrowP</cw>'s are.</p>
 
 <p>
 <precode>
@@ -203,22 +208,31 @@ and arrow2 directly from arrowPP. Namely, arrowPP, having come into being via a 
 </pre></code>
 </p>
 <p>
-returns item as the value of the component simple_diagram.js. Items may be displayed in the editor, as in
-<a href="https://prototypejungle.org/edit.html?source=https://prototypejungle.org/repo1/example/simple_diagram.js">
-  https://prototypejungle.org/edit.html?source=https://prototypejungle.org/repo1/example/simple_diagram.js
-</a>, or assembled into larger structures via require.
+returns item as the value of the component.</p>
+<p>To complete the explantion of this bit of code:  <cw>__show</cw>, <cw>__hide</cw>, and <cw>__moveto</cw> are methods of
+<cw>pj.svg.Element</cw> (the prototype which implements drawable shapes based on svg Elements).
+<cw>setEnds</cw> is a method of  the arc_arrow prototype, defined by the code
+<a href="http://protochart.org/repo1/shape/arc_arrow.js">http://protochart.org/repo1/shape/arc_arrow.js</a>.
+</p>
+ Items may be displayed in the editor, as we have seen (
+<a href="https://protochart.org/edit.html?source=https://protochart.org/repo1/example/simple_diagram.js">
+  https://protochart.org/edit.html?source=https://protochart.org/repo1/example/simple_diagram.js
+</a>), or assembled into larger structures via require.
 </p>
 <p>
 Items can also be displayed outside of the editor, as illustrated in the file
-<a href="https://prototypejungle.org/repo1/example/standalone.html">https://prototypejungle.org/repo1/example/standalone.html</a>.
-Note (via <i>view source</i>) that
-the coding environment is set up in a  different way, but that the construction of the item is identical.
-The same standalone code is available at
+<a href="https://protochart.org/repo1/example/standalone.html">https://protochart.org/repo1/example/standalone.html</a>.
+Use your browser's <i>view source</i>  to see how this works.
+<a href="https://protochart.org/repo1/example/standalone2.html">https://protochart.org/repo1/example/standalone2.html</a>, is similar
+but builds the item inline rather than requiring it from simple_diagram.js.
+The second variant is available at
 <a href = "https://jsfiddle.net/prototypejungle/qka1n30q/">jsfiddle</a></p>
+<p>
+ProtoChart also has a viewer:<br/> <a href="https://protochart.org/view.html?source=https://protochart.org/repo1/example/simple_diagram.js">
+https://protochart.org/edit.html?source=https://protochart.org/repo1/example/simple_diagram.js</a>
 </p>
 
-<p>To complete the explantion of this bit of code:  __show, __hide, and __moveto are methods of pj.svg.Element (the prototype which implements drawable shapes based on svg Elements). setEnds is a method of  the arc_arrow prototype, defined by the code  <a href="http://prototypejungle.org/repo1/shape/arc_arrow.js">http://prototypejungle.org/repo1/shape/arc_arrow.js</a>.
-</p>
+
 
 
 <div class="section" id="codeStructure">3. Code Structure </div>

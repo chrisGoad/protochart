@@ -8,12 +8,12 @@ var ui = pj.ui;
 var geom =  pj.geom;
 var item = svg.Element.mk('<g/>');
 
-item.set("main",svg.Element.mk(
+item.set("__contents",svg.Element.mk(
    '<rect x="0" y="0" width="100" height="50" stroke="black" '+
    ' stroke-width="2" fill="#eeeeee"/>'));
 
-item.main.__unselectable = true;
-item.main.__show();
+item.__contents.__unselectable = true;
+item.__contents.__show();
 item.dimension = 100;
 item.fill = 'red';
 item.stroke = 'green';
@@ -23,19 +23,18 @@ item.set('__signature',pj.Signature.mk({dimension:'N',fill:'S',stroke:'S','strok
 
 item.setColor = function (color) {
   this.fill = color;
-  this.main.fill = color;
+  this.__contents.fill = color;
 }
 
 item.update = function () {
-  var main = this.main;
+  var contents = this.__contents;
   if (this.hasOwnProperty('dimension')) {
     var dim = this.dimension;
-    main.width = dim;
-    main.height = dim;
-    main.x = main.y = -0.5*dim;
+    contents.width = dim;
+    contents.height = dim;
+    contents.x = __contents.y = -0.5*dim;
   }
-  pj.setPropertiesFromOwn(main,this,['fill','stroke','stroke-width']);
- // main.__show();
+  pj.setPropertiesFromOwn(contents,this,['fill','stroke','stroke-width']);
 }
 
 item.__adjustable = true;
@@ -71,7 +70,7 @@ item.__setExtent = function (extent,nm) {
  
 
 
-ui.hide(item,['main']);
+ui.hide(item,['__contents']);
 
 //ui.hide(item,['HeadP','shaft','includeEndControls']);
 //ui.hide(item,['head0','head1','LineP','end0','end1']);

@@ -1,3 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Standalone example for ProtoChart</title>
+<body>
+<script src="https://prototypejungle.org/js/pjcore-0.9.3.js"></script>
+<!--
+<script src="https://protochart.org/js/pjdom-0.9.3.js"></script>
+-->
+<script src="/js/pjdom-0.9.3.js"></script>
+
+<script>
+/*
+http://127.0.0.1:3000/repo1/example/standalone.html
+*/
 
 pj.require('../shape/arc_arrow.js',function (errorMessage,arrowPP) {
   var geom = pj.geom;
@@ -20,5 +35,12 @@ pj.require('../shape/arc_arrow.js',function (errorMessage,arrowPP) {
   item.set('arrow2',item.arrowP.instantiate()).__show();
   item.arrow1.setEnds(p1,p2);
   item.arrow2.setEnds(p2,p1);
-  pj.returnValue(undefined,item);
+  pj.viewItem(item,'svgDiv');
 });
+
+//pj.viewItem('/repo1/example/simple_diagram.js','svgDiv');
+
+</script>
+<div id="svgDiv" style="width:400px;height:200px;border:solid thin black"></div>
+</body>
+</html>

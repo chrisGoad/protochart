@@ -3,7 +3,7 @@
 <head>
 <title>Standalone example for ProtoChart</title>
 <body>
-<script src="http://prototypejungle.org/js/pjcore-0.9.3.js"></script>
+<script src="https://prototypejungle.org/js/pjcore-0.9.3.js"></script>
 <!--
 <script src="https://protochart.org/js/pjdom-0.9.3.js"></script>
 -->
@@ -13,8 +13,10 @@
 /*
 http://127.0.0.1:3000/repo1/example/standalone.html
 */
-
-pj.viewItem('/repo1/example/simple_diagram.js','svgDiv');
+pj.require('/repo1/example/simple_diagram.js',function (errorMessage,item) {
+  pj.viewItem(item,'svgDiv');
+});
+//pj.viewItem('/repo1/example/simple_diagram.js','svgDiv');
 
 </script>
 <div id="svgDiv" style="width:400px;height:200px;border:solid thin black"></div>

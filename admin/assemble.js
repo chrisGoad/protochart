@@ -117,7 +117,7 @@ function mkModule(which,version,contents,cb) {
 function mk_pjdom(cb) { 
   var fls = dom_files;
   var rs =mextract(fls) ;
-  mkModule("pjdom",versions.pjdom,rs,cb);
+  mkModule("dom",versions.pjdom,rs,cb);
   
 }
 
@@ -128,7 +128,7 @@ function mk_pjui(cb) {
  // var rs = "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,fb=pj.fb,ui=pj.ui;\n"+
  // var rs = "(function (pj) {\n\nvar om=pj.om,geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
   var rs =        mextract(fls);
-  mkModule('pjui',versions.pjui,rs,cb);
+  mkModule('ui',versions.pjui,rs,cb);
 
 }
 
@@ -138,7 +138,7 @@ function mk_pjui(cb) {
 function mk_pjchooser(cb) {
   var fls = chooser_files;
   var rs = mextract(fls);
-  mkModule("pjchooser",versions.pjchooser,rs,cb);
+  mkModule("chooser",versions.pjchooser,rs,cb);
 
 }
 
@@ -153,34 +153,10 @@ function mk_pjview(cb) {
 }
 
 
-function mk_pjloginout(cb) {
-  var fls = loginout_files;
-  var rs =   '\nwindow.prototypeJungle =  window.pj = (function () {\n\"use strict"\n'+mextract(fls) + "\nreturn pj;\n})();\n";
-  mkModule("pjloginout",versions.pjloginout,rs,cb);
-}
-
-
-
-function mk_pjworker(cb) {
-  var fls = worker_files;
-  var rs =   '(function () {\n\"use strict"\n'+mextract(fls) + "\nreturn pj;\n})(prototypeJungle);\n";
-  mkModule("pjworker",versions.pjworker,rs,cb);
-}
-
-
-function mk_insert(cb) {
-  debugger;
-  var rs = getContents('editor/insert');
-  mkModule('insert',versions.pjui,rs,cb);
-
-}
 function mk_pjeditor(cb) { 
   var fls = editor_files;
-  var rs =// "(function (pj) {\n\nvar geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui, fb=pj.fb,tree=pj.tree,lightbox=pj.lightbox;\n"+
- // var rs = "(function (pj) {\n\nvar om=pj.om,geom=pj.geom,dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
-            //'"use strict"\n'+
-             mextract(fls);//+ "\n})(prototypeJungle);\n"
-  mkModule('pjeditor',versions.editor,rs,cb);
+  var rs = mextract(fls);//+ "\n})(prototypeJungle);\n"
+  mkModule('editor',versions.editor,rs,cb);
 
 }
 
