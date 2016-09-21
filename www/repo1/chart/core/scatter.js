@@ -126,6 +126,7 @@ item.listenForUIchange = function (ev) {
 item.__addListener("UIchange","listenForUIchange");
 
 item.update = function () {
+  debugger;
   var svg = pj.svg,
     thisHere = this,
     //horizontal = this.orientation === 'horizontal',
@@ -141,6 +142,8 @@ item.update = function () {
   //color_utils.initColors(this);
   if (this.__data.categories) {
      this.categoryCount = this.__data.categories.length;
+  } else {
+    this.categoryCount = 1;
   }
   var numD = this.numericalDomain;
   if (!numD) {

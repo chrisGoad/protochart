@@ -21,18 +21,5 @@ pj.viewItem = function (item,inDiv,cb) {
  
 
 
-/*
-pj.viewItem = function (url,inDiv) {
-  document.addEventListener('DOMContentLoaded',function () {
-    pj.require(url,function (errorMessage,item) {
-      var root = pj.svg.Root.mk(document.getElementById(inDiv));
-    //var root = pj.svg.Element.mk('<g/>');// the root of the diagram we are assembling
-      root.set("contents", item);
-      pj.updateParts(root);
-      root.fitContents();
-    });
-  });
-}
-*/
 })(prototypeJungle);
 

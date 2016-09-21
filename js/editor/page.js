@@ -281,7 +281,25 @@ var htmlEscape = function (str) {
 
 var  delims = {',':1,':':1,'<':1,'>':1,';':1,' ':1,'\n':1};
 
-var splitAtDelims = function (str) {
+var lastStringSplit = undefined;
+var lastSplit = undefined;
+
+var splitAtDelims = function (str,forPath) {
+  if (forPath) {
+    var isplit = str.split('/');
+    var split = [];
+    var ln = isplit.length;
+    for (var i=0;i<ln;i++) {
+      split.push(isplit[i]);
+      if (i < ln-1) {
+        split.push('/');
+      }
+    }
+    return split;
+  }
+  if (lastStringSplit === str) {
+    return lastSplit;
+  }
   var ln = str.length;
   var rs = [];
   var word = '';
@@ -295,19 +313,21 @@ var splitAtDelims = function (str) {
       word += c;
     }
   }
+  if (word) {
+    rs.push(word);
+  }
+  lastStringSplit = str;
+  lastSplit = rs;
   return rs;
 }
-var wordWrap = function (str,maxLength) {
+var wordWrap = function (str,maxLength,forPath) {
+  var split = splitAtDelims(str,forPath);
   debugger;
-  var split = splitAtDelims(str);
   var rs = '';
   var currentLength = 0;
   split.forEach(function (word) {
-    var rrs;
     if (word) {
       if (word === '\n') {
-        rrs = rs;
-        debugger;
         if (rs[rs.length-1] != '\n') {
           rs += word;
         }
@@ -317,12 +337,11 @@ var wordWrap = function (str,maxLength) {
       var wln = word.length;
       if (wln + currentLength > maxLength) {
         rs += '\n';
-        currentLength = 0;
+        currentLength = wln;
       } else {
         currentLength += wln;
       }
       rs += word;
-      rrs = rs;
     }
   });
   return rs;
@@ -353,11 +372,21 @@ ui.viewData  = function (idata) {
     ui.editDiv.$html('');
     return;
   }
-  var wwd  = uiWidth;//$(window).width();
+  var wwd  = uiWidth;
   debugger;
   var maxLength = Math.floor((wwd/622)*84);
   var htmlString = '<pre>'+htmlEscape(wordWrap(dataString,maxLength))+'</pre>';
   ui.editDiv.$html(htmlString);
+  ui.viewDataUrl();
+}
+
+var dataUrl;
+
+ui.viewDataUrl = function () {
+  var wwd  = uiWidth;
+  var maxLength = Math.floor((wwd/622)*84);
+  var wrapped = wordWrap(dataUrl,maxLength,true);
+  ui.editMsg.$html(wrapped);
 }
 
 ui.viewAndUpdateFromData =  function (data,url,cb) {
@@ -422,16 +451,17 @@ ui.viewDataBut.$click(function () {
   var ds = dat.findDataSource();
   if (ds) {
     debugger;;
-   
+  
     //ui.saveEditBut.$html('Save data');
-    ui.editTitle.$html('Data source:')
+    ui.editTitle.$html('Data source:');
     var url = ds[1];
-    var afterFetch = function () {ui.editMsg.$html(url);};
+    dataUrl = url;
+    //var afterFetch = function () {ui.viewDataUrl(url);};//ui.editMsg.$html(url);};
     if (url[0] === '[') { // url has the form [uid]path .. that is, it is a reference to a user's database, which in turn points to storage
       var indirect = pj.indirectUrl(url);
       pj.httpGet(indirect,function (erm,rs) {
                 debugger;
-                ui.getData(JSON.parse(rs),url,afterFetch);
+                ui.getData(JSON.parse(rs),url);//,afterFetch);
               });
     } else { // a direct url at which the data itself is present
       ui.getData(url,url,afterFetch);
@@ -477,7 +507,7 @@ ui.loadAndViewData = function (path) {
        pj.httpGet(url,function (erm,rs) {
          var cleanUp = ui.removeToken(JSON.parse(rs));
          ui.getData(cleanUp,displayUrl,function () {
-               ui.editMsg.$html(displayUrl);
+               //ui.editMsg.$html(displayUrl);
          });    
        });
     } else {

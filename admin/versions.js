@@ -1,5 +1,7 @@
 
 
+exports.combo = "0.9.3";
+
 exports.pjcore = "0.9.3";
 exports.pjdom = "0.9.3";
 exports.pjui = "0.9.3";

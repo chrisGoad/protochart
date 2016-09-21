@@ -300,26 +300,30 @@ var fieldLabel = function (field) {
   }
 }
 
-dat.Series.setupCategories = function (dt) {
+dat.Series.setupCategories = function (dt,flds) {
   var nflds;
-  var flds = dt.fields;
+  //var flds = dt.fields;
   var ln = flds.length;
   var categorize = ln >= 3;
   var domainId = fieldId(flds[0]);
   if (categorize) {
     var cts = pj.Array.mk();
     var categoryCaptions = pj.Object.mk();
+    var rangeType = 'number';
     for (var i=1;i<ln;i++) {
       var fld = flds[i];
       var ct = fieldId(fld);
       cts.push(ct);
       categoryCaptions[ct] = fieldLabel(fld);
+      if (fld.type !== 'number') {
+        rangeType = 'string';
+      }
     }
     this.set("categories",cts);
     this.set("categoryCaptions",categoryCaptions);
   }
   var fld0 = pj.Object.mk({id:domainId,role:'domain',type:flds[0].type});
-  var fld1 = pj.Object.mk({id:'value',role:'range',type:flds[1].type});
+  var fld1 = pj.Object.mk({id:'value',role:'range',type:rangeType});
   if (categorize) {
     var fld2 = pj.Object.mk({id:'category',type:'string'});
     nflds = pj.Array.mk([fld0,fld1,fld2]);
@@ -329,10 +333,45 @@ dat.Series.setupCategories = function (dt) {
   this.set('fields',nflds);
 }
 
+dat.determineTypeOfField = function (dt,field) {
+  var els = dt.elements;
+  var ln = els.length;
+  for (var i=0;i<ln;i++) {
+    var v = els[i][field];
+    if (typeof v !== 'number') {
+      return 'string';
+    }
+  }
+  return 'number';
+}
+
+dat.addTypesToFields = function (dt) {
+  var iflds = dt.fields;
+  var rs = pj.Array.mk();
+  iflds.forEach(function (field) {
+    if ((typeof field === 'object') && field.type) {
+      rs.push(field);
+    } else {
+      var tp = dat.determineTypeOfField(dt,field);
+      if (typeof field === 'object') {
+        field.type = tp;
+        rs.push(field);
+      } else {
+        var nfield = pj.Object.mk();
+        nfield.id = field;
+        nfield.type = tp;
+        rs.push(nfield);
+      }
+      //code
+    }
+  });
+  return rs;;
+}
 dat.toCategorized = function (dt) {
+  debugger;
   var rs =  Object.create(dat.Series);
   var flds,ln,categorize,els,i,domainId,domainType,domainV,cts,ct,nels,fld0,fld1,fld2,nflds,eltype;
-  flds = dt.fields;
+  flds = dat.addTypesToFields(dt);
   els = dt.elements;
   var el0 = els[0];
   /* if there is only one field, then there is nothing to do; this is a primitive series.  
@@ -342,7 +381,7 @@ dat.toCategorized = function (dt) {
   if (ln < 2) return this;
   categorize = ln >= 3;
   domainId = fieldId(flds[0]);
-  rs.setupCategories(dt);
+  rs.setupCategories(dt,flds);
   nels = pj.Array.mk(); 
   els.forEach(function (el) {
     var domainV = el[domainId];
@@ -357,14 +396,16 @@ dat.toCategorized = function (dt) {
     } 
   });
   rs.set("elements",nels);
-  eltype = (domainType === "string")?"S,N":"N,N";
-  rs.elementType = eltype;
+  //eltype = (domainType === "string")?"S,N":"N,N";
+  //rs.elementType = eltype;
   return rs;
 }
   // this converts incoming data to a form where each mark has the form {points:,[category:]}
 dat.to_pointArrays = function (dt) {
   var rs =  Object.create(dat.Series);
-  var flds = dt.fields;
+  var flds = dat.addTypesToFields(dt);
+
+ // var flds = dt.fields;
   // if there is only one field, then there is nothing to do; this is a primitive series.
   //  for now, the categories are the ids of the fields after the 0th (which is the domain) 
   var ln = flds.length;
@@ -374,7 +415,7 @@ dat.to_pointArrays = function (dt) {
   els = dt.elements;
   domain = fieldId(flds[0]);
   nels = pj.Array.mk(); // each will have the form {category:,points:},
-  rs.setupCategories(dt);
+  rs.setupCategories(dt,flds);
   if (categorize) {
     for (i=1;i<ln;i++) {
       nel = pj.Object.mk({category:rs.categories[i-1],points:pj.Array.mk()});
@@ -676,6 +717,7 @@ dat.internalizeData = function (dt,markType) {
 
 
 pj.Object.__setData = function (xdt,doUpdate) {
+  debugger;
   this.__idata = undefined;
   var isNode = pj.isNode(xdt);
   var fromExternal,dt,lifted;
@@ -687,7 +729,7 @@ pj.Object.__setData = function (xdt,doUpdate) {
     this.__newData = true;
   } else {
     dt = fromExternal?Object.create(xdt):xdt;
-    if (!dt.__parent) {
+    if (!dt.__get('__parent')) {
       this.set("__data",dt);
       this.__newData = true;
     } else {

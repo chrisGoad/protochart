@@ -134,6 +134,18 @@ function mk_pjui(cb) {
 
 
 
+function mk_combo() {
+  var domPath = mkPath('dom',versions.pjdom);
+  // var core = ''+fs.readFileSync(mkPath('pj',versions.pjcore));
+ console.log('domPath',domPath);
+  var dom = ''+fs.readFileSync(domPath);
+  var ui = ''+fs.readFileSync(mkPath('ui',versions.pjui));
+  var editor = ''+fs.readFileSync(mkPath('editor',versions.editor));
+  var combo = dom.concat(ui,editor);
+  mkModule('protochart',versions.combo,combo);
+  console.log(combo);
+  //code
+}
 
 function mk_pjchooser(cb) {
   var fls = chooser_files;
@@ -166,7 +178,7 @@ var afn = function (d,cb) {
   d(cb);
 }
 var jobByWhat = {dom:mk_pjdom,ui:mk_pjui,//data:mk_pjdata,
-                  view:mk_pjview,chooser:mk_pjchooser,editor:mk_pjeditor
+                  view:mk_pjview,chooser:mk_pjchooser,editor:mk_pjeditor,combo:mk_combo
                   // some old items: inspect:[mk_pjinspect],draw:[mk_pjdraw],dev:[mk_pjdev],login:[mk_pjloginout],
                  // rest:[mk_topbar,mk_pjloginout,mk_pjworker,mk_bubbles]
                   }

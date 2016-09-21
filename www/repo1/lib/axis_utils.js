@@ -92,6 +92,7 @@ item.updateAxes = function (main,flip) {
       minD = minD - pd;
     }
     axisH.set('dataBounds',prototypeJungle.geom.Interval.mk(minD,maxD));
+    debugger;
     axisH.update();
     axisH.__moveto(lowerLeft);
   }

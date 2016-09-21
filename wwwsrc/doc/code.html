@@ -41,12 +41,12 @@ JavaScript component technology hosted at prototypejungle.org. Deep prototypes a
 
 <div class="tableOfContents"> 
     <div class="contentsLine"><a href="#quickStart">1. Quick Start</a></div>
-   <div class="contentsLine"><a href="#codeStructure">3. Code Structure</a></div>
-     <div class="contentsLine"><a href="#trees">4. Trees</a></div>
-      <div class="contentsLine"><a href="#instantiation">5. Instantiation and Serialization</a></div>
-   <div class="contentsLine"><a href="#nonews">6. No news</a></div>  
-  <div class="contentsLine"><a href="#svg">7. SVG</a></div>
-   <div class="contentsLine"><a href="#conventions">8. Naming Conventions</a></div>
+   <div class="contentsLine"><a href="#codeStructure">2. Code Structure</a></div>
+     <div class="contentsLine"><a href="#trees">3. Trees</a></div>
+      <div class="contentsLine"><a href="#instantiation">4. Instantiation and Serialization</a></div>
+   <div class="contentsLine"><a href="#nonews">5. No news</a></div>  
+  <div class="contentsLine"><a href="#svg">6. SVG</a></div>
+   <div class="contentsLine"><a href="#conventions">7. Naming Conventions</a></div>
     <div class="contentsLine"><a href="#controllers">9. Controllers</a></div>
       <div class="contentsLine"><a href="#dataBinding">10.  Data Binding</a></div>
         <div class="contentsLine"><a href="#spreads">11. Spreads</a></div>
@@ -76,7 +76,7 @@ pj.require('../shape/arrow2.js',function (errorMessage,arrowPP) {
   var p2 = geom.Point.mk(100,0);
   // first the circles
   item.set('circleP',svg.Element.mk(
-   '&lt;circle fill="rgb(39, 49, 151)" stroke="black" stroke-width="2" \ r="5" /&gt;').__hide());
+   '&lt;circle fill="rgb(39, 49, 151)" stroke="black" stroke-width="2" r="5" /&gt;').__hide());
   item.set('circle1',item.circleP.instantiate()).__show();
   item.set('circle2',item.circleP.instantiate()).__show();
   item.circle1.__moveto(p1);
@@ -235,7 +235,7 @@ https://protochart.org/edit.html?source=https://protochart.org/repo1/example/sim
 
 
 
-<div class="section" id="codeStructure">3. Code Structure </div>
+<div class="section" id="codeStructure">2. Code Structure </div>
 
 <p>The ProtoChart implementation has three levels. First, there  is the core, in which deep prototypes
 and their basic operations, including serialization and instantiation, are defined. The second level supports
@@ -244,33 +244,40 @@ Protototypes are provided for 2d graphical shapes and their operations, and for 
 with data binding. -->This level of the implementation relies on
 <a href="https://developer.mozilla.org/en-US/docs/Web/SVG">SVG</a>. The third level implements
 a prototype-enabled 
-user interface. You see this interface in <a href="http://prototypejungle.org/edit.html">https://prototypeJungle/edit.html</a></p>
+user interface. You see this interface at <a href="http://protochart.org/edit.html">https://protochart.org/edit.html</a></p>
 
-<p>These three levels of code can be found at 
-<a href="http://prototypejungle.org/js/pjcore-0.9.2.js">pjcore-0.9.2.js</a>, <a href="http://prototypejungle.org/js/pjdom-0.9.2.js">pjdom.0.9.2.js</a>
- and <a href="http://prototypejungle.org/js/pjui-0.8.2.js">pjui-0.8.2.js</a>, respectively.
-pjdom includes the PrototypeJungle core,
-so that PrototypeJungle with geometric, SVG, and infographic support may be loaded with just one line:</p>
-
-<precode>
-&lt;script src="http://prototypejungle.org/js/pjdom-0.9.2.min.js"&gt;&lt;/script&gt;
-
-</precode>
+<p>The  core level is hosted at prototypejungle.org:  
+<a href="http://prototypejungle.org/js/pj-0.9.3.js">https://prototypejungle.org/js/pj-0.9.3.js</a>.
+The remaining levels are at
+<a href="https://protochart.org/js/dom-0.9.3.js">https://protochart.org/js/dom-0.9.3.js</a>
+ and <a href="https://protochart.org/js/editor-0.9.3.js">https://protochart.org/js/editor-0.9.3.js</a>.
+ The dom is built into the editor, so only one or the other of these two need be loaded.
+There are minimized versions: http://prototypejungle.org/js/pj-0.9.3.min.js, https://protochart.org/js/dom-0.9.3.js,
+and https://protochart.org/js/editor-0.9.3.js.
+<!--
 <p> For charts, there is a fourth level of code: the code that implements the charts themselves, and their components
 such as axes and legends.  The code for these appears in the current prototype repository: http://prototypejungle.org/repo3/charts, and also at github.
-
+-->
 
 <p>Unlike the other levels, which have no
 association with any particular web location and could be deployed from anywhere,
-pjui is configured specifically to support  the PrototypeJungle web site. Not much will be said about the ui layer in this document.</p>
+the editor is configured specifically to support  the ProtoChart web site. Summarizing:
+these are the lines needed for building applications hosted
+elsewhere:
+
+<precode>
+&lt;script src="https://prototypejungle.org/js/pj.0.9.3.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://protochart.org/js/dom-0.9.3.min.js"&gt;&lt;/script&gt;
+</precode>
+<!--Not much will be said about the editor in this document.-->
 
 
-<div class="section" id="trees">4. Trees</div>
+<div class="section" id="trees">3. Trees</div>
 
 <p> All deep prototypes (aka "items") are trees: each non-atomic child 
-has a unique parent. (Formally, if parent.prop === child, there is no parent2 with parent2 !== parent, and
-with parent2.prop === child. This is assuming that child is non-atomic:
-non-null and typeof(child) === 'object').
+has a unique parent. (Formally, if <cw>parent.prop === child</cw>, and <cw>prop</cw> is an own property of <cw>parent</cw>,
+there is no <cw>parent2</cw> with <cw>parent2 !== parent</cw>, and
+with <cw>parent2.prop2 === child</cw> for own property <cw>prop2</cw> of <cw>parent2</cw>. 
  The internal nodes in items  inherit from prototypes pj.Array 
 for sequential, zero-based arrays, and pj.Object  for objects which are not arrays.  
 
@@ -304,7 +311,7 @@ array.push(child);
 and assigns <cw>array</span> as the parent of <cw>child</span>. Then,
 <span class="code">array[array.length-1] === child</span>, and if <cw>child</span> is an Object or Array,
 <span class="code">child.__name === array.length-1</span>,
-and <span class="code">child.__parent === object</span>. Arrays are always sequential, zero-based arrays.
+and <span class="code">child.__parent === object</span>. Arrays are always sequential and zero-based.
 </p>
 
 <precode>
@@ -330,7 +337,7 @@ pj.lift({a:2,b:["a",4]});
 <precode>
 var root = pj.Object.mk();
 var aa = pj.Object.mk();
-var bb = pj.Array.mk();
+var bb = pj.Object.mk();
 
 root.set("a",aa); // adds aa as a child named "a" of root
 root.set("b",bb);
@@ -394,23 +401,23 @@ a.xx = b;
 <p><i>Restriction on names</i>: names may include only letters, numerals, and the underbar, and may not start with a numeral.</p>
 </div>
 
-<div class="section" id="instantiation">5. Instantiation and serialization</div>
+<div class="section" id="instantiation">4. Instantiation and serialization</div>
 <precode> 
 inode = node.instantiate();
 </precode>
 
-<p> builds an instantiation of node; a tree which has the same structure as node, but inherits primitive
-data and functions from root via prototypical inheritance. (Details <a href="/indexd.html#instantiate">here</a> and
-<a href="/devdoc/tech.html#instantiate">here</a>)</p>
+<p> builds an instantiation of <cw>node</cw>; a tree which has the same structure as node, but inherits primitive
+data and functions from root via prototypical inheritance. (Details
+<a href="https://prototypejungle.org/doc/tech.html#instantiate">here</a>)</p>
 <p>Serialization is performed by: 
 <precode> 
 s = pj.stringify(node);
 </precode>
 
-<p> as described <a href="/devdoc/tech.html#serialization">here</a>.</p>
+<p> as described <a href="https://prototypejungle.org/doc/tech.html#serialize">here</a>.</p>
 
 
-<div class="section" id="nonews">6. No news</div>
+<div class="section" id="nonews">5. No news</div>
 <p> Nodes are constructed with <cw>pj.Object.mk()</span> and <cw>pj.Array.mk()</span>, rather than via the use of a "new". The definition of the mk method for Object is:
 
 <precode>
@@ -439,41 +446,43 @@ pj.Array = [];
 
 <p>
 <cw>pj.Object</span> itself serves as the prototype for instances.  In the more conventional pattern, <cw>pj.Object</span> would be a function, and
-the prototype property of that function, not Object itself, would be the  prototype for the instances generated via the new operator
+the prototype property of that function, not <cw>Object</cw> itself, would be the  prototype for the instances generated via the new operator
 (note that if <code>F = function (){}, new F()</code> is equivalent
 to <code>Object.create(F.prototype)</code>)
 </p>
 <p>
 The <cw><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new">
-function, function.prototype, new</a></span> &nbsp; pattern has been available in JavaScript all along, whereas the  more direct <cw>Object.create</span> was introduced in recent years, in version 1.8.5. PrototypeJungle
+function, function.prototype, new</a></span> &nbsp; pattern has been available in JavaScript all along,
+whereas the  more direct <cw>Object.create</span> was introduced more recent years (in version 1.8.5 to be exact). PrototypeJungle
 employs the newer pattern, not so much for its intrinsic  simplicity (though that's nice), but because this way of doing things has a major
 simplifying effect on the entire PrototypeJungle code base. </p>
 
 <p> You will never see a "new" anywhere in the code. The convention is that for prototype  <cw>X</span>, <cw>X.mk</span> is the creator/initializer (which may take arguments).</p>
 
-<div class="section" id="svg">7.  SVG  </div>
+<div class="section" id="svg">6.  SVG  </div>
 <p>We have seen SVG Elements before, as in the line</p>
 <precode>
-  var rect = pj.svg.Element.mk(
-    '&lt;rect  fill="blue" stroke="black" stroke-width="5" x="0"   y="0" width="100" height="100"/&gt;').hide();
+   item.set('circleP',svg.Element.mk(
+   '&lt;circle fill="rgb(39, 49, 151)" stroke="black" stroke-width="2" r="5" /&gt;').__hide());
 </precode>
 
 <p> in the quick start section. 
-Generally, svg.Element.mk(markup); creates an object that inherits from the prototype svg.Element, which in turn
-inherits from pj.Object. Its  content
+Generally, <cw>svg.Element.mk(markup);</cw> creates an object that inherits from the prototype <cw>svg.Element</cw>, which in turn
+inherits from <cw>pj.Object</cw>. Its  content
 as an SVG element is as specified by the markup. At this stage, only some of the tags are supported:
-g, line, polyline, circle, rect, text, g and svg.
+<cw>g, line, polyline, circle, rect, text, g</cw> and <cw>svg</cw>.
 </p>
-<div class="section" id="conventions">8.  Naming conventions</div>
+<div class="section" id="conventions">7.  Naming conventions</div>
 <p>Developers  perform their work by defining new properties and methods for pj.Object, pj.Array, and
 pj.svg.Element.
 Thus, the issue arises of avoiding name collisions with methods on these types that PrototypeJungle
 itself defines. A primitive scheme addresses this issue: except for a very small collection of basic methods,
 PrototypeJungle uses names that start with a double underbar (__). So, name collisions
-will be avoided if developers never use double-underbar prefixes for the  properties and methods that they
+can be avoided if developers never use double-underbar prefixes for the  properties and methods that they
 introduce for their own purposes.
 Of course, the
 few basic methods should not be trampled on either, but it is a very short list, namely:
+<cw>instantiate, mk, name, parent, remove,</cw> and <cw>set</cw>.
 It is not quite right to call the double underbarred symbols <i>private</i>, since, as you will see,
 several of them
 (eg __getExtent to take a random example) have designated public purposes. </p>
