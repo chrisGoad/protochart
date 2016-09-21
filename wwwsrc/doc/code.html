@@ -31,9 +31,10 @@ $('document').ready(function () {
   
 <div class="pageTitle">Coding Guide</div>
 <p>
-Sections 2 - 6  describe how to work with <a href="https://prototypejungle.org">deep prototypes</a> ("deep" as in hierarchical).
+Sections 2 - 5  describe how to work with <a href="https://prototypejungle.org">deep prototypes</a> ("deep" as in hierarchical),
+the material from which all ProtoChart elements are made.<!--
 This is a general purpose
-JavaScript component technology hosted at prototypejungle.org. Deep prototypes are the material from which all ProtoChart elements are made.
+JavaScript component technology hosted at prototypejungle.org. Deep prototypes are the material from which all ProtoChart elements are made.-->
   The remaining sections concern  construction of 2d shapes (implemented by way  of
 <a href="https://developer.mozilla.org/en-US/docs/Web/SVG">SVG)</a>, and
  binding of visual constructions to data (that is, charting).
@@ -189,7 +190,7 @@ circles have depth 1,  but arrows, instantiated a few lines later, are of depth 
 
 <p>
 <cw>arrow1</cw> is, roughly speaking, a tree-wise copy of <cw>arrowP</cw>, but the copying is only applied to internal nodes; atomic properties
-are inherited. There are <a href="http://prototypejungle.org/doc/tech.html#instantiate">details</a>. Anyway, via instantiation, we get two circles and two arrows, which are then given the differing properties appearing in the diagram. The unmodified properties are inherited. Instantiation is used at all levels of charting - for comparatively simple components like arrows, but also for more complex components such as axes, and the sets of data-bound marks (eg bars or bubbles) that make up the core of most charts.
+are inherited. There are <a href="https://prototypejungle.org/doc/tech.html#instantiate">details</a>. Anyway, via instantiation, we get two circles and two arrows, which are then given the differing properties appearing in the diagram. The unmodified properties are inherited. Instantiation is used at all levels of charting - for comparatively simple components like arrows, but also for more complex components such as axes, and the sets of data-bound marks (eg bars or bubbles) that make up the core of most charts.
 </p>
 <p>But we have skipped ahead a little. <cw>arrowP</cw> was defined by: </p>
 <precode>
@@ -212,7 +213,7 @@ returns item as the value of the component.</p>
 <p>To complete the explantion of this bit of code:  <cw>__show</cw>, <cw>__hide</cw>, and <cw>__moveto</cw> are methods of
 <cw>pj.svg.Element</cw> (the prototype which implements drawable shapes based on svg Elements).
 <cw>setEnds</cw> is a method of  the arc_arrow prototype, defined by the code
-<a href="http://protochart.org/repo1/shape/arc_arrow.js">http://protochart.org/repo1/shape/arc_arrow.js</a>.
+<a href="https://protochart.org/repo1/shape/arc_arrow.js">https://protochart.org/repo1/shape/arc_arrow.js</a>.
 </p>
  Items may be displayed in the editor, as we have seen (
 <a href="https://protochart.org/edit.html?source=https://protochart.org/repo1/example/simple_diagram.js">
@@ -244,25 +245,25 @@ Protototypes are provided for 2d graphical shapes and their operations, and for 
 with data binding. -->This level of the implementation relies on
 <a href="https://developer.mozilla.org/en-US/docs/Web/SVG">SVG</a>. The third level implements
 a prototype-enabled 
-user interface. You see this interface at <a href="http://protochart.org/edit.html">https://protochart.org/edit.html</a></p>
+user interface. You see this interface at <a href="https://protochart.org/edit.html">https://protochart.org/edit.html</a></p>
 
 <p>The  core level is hosted at prototypejungle.org:  
-<a href="http://prototypejungle.org/js/pj-0.9.3.js">https://prototypejungle.org/js/pj-0.9.3.js</a>.
+<a href="https://prototypejungle.org/js/pj-0.9.3.js">https://prototypejungle.org/js/pj-0.9.3.js</a>.
 The remaining levels are at
 <a href="https://protochart.org/js/dom-0.9.3.js">https://protochart.org/js/dom-0.9.3.js</a>
  and <a href="https://protochart.org/js/editor-0.9.3.js">https://protochart.org/js/editor-0.9.3.js</a>.
  The dom is built into the editor, so only one or the other of these two need be loaded.
-There are minimized versions: http://prototypejungle.org/js/pj-0.9.3.min.js, https://protochart.org/js/dom-0.9.3.js,
-and https://protochart.org/js/editor-0.9.3.js.
+There are minimized versions: https://prototypejungle.org/js/pj-0.9.3.min.js, https://protochart.org/js/dom-0.9.3.min.js,
+and https://protochart.org/js/editor-0.9.3.min.js.
 <!--
 <p> For charts, there is a fourth level of code: the code that implements the charts themselves, and their components
-such as axes and legends.  The code for these appears in the current prototype repository: http://prototypejungle.org/repo3/charts, and also at github.
+such as axes and legends.  The code for these appears in the current prototype repository: https://prototypejungle.org/repo3/charts, and also at github.
 -->
 
 <p>Unlike the other levels, which have no
 association with any particular web location and could be deployed from anywhere,
 the editor is configured specifically to support  the ProtoChart web site. Summarizing:
-these are the lines needed for building applications hosted
+these are the lines needed for applications hosted
 elsewhere:
 
 <precode>
@@ -294,13 +295,13 @@ pj.Array.mk();
 <p> a new <cw>Array</span>.</p>
 <p> 
 <precode>
-object.set(name,child);
+object.set('name',child);
 </precode>
 
 <p>assigns <cw>child</span> as a child of 
 <cw>object</span> with name <cw>name</span>.
 If <cw>child</span> is an Object or Array, this results in setting special properties:
-<cw>child.__parent === object</span>, and <cw>child.__name === name</span>.</p>
+<cw>child.__parent === object</span>, and <cw>child.__name === 'name'</span>.</p>
 
 <p> For an Array,</p>
 <precode>
@@ -308,10 +309,10 @@ array.push(child);
 </precode>
 
 <p>Pushes <cw>child</span> onto the end of  <cw>array</span>,
-and assigns <cw>array</span> as the parent of <cw>child</span>. Then,
+and assigns <cw>array</span> as the parent of <cw>child</span>. That is,
 <span class="code">array[array.length-1] === child</span>, and if <cw>child</span> is an Object or Array,
-<span class="code">child.__name === array.length-1</span>,
-and <span class="code">child.__parent === object</span>. Arrays are always sequential and zero-based.
+and <span class="code">child.__parent === array</span>. Also, <span class="code">child.__name === array.length-1</span>.
+Arrays are always sequential and zero-based.
 </p>
 
 <precode>
@@ -325,7 +326,7 @@ For example: </p>
 pj.lift({a:2,b:["a",4]});
 </precode>
 
-<p> will produce a Object/Array tree with matching structure. "item" is another term for Object/Array tree. </p>
+<p> will produce a Object/Array tree with matching structure.  </p>
 
 
 <p>Click <span class="clickable" id="openTreeDetails">here</span> for an example of tree construction and manipulation.</p>
@@ -406,8 +407,8 @@ a.xx = b;
 inode = node.instantiate();
 </precode>
 
-<p> builds an instantiation of <cw>node</cw>; a tree which has the same structure as node, but inherits primitive
-data and functions from root via prototypical inheritance. (Details
+<p> builds an instantiation of <cw>node</cw>; a tree which has the same structure as <cw>node</cw>, but inherits primitive
+data and functions from <cw>node</cw> via prototypical inheritance. (Details
 <a href="https://prototypejungle.org/doc/tech.html#instantiate">here</a>)</p>
 <p>Serialization is performed by: 
 <precode> 
@@ -475,9 +476,9 @@ as an SVG element is as specified by the markup. At this stage, only some of the
 <div class="section" id="conventions">7.  Naming conventions</div>
 <p>Developers  perform their work by defining new properties and methods for pj.Object, pj.Array, and
 pj.svg.Element.
-Thus, the issue arises of avoiding name collisions with methods on these types that PrototypeJungle
+Thus, the issue arises of avoiding name collisions with methods on these types that ProtoChart
 itself defines. A primitive scheme addresses this issue: except for a very small collection of basic methods,
-PrototypeJungle uses names that start with a double underbar (__). So, name collisions
+PrototypeChart uses names that start with a double underbar (__). So, name collisions
 can be avoided if developers never use double-underbar prefixes for the  properties and methods that they
 introduce for their own purposes.
 Of course, the
@@ -546,7 +547,7 @@ The default update method for a spread works as outlined above:
 if a series has been bound to the spread, then
 for each element e of the series, the prototype (eg mProto) is instantiated, and then e is bound to the instance using the binder method.
 Here is the code for a
-<a href="http://prototypejungle.org/chartsd?source=http://prototypejungle.org/sys/repo3|example/simple_bar_chart.js">simple bar chart</a>:</p>
+<a href="https://prototypejungle.org/chartsd?source=https://prototypejungle.org/sys/repo3|example/simple_bar_chart.js">simple bar chart</a>:</p>
 
 <pre>
 (function () {
@@ -579,8 +580,8 @@ in such a way that the bars are stacked.
 <div class="section" id="externalData">12.  External Data </div>
 
 <p>Data can be loaded from external sources using the component mechanism, as follows: (at
-<a href="http://prototypejungle.org/chartsd?source=http://prototypejungle.org/sys/repo3|example/external_data0.js">
-  http://prototypejungle.org/sys/repo3/example/external_data0.js
+<a href="https://prototypejungle.org/chartsd?source=https://prototypejungle.org/sys/repo3|example/external_data0.js">
+  https://prototypejungle.org/sys/repo3/example/external_data0.js
 </a>)
 
 
@@ -593,7 +594,7 @@ pj.require('example/simple_bar_chart.js','example/sample_data0.js',function (erm
 });
 </precode>
 
-<p> where http://prototypejungle.org/sys/repo3/example/sample_data0.js contains: </p>
+<p> where https://prototypejungle.org/sys/repo3/example/sample_data0.js contains: </p>
 
 <precode>
 pj.returnValue(undefined,{"elements":[1,2,4,8]});
@@ -603,8 +604,8 @@ pj.returnValue(undefined,{"elements":[1,2,4,8]});
 <p>Alternatively, for each item with a  dataSource property, the data appearing at the indicated location is automatically
 loaded and bound to the item at initialization. Here is an example, whose effect is the same as produced by the example
 just above (at
-<a href="http://prototypejungle.org/chartsd?source=http://prototypejungle.org/sys/repo3|example/external_data1.js">
-  http://prototypejungle.org/sys/repo3/example/external_data1.js
+<a href="https://prototypejungle.org/chartsd?source=https://prototypejungle.org/sys/repo3|example/external_data1.js">
+  https://prototypejungle.org/sys/repo3/example/external_data1.js
 </a>)
 
 <precode>
@@ -617,7 +618,7 @@ pj.require('example/simple_bar_chart.js',function (erm,graphP) {
 </precode>
 
 <precode>
-item.dataSource = '<a href="http://prototypejungle.org/sys/repo2/data/metal_densities.js">http://prototypejungle.org/sys/repo2/data/metal_densities.js'</a>;
+item.dataSource = '<a href="https://prototypejungle.org/sys/repo2/data/metal_densities.js">https://prototypejungle.org/sys/repo2/data/metal_densities.js'</a>;
 </precode>
 
 <div  class="section"  id="dataFormat">13. Data Format </div>
@@ -628,7 +629,7 @@ This is converted
 into an object of form <code>{fields:f,elements:e}</code>.
 The details of the internal form are beyond the scope of this document.</p>
 <p> A minor simplification in the Google Charts format is supported. Namely, column -->
-<p> Here is the data for the <a href="http://prototypejungle.org/chartsd?item=/anon/repo2/w3hxiqyviz/item.js">bar graph</a> of metal densities:</p>
+<p> Here is the data for the <a href="https://prototypejungle.org/chartsd?item=/anon/repo2/w3hxiqyviz/item.js">bar graph</a> of metal densities:</p>
 
 <pre>
   {'fields':[
@@ -671,10 +672,10 @@ binding data to those parts.</p>
 Mark Set is created. Then, for individual elements, the instantiation associated with the category of the element is instantiated again. This allows the group of marks of a given category to
 share a prototype, which can be adjusted to taste.</p>
 <p>
-<a href = "http://prototypejungle.org/inspect?item=/sys/repo0/chart/component/Legend1">/sys/repo0/chart/component/Legend1</a> produces legends naming the categories,
+<a href = "https://prototypejungle.org/inspect?item=/sys/repo0/chart/component/Legend1">/sys/repo0/chart/component/Legend1</a> produces legends naming the categories,
 and showing colors associated with them.
 
-<a href="http://prototypejungle.org/inspect?item=/sys/repo0/chart/Bar1">/sys/repo0/chart/Bar1</a> implements bar charting of categorized data. By inspecting its code, you can see the techniques involved.
+<a href="https://prototypejungle.org/inspect?item=/sys/repo0/chart/Bar1">/sys/repo0/chart/Bar1</a> implements bar charting of categorized data. By inspecting its code, you can see the techniques involved.
 
 </p>
 
@@ -912,7 +913,7 @@ use within the PrototypeJungle code base. A crude but common approach to name-co
 
 <p>In defining an item in the code tab of the inspector, the variables that you introduce at the global level are not accessible within the methods that you
 define within the item. For example consider code from 
-<a href="http://prototypejungle.org/inspect?item=/sys/repo0/example/BarChart2">/sys/repo0/example/BarChart2</a></p>
+<a href="https://prototypejungle.org/inspect?item=/sys/repo0/example/BarChart2">/sys/repo0/example/BarChart2</a></p>
 <pre>
 var  geom = pj.geom;
 ....

@@ -38,6 +38,7 @@ item.tickImageInterval = 10;
 item.dragStartTextoffset = 0; // initialize so that ui.freezeExcept will work
 item.dragStartY = 0;
 item.orientation = 'horizontal';
+item.at10s = true;
 /**
  * dataBounds should be reset from the outside
 */
@@ -95,8 +96,9 @@ item.update = function () {
     var bigTickPositions = [];
     var currentTick = firstTick;//  in data space
     var ip,numTicks,mediumTick,bigTick;
-    while (currentTick <= lastTick) {
-      numTicks = Math.floor(currentTick/interval);
+    var numTicks = 0;
+    while (currentTick <= lastTick+0.000001) {
+      //numTicks = Math.floor(currentTick/interval);
       bigTick = numTicks%(at10s?10:5) === 0;
       mediumTick = at10s?numTicks%5 === 0:false;
       if (bigTick) {
@@ -107,6 +109,7 @@ item.update = function () {
          tickPositions.push(currentTick);
       }
       currentTick += interval;
+      numTicks++;
     }
     return [tickPositions,mediumTickPositions,bigTickPositions];
   }
@@ -147,6 +150,7 @@ item.update = function () {
   scale.coverage.ub = this.dataBounds.ub;
   if ( !scale) return; // data not ready
   var tickInterval = this.bigTickImageInterval/(this.at10s?10:5);
+  var bigTickInterval = tickInterval*(this.at10s?10:5);
   var roundUpToGoodTickInterval = function (n) {
     var lg10 = Math.floor(Math.log(n)/Math.log(10)),
       b10 = Math.pow(10,lg10);
@@ -164,8 +168,9 @@ item.update = function () {
    * interval is the interval between ticks in data space
    * bigInteval is the interval between big ticks in data space
   */
-  interval= roundUpToGoodTickInterval(tickInterval/dataToImageScale);
-  bigInterval = (this.at10a?10:5)*interval;
+  bigInterval = roundUpToGoodTickInterval(bigTickInterval/dataToImageScale);
+  interval = bigInterval*(this.at10s?1/10:1/5);
+  //bigInterval = (this.at10a?10:5)*interval;
   firstTick = Math.floor(datalb/interval)*interval;
   /**
   * adjust the coverage to exactly even number of big ticks, ending at a big tick
@@ -173,6 +178,7 @@ item.update = function () {
   */
  // lastTick = (Math.ceil(dataub/this.bigTickImageInterval))*this.bigTickImageInterval; // new upperbound at even bigtick count
   lastTick = (Math.ceil(dataub/bigInterval))*bigInterval; // new upperbound at even bigtick count
+  debugger;
   tickPositionArray= computeTickPositions(firstTick,lastTick,interval,this.at10s);
   tickPositions = tickPositionArray[0];
   mediumTickPositions = tickPositionArray[1];

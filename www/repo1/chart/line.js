@@ -24,7 +24,7 @@ axisUtils.initAxes(item,'adjustable');
 
 item.axisV.showTicks = item.axisH.showTicks = true;
 item.axisV.showLine = item.axisH.showLine = true;
-item.axisV.bigTickImageInterval = item.axisH.bigTickImageInterval = 10;
+item.axisV.bigTickImageInterval = item.axisH.bigTickImageInterval = 30;
 
 item.core.orientation = 'vertical';
 

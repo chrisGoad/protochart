@@ -22,7 +22,7 @@ item.axisSep  = 20;
 
 axisUtils.initAxes(item);
 item.axis.showTicks = false;
-item.axis.bigTickImageInterval = 100;
+item.axis.bigTickImageInterval = 30;
 
 item.shifterPlacement = function () {
  return geom.Point.mk(0,0);

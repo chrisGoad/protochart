@@ -249,21 +249,7 @@ ui.parseQuerystring = function(){
   return nvpair;
 }
   
-  
-// n = max after decimal place; @todo adjust for .0000 case
-pj.nDigits = function (n,d) {
-  var ns,dp,ln,bd,ad;
-  if (typeof n !=="number") return n;
-  ns = String(n);
-  dp = ns.indexOf(".");
-  if (dp < 0) return ns;
-  ln = ns.length;
-  if ((ln - dp -1)<=d) return ns;
-  bd = ns.substring(0,dp);
-  ad = ns.substring(dp+1,dp+d+1)
-  return bd + "." + ad;
-}
-  
+
   
 ui.disableBackspace = function () {
   //from http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
