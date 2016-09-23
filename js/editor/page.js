@@ -445,7 +445,7 @@ ui.uploadBut.$click(function () {
 });
   
 ui.changeDataSourceBut.$click(function () {
-   fb.getDirectory(function (list) {
+   fb.getDirectory(function (err,list) {
      ui.popChooser(list,'dataSource');
   });
 })
@@ -692,7 +692,7 @@ ui.completeInsert = function (svgPoint) {
   ui.insertItem(ui.nowInserting.url,ui.nowInserting.name,svgPoint);
 }
 var listAndPop = function (opt) {
-  fb.getDirectory(function (list) {
+  fb.getDirectory(function (err,list) {
     ui.popChooser(list,opt);
   });
 }
@@ -777,8 +777,7 @@ fsel.onSelect = function (n) {
     case "saveAs":
     case "saveAsSvg":
     case "viewSource":
-      fb.getDirectory(function (list) {
-        debugger;
+      fb.getDirectory(function (err,list) {
         ui.popChooser(list,opt);
       });
       break;

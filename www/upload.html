@@ -91,6 +91,7 @@ $('document').ready(function () {
   message = $('#message');
   fb.setCurrentUser(function () {
     if (!fb.currentUser) {
+       $('#upload').hide();
       errorMessage.text('You are not logged in');
     }
   });

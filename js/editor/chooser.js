@@ -436,7 +436,7 @@ function selectItemLine(iel) {
 }
 
 var currentUid = function () {
-  return '['+ parent.pj.fb.currentUser.uid+ ']';
+  return '['+ parent.pj.fb.currentUid()+ ']';
 };
 
 var setPathLine = function (nd) {
