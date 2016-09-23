@@ -80,7 +80,8 @@ item.updateAxes = function (main,flip) {
   var upperLeft = main.extent.times(-0.5);
   var lowerLeft = upperLeft.plus(geom.Point.mk(0,mainHeight + main.axisSep));
   var max = data.max('range');
-  axisV.set('dataBounds',prototypeJungle.geom.Interval.mk(0,max));
+  var min = data.min('range');
+  axisV.set('dataBounds',prototypeJungle.geom.Interval.mk(min,max));
   axisV.gridLineLength = gridlineLength;//-this.minY;
   axisV.update();
   if (numericalDomain) {

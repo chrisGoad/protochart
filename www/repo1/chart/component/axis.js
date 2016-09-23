@@ -74,6 +74,7 @@ item.firstLabelPos = undefined; // defined later; mentioned here so it can be fr
 
 
 item.update = function () {
+  debugger;
   var ui = pj.ui;
   var geom = pj.geom;
   var dat = pj.dat;
@@ -171,7 +172,7 @@ item.update = function () {
   bigInterval = roundUpToGoodTickInterval(bigTickInterval/dataToImageScale);
   interval = bigInterval*(this.at10s?1/10:1/5);
   //bigInterval = (this.at10a?10:5)*interval;
-  firstTick = Math.floor(datalb/interval)*interval;
+  firstTick = Math.floor(datalb/bigInterval)*bigInterval;
   /**
   * adjust the coverage to exactly even number of big ticks, ending at a big tick
   * record the scaling involved in the adjustment

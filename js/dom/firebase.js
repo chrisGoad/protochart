@@ -9,6 +9,7 @@ fb.__builtIn = true;
 
 // get the  directory for this user. Create if missing.
 
+var notSignedInUid = 'TcYg4ep5s5TrvfxG5CWr11vjZZu1';
 
  var config = {
     apiKey: "AIzaSyDCSJngwaC0I6K3QJNs4jibqmvV6Ezbvvc",
@@ -74,11 +75,11 @@ fb.removeUser = function () {
  }
 }
 
+fb.currentUid = function ()  {
+  return fb.currentUser?fb.currentUser.uid:notSignedInUid;
+}
 fb.directoryRefString = function () {
-   if (fb.currentUser) {
-    var uid = fb.currentUser.uid;
-    return uid+'/directory';
-  }
+  return fb.currentUid()+'/directory';
 }
 
 fb.directoryRef = function () {
@@ -89,6 +90,8 @@ fb.storeRefString = function () {
   if (fb.currentUser) {
     var uid = fb.currentUser.uid;
     return uid+'/s';
+  } else {
+    return ''
   }
 }
 

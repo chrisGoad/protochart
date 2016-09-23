@@ -1,5 +1,5 @@
 {
-  "title":"Global Land-Ocean Temperature Index; 5 Year Mean (C)\nrelative to 1951-1980 average",
+  "title":"Global Land-Ocean Temperature Index; 5 Year Mean(C), relative to 1951-1980 average",
    "fields":["year","temperature"],
    "elements":[{"year":1950,"temperature":-0.08},{"year":1955,"temperature":-0.07},
                {"year":1960,"temperature":0.03},{"year":1965,"temperature":-0.07},

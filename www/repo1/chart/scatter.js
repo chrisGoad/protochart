@@ -2,6 +2,7 @@
 pj.require('./component/axis.js','./core/scatter.js','../lib/axis_utils.js',function (erm,axisP,coreP,axisUtils) {
 var ui=pj.ui;
 var geom=pj.geom;
+var dat=pj.dat;
 
 var item = pj.svg.Element.mk('<g/>');
 item.markType = 'N';
@@ -31,9 +32,19 @@ item.shifterPlacement = function () {
 
 
 item.update = function () {
+  debugger;
   if (!this.__data) return;
+  //pj.dat.throwDataError('bad data');
+  var idata = this.__getData();
+  if (!dat.Series.isPrototypeOf(idata)) {
+    pj.dat.throwDataError('Data has the wrong form; data sequence expected');
+  }
+  if (!idata.numericalDomain()) {
+    pj.dat.throwDataError('Data has the wrong form: numerical domain expected');
+  }
+  debugger;
   axisUtils.updateAxes(this,'flip');
-  this.core.__setData(this.__getData(),true);
+  this.core.__setData(idata,true);
 }
 
 item.reset = function () {

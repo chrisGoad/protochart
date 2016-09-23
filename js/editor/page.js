@@ -53,7 +53,8 @@ var mpg = ui.mpg =  html.wrap("main",'div',{style:{position:"absolute","margin":
         ui.upBut =html.Element.mk('<div class="roundButton">Up</div>'), 
         ui.downBut =html.Element.mk('<div class="roundButton">Down</div>'),
         ui.topBut =html.Element.mk('<div class="roundButton">Top</div>')
-        ])
+        ]),
+        ui.svgMessageDiv = html.Element.mk('<div style="display:none;margin-left:auto;padding:40px;margin-right:auto;width:50%;margin-top:20px;border:solid thin black">AAAAUUUU</div>')
      ]),
     
      tree.objectContainer = uiDiv = html.Element.mk('<div id="uiDiv" style="position:absolute;margin:0px;padding:0px"/>').addChildren([
@@ -113,7 +114,7 @@ var mpg = ui.mpg =  html.wrap("main",'div',{style:{position:"absolute","margin":
   var firstLayout = true;
 ui.layout = function(noDraw) { // in the initialization phase, it is not yet time to __draw, and adjust the transform
   // aspect ratio of the UI
-  var bkg = "gray";
+  var bkg = "white";
   var svgwd = 500;
   var svght = 500;
   var ar = 0.48//0.5;
@@ -391,7 +392,12 @@ ui.viewDataUrl = function () {
 
 ui.viewAndUpdateFromData =  function (data,url,cb) {
   ui.viewData(data);
-  ui.updateFromData(data,url,cb);
+  ui.clearError();
+  try {
+    ui.updateFromData(data,url,cb);
+  } catch (e) {
+    ui.handleError(e);
+  }
 }
 
 ui.getDataJSONP = function (url,initialUrl,cb,dontUpdate) {

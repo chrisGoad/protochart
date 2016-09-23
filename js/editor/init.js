@@ -23,6 +23,32 @@
     }
   }
   
+  ui.displayMessageInSvg = function (msg) {
+    pj.root.__hide();
+    ui.svgMessageDiv.$show();
+    ui.svgMessageDiv.$html(msg);
+    //ui.svgDiv.$html("<div style='text-align:center;width:100%;padding-top:20px;font-weight:bold'>"+msg+"</div>");
+  }
+
+  ui.clearError = function () {
+    pj.root.__show();
+    ui.svgMessageDiv.$hide();
+  }
+  
+  ui.handleError = function (e) {
+    debugger;
+    var msg;
+    if (e.kind === dat.badDataErrorKind) {
+      msg = e.message;
+    } else {
+      msg = 'Unknown error in update';
+    } 
+    ui.displayMessageInSvg(msg);
+    //alert(msg);
+    //ui.displayMessage(ui.messageElement,msg);
+
+  }
+  
   ui.installNewItem = function () {
     var itm = pj.root;
     svg.main.addBackground(pj.root.backgroundColor);
@@ -37,8 +63,13 @@
     if (itm.soloInit) { 
       itm.soloInit(); 
     }
-    ui.refresh(ui.fitMode);
+    //ui.displayMessageInSvg('ZUB');
+    try {
+      ui.refresh(ui.fitMode);
+  } catch (e) {
+    ui.handleError(e);
   }
+}
 
 
 function displayDone(el,afterMsg) {
@@ -84,8 +115,10 @@ ui.setSaved = function (){}; // stub called from ui
       if (!dat.findDataSource()) {
         ui.disableButton(ui.viewDataBut);
       }
+      /*
       var htl = ui.hasTitleLegend();
       fsel.disabled.addLegend = ui.legendAdded || !(htl.hasTitle || htl.hasLegend);
+      */
       $('body').css({"background-color":"#eeeeee"});
       if (typeof(pj.root) == "string") {
         ui.editButDiv.$hide();

@@ -27,6 +27,8 @@ item.labelSep = pj.geom.Point.mk(0,0); // the whole label set is displaced by th
 item.set("labels",pj.Spread.mk());
 item.labels.__unselectable = true;
 item.__unselectable = true;
+
+
 item.labels.binder = function (label,data,indexInSeries,lengthOfDataSeries) {
   label.__editPanelName = 'This label';
   var item = this.__parent;
@@ -45,6 +47,7 @@ item.labels.binder = function (label,data,indexInSeries,lengthOfDataSeries) {
   }  else {
     x = indexInSeries * gap;
     y =0;
+    debugger;
   }
   label.__moveto(x,y);
   label.__show();
@@ -63,18 +66,25 @@ item.update = function () {
     this.set("labelSep",this.labelSep.copy());
   }
   var L = this.__data.elements.length;
+  this.maxLabelWidth = 0;
   if (horizontal) {
     this.labelGap = this.width/(L-1);
   } else {
     this.labelGap = this.height/(L-1);
-    this.maxLabelWidth = 0;
   }
   this.labelP.center();
   this.labels.masterPrototype = this.labelP;
   this.labels.__moveto(this.labelSep);
   this.labelP.__editPanelName = 'Prototype for all labels on this axis'
   this.labels.__setData(this.__data,true);
- 
+  if (horizontal) {  // prevent labels from crowding
+    var crowding =this.maxLabelWidth/this.labelGap;
+    if (crowding > 0.9) {
+      var   fontSize = this.labelP['font-size'];
+      this.labelP['font-size'] = Math.floor(fontSize * 0.9/crowding);
+      this.update();
+    }
+  }
 }
 
 

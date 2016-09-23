@@ -47,7 +47,6 @@ dat.LinearScale.dtToImScale = function () {
   
 // c = max after decimal place; @todo adjust for .0000 case
 pj.nDigits = function (n,d) {
-  debugger;
   var ns,dp,ln,bd,ad;
   if (typeof n !=="number") return n;
   var pow = Math.pow(10,d);
@@ -695,22 +694,30 @@ pj.nodeMethod("__dataTransform1d",function () {
 });
   
 // returns the kind
-dat.checkIncomingData = function (dt) {
+dat.dataKind = function (dt) {
   if (dt.fields && dt.elements) {
-    return 'table';
+    return 'sequence';
   }
   if (dt.vertices && dt.edges) {
     return 'graph';
   }
-  return false;
+  return 'unknown';
 }
 
 dat.badDataErrorKind = {};
 
+
+dat.throwDataError = function (msg) {
+  debugger;
+  throw {kind:dat.badDataErrorKind,message:msg}
+}
+
+// for now, this is only for data sequences
+
 dat.internalizeData = function (dt,markType) {
-  var ok = dat.checkIncomingData(dt);
-  if (!ok) {
-    throw {kind:dat.badDataErrorKind,message:'bad data'}
+  var k = dat.dataKind(dt);
+  if (k !== 'sequence') {
+    dat.throwDataError('Bad form for data: expected data sequence');
   }
   var pdt,flds,categories;
   if (dt===undefined) {
@@ -760,8 +767,8 @@ pj.Object.__setData = function (xdt,doUpdate) {
       }
     }
   }
-  this.__getData();// gets data into internal form
   if (doUpdate)  {
+    this.__getData();// gets data into internal form
     this.__update();
   }
 }

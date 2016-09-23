@@ -1,5 +1,5 @@
 pj.require('../shape/circle.js','../shape/arc_arrow.js',function (errorMessage,circlePP,arrowPP) {
-var ui=pj.ui,geom=pj.geom,svg=pj.svg;
+var ui=pj.ui,geom=pj.geom,svg=pj.svg,dat=pj.dat;
 var item = pj.svg.Element.mk('<g/>');
 item.scaling = 1; // scaling between positions of vertices and image placement of circles
 item.set("circleP",circlePP.instantiate());
@@ -53,6 +53,13 @@ item.edges.bind = function () {
    
 item.update = function () {
   debugger;
+  if (!this.__data) {
+    return;
+  }
+  var k = dat.dataKind(this.__data);
+  if (k !== 'graph') {
+    dat.throwDataError('Bad form for data: expected graph');
+  }
   this.vertices.__setData(this.__data.vertices,'doUpdate');
   this.edges.__setData(this.__data.edges,'doUpdate');
 }
