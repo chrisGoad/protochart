@@ -13,8 +13,8 @@ item.set("__contents",svg.Element.mk(
 item.__contents.__unselectable = true;
 item.__contents.__show();
 item.dimension = 100;
-item.fill = 'red';
-item.stroke = 'rgb(0, 128, 117)';
+item.fill = item.__contents.fill;
+item.stroke = item.__contents.stroke;
 item['stroke-width'] = 2;
 item.extentEvent = pj.Event.mk('extentChange');
 

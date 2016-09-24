@@ -395,6 +395,7 @@ ui.viewAndUpdateFromData =  function (data,url,cb) {
   ui.clearError();
   try {
     ui.updateFromData(data,url,cb);
+    ui.updateTitleAndLegend();
   } catch (e) {
     ui.handleError(e);
   }
@@ -754,7 +755,8 @@ fsel.onSelect = function (n) {
       break;
 
     case "addLegend":
-      ui.addTitleAndLegend();
+      //ui.addTitleAndLegend();
+      ui.updateTitleAndLegend();
       return;
       debugger;
       var htl = ui.hasTitleLegend();
@@ -801,6 +803,67 @@ ui.fileBut.$click(function () {
 var aboveOffset = geom.Point.mk(20,-10);
 var toRightOffset = geom.Point.mk(20,10);
 
+var updateTitleAndLegend1 = function (titleBox,legend,chart) {
+  var itmBounds;
+ 
+  var chartBounds = chart.__bounds();
+  var bindChart = function (x) {
+    x.forChart = chart;
+    x.__newData = true;
+    x.__update();
+    return x.__bounds();   
+  }
+  if (titleBox) {
+    titleBox.__show();
+    itmBounds = bindChart(titleBox); 
+    var above = chartBounds.upperLeft().plus(
+                  geom.Point.mk(0.5*itmBounds.extent.x,-0.5*itmBounds.extent.y)).plus(aboveOffset);
+    titleBox.__moveto(above);
+  }
+  if (legend) {
+    legend.__show();
+    itmBounds = bindChart(legend); 
+    var toRight = chartBounds.upperRight().plus(
+                  geom.Point.mk(0.5*itmBounds.extent.x,0.5*itmBounds.extent.y)).plus(toRightOffset);
+    legend.__moveto(toRight);
+    legend.setColorsFromChart();
+  }
+}
+
+ui.updateTitleAndLegend  = function () {
+  var  ds = dat.findDataSource();
+  var chart = ds[0];
+  var dt = chart.__getData();
+  var needsLegend = dt.categories;
+  var legend = pj.root.legend;
+  var needsTitle = dt.title;
+  var title = pj.root.titleBox;
+  var newTitle = needsTitle && !title;
+  var newLegend = needsLegend && !legend;
+  var titleToUpdate = needsTitle?title:undefined;
+  var legendToUpdate = needsLegend?legend:undefined;
+  updateTitleAndLegend1(titleToUpdate,legendToUpdate,chart)
+  if (title && !needsTitle) {
+    title.__hide();
+  }
+  if (legend && !needsLegend) {
+    legend.__hide();
+  }
+  if (newTitle) {
+    ui.insertItem('/repo1/text/textbox1.js','titleBox',undefined,'title',function () {
+      if (newLegend) {
+        ui.insertItem('/repo1/chart/component/legend3.js','legend',undefined,'legend',function () {svg.main.fitContents();});
+      } else {
+        svg.main.fitContents();
+      }
+    });
+  } else if (newLegend) {
+    ui.insertItem('/repo1/chart/component/legend3.js','legend',undefined,'legend',function () {svg.main.fitContents();});
+  }
+}
+      
+
+
 var whereToInsert,positionForInsert;
 var afterInsert = function (e,rs) {
   var irs = rs.instantiate();
@@ -808,6 +871,14 @@ var afterInsert = function (e,rs) {
   if (positionForInsert) {
     irs.__moveto(positionForInsert);
   }
+  var  ds = dat.findDataSource();
+  var chart = ds[0];
+  if (insertKind === 'legend') {
+    updateTitleAndLegend1(null,irs,chart);
+  } else if (insertKind === 'title') {
+    updateTitleAndLegend1(irs,null,chart);
+  }
+  return;
   if ((insertKind === 'legend') || (insertKind === 'title')) {
     var  ds = dat.findDataSource();
     irs.forChart = ds[0];
