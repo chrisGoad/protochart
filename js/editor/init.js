@@ -64,10 +64,14 @@
       itm.soloInit(); 
     }
     //ui.displayMessageInSvg('ZUB');
-    try {
+    if (ui.dontCatch) {
       ui.refresh(ui.fitMode);
-  } catch (e) {
-    ui.handleError(e);
+    } else {
+      try {
+        ui.refresh(ui.fitMode);
+    } catch (e) {
+      ui.handleError(e);
+    }
   }
 }
 

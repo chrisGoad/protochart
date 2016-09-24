@@ -509,54 +509,65 @@ provides an example.</p>
 
 <p id="setData"> 
 Data binding is done in a very simple way, amounting to no more than two conventions.  The first is that the data associated
-with any node N is held in the field N.data. The second is that the method N.update, if any, has the job of causing the state of N to
+with any node N is held in the field N.__data. The second is that the method N.update, if any, has the job of causing the state of N to
 reflect the data. The basic data binding operator is (in essence):</p>
 
 <pre>
-Object.setData = function (d) {
-  this.set('data',pj.lift(d));if (this.update) this.update();
+Object.__setData = function (d,doUpdate) {
+  this.set('__data',pj.lift(d));if (doUpdate && this.update) this.update();
 }
 </pre>
 <p> (pj.lift is a no-op when applied to an object which is already in Object/Array form.) </p>
 <div class="section" id="spreads">11. Spreads</div>
 
-<p>A pj.Spread represents a collection of items instantiated from the same prototype. Usually, the data associated
-with a spread is a series, and the individual members of the spread are bound to the elements of
-series.  For example, in the bar chart example, the set of bars is represented as a spread, and the data
-is a series of metal densities. The individual bars are bound to the elements of this series.
-(In infographics, it is conventional to refer to the members of a spread used in this way as "marks".)
- Consider:
+<p>A pj.Spread represents a collection of items instantiated from the same prototype. The data associated
+with a spread contains a sequence of individual data entities (eg numbers or points). The spread update method instantiates its prototype once for each
+datum, and then binds each instantiation to its corresponding datum.   (Each spread has its own method for binding, but the update method is common to all).
+For example,for the bar chart, the set of bars is represented as a spread, and the data 
+contains a sequence of metal densities. The prototype  for this spread is a rectangle, and the binding method  sets the width of each rectangle instantiation 
+to the corresponding density, properly scaled (the height is set to a common value).</p>
+<p>
+In infographics, it is conventional to refer to visual items, such as the bars in a bar graph, whose properties encode data values  as "marks".
 </p>
-
+<p>Now, to details:</p>
 <pre>
-m = pj.Spread.mk(mProto);
+var spread = pj.Spread.mk(mProto);
 </pre>
 
-<p>This creates a spread whose members are instantiated from  mProto.
-Suppose that m is bound to the following series:</p>
-
+<p>creates a spread whose members are instantiated from  mProto.
+<!-- Suppose that spread is bound to the following data sequence:</p>
 <pre>
 {'elements':[3,4,5]]}
 </pre>
 
-<p>The general format for data series is described <a href="#dataFormat">below</a>.</p>
-<p>A spread should also have a binder method, which binds elements of the series to the members of the spread.
-(The binder method is also
-passed the index of the member in the set, and the size of the set)
-The default update method for a spread works as outlined above:
+
+
+<p>The general format for data sequences is described <a href="#dataFormat">below</a>.</p>
+-->
+As indicated earlier, a spread should also have a method which binds elements of the data sequence to the marks.
+<precode>
+spread.binder = function (mark,datum,index,size) {...}
+</precode>
+<p>
+ <cw>index</cw> is the index of this  mark and datum within the sequence. Size is length of the data sequence.
+</p>
+<!-- The default update method for a spread works as outlined above:
 if a series has been bound to the spread, then
 for each element e of the series, the prototype (eg mProto) is instantiated, and then e is bound to the instance using the binder method.
-Here is the code for a
-<a href="https://prototypejungle.org/chartsd?source=https://prototypejungle.org/sys/repo3|example/simple_bar_chart.js">simple bar chart</a>:</p>
+-->
+<p>
+ Here's an example: <a href="http://127.0.0.1:3000/edit.html?source=/repo1/example/simple_bar_chart.js">
+ https://protochart.org/edit.html?source=/repo1/example/simple_bar_chart.js</a> Code:
+</p>
 
-<pre>
+<precode>
 (function () {
 var item = pj.svg.Element.mk('&lt;g/&gt;');
 // barP is the prototype for bars
 item.set("barP",pj.svg.Element.mk(
   '&lt;rect fill="rgb(39, 49, 151)" stroke="black" stroke-width="3"  height="50"/&gt;'));
 item.barP.scale = 100;
-item.set("marks",pj.Marks.mk(item.barP));
+item.set("marks",pj.Spread.mk(item.barP));
 item.marks.binder = function (mark,data,index,size) {
   mark.width = mark.scale * data; // the width of the bar set from the data
   mark.y = (size - index) * 60; // stack the bars from bottom to top
@@ -568,7 +579,7 @@ item.update = function () {
 }
 pj.returnValue(undefined,item);
 })();
-</pre>
+</precode>
 <!--
 <p> Here's a walk-through of what happens. When the item is loaded, the update method is run. This first binds the data (a series) to the mark set. The mark set's
 update method in turn instantiates barP once for each element e of the series, and binds that element to the instance, which has the effect

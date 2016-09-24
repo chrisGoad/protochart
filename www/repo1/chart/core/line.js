@@ -107,7 +107,7 @@ item.lines.bind = function () {
   debugger;
   var categories = this.__data.categories;
   var elements  = this.__data.elements;
-  var n = categories.length;
+  var n = categories?categories.length:1;
   var i;
   var top = this.__parent;
   for (i=0;i<n;i++) {
@@ -136,7 +136,7 @@ item.update = function () {
   this.domainMin = this.__data.min('domain');
   this.domainMax = this.__data.max('domain');
   //var domainValues = this.__data.extractDomainValues();
-  //categories = this.__data.categories;
+  this.categories = this.__data.categories;
   //elements  = this.__data.elements;
   var dt = this.__getData();
   if (this.__newData) {

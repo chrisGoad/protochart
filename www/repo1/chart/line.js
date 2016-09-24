@@ -3,6 +3,7 @@ pj.require('./component/axis.js','./core/line.js','../lib/axis_utils.js',functio
 debugger;
 var ui=pj.ui;
 var geom=pj.geom;
+var dat=pj.dat;
 
 var item = pj.svg.Element.mk('<g/>');
 item.markType = 'pointArray';
@@ -35,6 +36,13 @@ item.shifterPlacement = function () {
 
 item.update = function () {
   if (!this.__data) return;
+  var idata = this.__getData();
+  if (!dat.Series.isPrototypeOf(idata)) {
+    pj.dat.throwDataError('Data has the wrong form; data sequence expected');
+  }
+  if (!idata.numericalDomain()) {
+    pj.dat.throwDataError('Data has the wrong form: numerical domain expected');
+  }
   axisUtils.updateAxes(this);
   this.core.__setData(this.__getData(),true);
 }

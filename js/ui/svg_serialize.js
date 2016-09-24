@@ -19,7 +19,7 @@ svg.toPointsString = function (pnts) {
   return rs;
 }
   // for the outermost g, a transform is sent in
-svg.tag.g.svgStringR = function (dst,itr) {
+svg.tag.g.__svgStringR = function (dst,itr) {
   var tr;
   if (this.__hidden()) {
     return;
@@ -36,7 +36,7 @@ svg.tag.g.svgStringR = function (dst,itr) {
   }
   this.__iterDomTree(function (ch) {
     if (pj.Array.isPrototypeOf(ch) || svg.Element.isPrototypeOf(ch)) {
-      ch.svgStringR(dst);
+      ch.__svgStringR(dst);
     }
   });
   dst[0] += "\n</g>\n";
@@ -44,11 +44,11 @@ svg.tag.g.svgStringR = function (dst,itr) {
   
   
   
-pj.Array.svgStringR = svg.tag.g.svgStringR;
+pj.Array.__svgStringR = svg.tag.g.__svgStringR;
 
 svg.tag.g.svgString = function () {
   var dst = [""];
-  this.svgStringR(dst);
+  this.__svgStringR(dst);
   return dst[0];
 }
   
@@ -103,7 +103,7 @@ svg.Root.svgString = function (viewWd,padding,aspectRatio) {
   }
   rs += 'viewBox="0 0 '+ viewWd + ' ' + viewHt + '">\n';
   var dst = [rs];
-  this.contents.svgStringR(dst,tr);
+  this.contents.__svgStringR(dst,tr);
   dst += '</svg>';
   return dst;
 }

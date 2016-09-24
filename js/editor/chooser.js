@@ -57,9 +57,9 @@ function initVars() {
   
   
 var itemsBrowser =  html.Element.mk('<div  style="position:absolute;width:100%;height:100%"/>');
-itemsBrowser.addChildren([
+itemsBrowser.__addChildren([
   modeLine = html.Element.mk('<div style="padding:10px;width:100%;text-align:center">Mode</div>'),
-  newFolderLine = html.Element.mk('<div/>').addChildren([
+  newFolderLine = html.Element.mk('<div/>').__addChildren([
     newFolderB  = html.Element.mk('<div class="button">New Folder</div>'),
                            // hoverOut:{"background-color":"white"},
                            // hoverIn:{"background-color":highlightColor},style="cursor:"pointer"}}),
@@ -68,38 +68,38 @@ itemsBrowser.addChildren([
 
   ]),
   errDiv0 =  html.Element.mk('<span class="error" style="font-size:12pt"/>'),
-  html.Element.mk('<div/>').addChildren([
+  html.Element.mk('<div/>').__addChildren([
      pathLine = html.Element.mk('<span/>'),
      itemName = html.Element.mk('<span/>')
      ]),
-  itemsPanel = html.Element.mk('<div id="itemsPanel" style="overflow:auto;ffloat:right;height:100%;width:100%;border:solid thin black"/>').addChildren([
+  itemsPanel = html.Element.mk('<div id="itemsPanel" style="overflow:auto;ffloat:right;height:100%;width:100%;border:solid thin black"/>').__addChildren([
       itemsDiv=html.Element.mk('<div style="width:100%;height:100%"/>'),
       forImage =  html.Element.mk('<img style="display:none;border:solid thin black;margin-right:auto;margin-left:auto"/>')
     ]),
  
-  bottomDiv = html.Element.mk('<div style="padding-top:10px;width:100%"/>').addChildren([
-    html.Element.mk('<div/>').addChildren([
+  bottomDiv = html.Element.mk('<div style="padding-top:10px;width:100%"/>').__addChildren([
+    html.Element.mk('<div/>').__addChildren([
       fileNameLine = fileNameSpan = html.Element.mk('<span>Filename: </span>'),
       fileName = html.Element.mk('<input type="input" style="font:8pt arial;background-color:#e7e7ee,width:60%;margin-left:10px"/>'),
       fileNameExt = html.Element.mk('<span>.svg</span>'),
       openB =  html.Element.mk('<span class="button" style="float:right">New Folder</span>'),
       deleteB =  html.Element.mk('<span class="button" style="float:right">Delete</span>')
       ]),
-    aspectRatioLine = html.Element.mk('<div/>').addChildren([
+    aspectRatioLine = html.Element.mk('<div/>').__addChildren([
       aspectRatioSpan = html.Element.mk('<span>Aspect ratio: </span>'),
       aspectRatioInput= html.Element.mk('<input type="input" style="font:8pt arial;background-color:#e7e7ee,width:30%;margin-left:10px"/>'),
       html.Element.mk('<span>(initialized based on content - but settable)</span> ')
     ]),
   ]),
-  errDiv1Container = html.Element.mk('<div/>').addChildren([
+  errDiv1Container = html.Element.mk('<div/>').__addChildren([
       errDiv1 = html.Element.mk('<div class="error" style="font-size:12pt"/>'),
-      html.Element.mk('<div/>').addChildren([
+      html.Element.mk('<div/>').__addChildren([
         yesBut =  html.Element.mk('<div class="button">Yes</div>'),
         noBut =  html.Element.mk('<div class="button">No</div>'),
       ])
   ])
 ]);
-fullPageDiv = html.Element.mk('<div style="width:100%"/>').addChildren([
+fullPageDiv = html.Element.mk('<div style="width:100%"/>').__addChildren([
   fullPageText = html.Element.mk('<div style="padding-top:30px;width:90%;text-align:center;font-weight:bold"/>')
 ]);
     

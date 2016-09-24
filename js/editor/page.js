@@ -30,10 +30,10 @@ var mainTitleDiv = html.wrap('mainTitle','div');
 
 var actionDiv,cols;
 
-var mpg = ui.mpg =  html.wrap("main",'div',{style:{position:"absolute","margin":"0px",padding:"0px"}}).addChildren([
-  topbarDiv = html.wrap('topbar','div',{style:{position:"absolute",height:"10px",left:"0px","background-color":"bkColor",margin:"0px",padding:"0px"}}).addChildren([
+var mpg = ui.mpg =  html.wrap("main",'div',{style:{position:"absolute","margin":"0px",padding:"0px"}}).__addChildren([
+  topbarDiv = html.wrap('topbar','div',{style:{position:"absolute",height:"10px",left:"0px","background-color":"bkColor",margin:"0px",padding:"0px"}}).__addChildren([
     
-  actionDiv =  html.Element.mk('<div id="action" style="position:absolute;margin:0px;overflow:none;padding:5px;height:20px"/>').addChildren([
+  actionDiv =  html.Element.mk('<div id="action" style="position:absolute;margin:0px;overflow:none;padding:5px;height:20px"/>').__addChildren([
       ui.fileBut = html.Element.mk('<div class="ubutton">File</div>'),
       ui.replaceBut = html.Element.mk('<div class="ubutton">Alternate Marks</div>'),
      ui.viewDataBut = html.Element.mk('<div class="ubutton">View/Change Data</div>'),
@@ -42,13 +42,13 @@ var mpg = ui.mpg =  html.wrap("main",'div',{style:{position:"absolute","margin":
     ui.ctopDiv = html.wrap('topbarInner','div',{style:{float:"right"}})
   ]),
 
-  cols = html.Element.mk('<div id="columns" style="left:0px;position:relative"/>').addChildren([
+  cols = html.Element.mk('<div id="columns" style="left:0px;position:relative"/>').__addChildren([
     
     ui.docDiv = docDiv = html.Element.mk('<iframe id="docDiv" style="position:absolute;height:400px;width:600px;background-color:white;border:solid thin green;display:inline-block"/>'),
     
-    ui.svgDiv = html.Element.mk('<div id="svgDiv" style="position:absolute;height:400px;width:600px;background-color:white;border:solid thin black;display:inline-block"/>').addChildren([
-      tree.noteDiv = html.Element.mk('<div style="font:10pt arial;background-color:white;position:absolute;top:0px;left:90px;padding-left:4px;border:solid thin black"/>').addChildren([
-  //    tree.noteDiv = html.Element.mk('<div style="font:10pt arial;background-color:white;width:600px;padding-left:4px;float:right;border:solid thin black"/>').addChildren([
+    ui.svgDiv = html.Element.mk('<div id="svgDiv" style="position:absolute;height:400px;width:600px;background-color:white;border:solid thin black;display:inline-block"/>').__addChildren([
+      tree.noteDiv = html.Element.mk('<div style="font:10pt arial;background-color:white;position:absolute;top:0px;left:90px;padding-left:4px;border:solid thin black"/>').__addChildren([
+  //    tree.noteDiv = html.Element.mk('<div style="font:10pt arial;background-color:white;width:600px;padding-left:4px;float:right;border:solid thin black"/>').__addChildren([
         ui.noteSpan = html.Element.mk('<span>Click on things to adjust them. To navigate part/subpart hierarchy:</span>'),
         ui.upBut =html.Element.mk('<div class="roundButton">Up</div>'), 
         ui.downBut =html.Element.mk('<div class="roundButton">Down</div>'),
@@ -57,22 +57,22 @@ var mpg = ui.mpg =  html.wrap("main",'div',{style:{position:"absolute","margin":
         ui.svgMessageDiv = html.Element.mk('<div style="display:none;margin-left:auto;padding:40px;margin-right:auto;width:50%;margin-top:20px;border:solid thin black">AAAAUUUU</div>')
      ]),
     
-     tree.objectContainer = uiDiv = html.Element.mk('<div id="uiDiv" style="position:absolute;margin:0px;padding:0px"/>').addChildren([
-       tree.obDivRest = tree.obDiv = html.Element.mk('<div id="obDiv" style="position:absolute;background-color:white;border:solid thin blue;overflow:auto;vertical-align:top;margin:0px;padding:'+treePadding+'px"/>').addChildren([
-         html.Element.mk('<div style="margin-bottom:0px;border-bottom:solid thin black"/>').addChildren([
+     tree.objectContainer = uiDiv = html.Element.mk('<div id="uiDiv" style="position:absolute;margin:0px;padding:0px"/>').__addChildren([
+       tree.obDivRest = tree.obDiv = html.Element.mk('<div id="obDiv" style="position:absolute;background-color:white;border:solid thin blue;overflow:auto;vertical-align:top;margin:0px;padding:'+treePadding+'px"/>').__addChildren([
+         html.Element.mk('<div style="margin-bottom:0px;border-bottom:solid thin black"/>').__addChildren([
                               obDivTitle = html.Element.mk('<span style="margin-bottom:10px;border-bottom:solid thin black">Workspace</span>')
         ]),
       ])
     ]),
      
-    ui.editContainer =  html.Element.mk('<div id="editContainer" style="background-color:white;border:solid thin green;position:absolute;margin:0px;padding:0px"></div>').addChildren([
-      html.Element.mk('<div style="margin-bottom:5px"></div>').addChildren([
+    ui.editContainer =  html.Element.mk('<div id="editContainer" style="background-color:white;border:solid thin green;position:absolute;margin:0px;padding:0px"></div>').__addChildren([
+      html.Element.mk('<div style="margin-bottom:5px"></div>').__addChildren([
         ui.closeEditBut = html.Element.mk('<span style="background-color:red;float:right;cursor:pointer;margin-left:10px;margin-right:0px">X</span>'),
         ui.editTitle = html.Element.mk('<span style="font-size:8pt;margin-left:10px;margin-right:10px">Data source:</span>'),
         ui.editMsg =html.Element.mk('<span style="font-size:10pt">a/b/c</span>'), 
      ]),
      ui.editError =html.Element.mk('<div style="margin-left:10px;margin-bottom:5px;color:red;font-size:10pt">Error</div>'),
-      ui.editButtons = html.Element.mk('<div id="editButtons" style="bborder:solid thin red;"></div>').addChildren([
+      ui.editButtons = html.Element.mk('<div id="editButtons" style="bborder:solid thin red;"></div>').__addChildren([
          ui.changeDataSourceBut =html.Element.mk('<div style = "ffloat:right" class="roundButton">Change Source</div>'),
          ui.uploadBut =html.Element.mk('<div style = "ffloat:right" class="roundButton">Upload</div>'),
       ]),
@@ -80,24 +80,24 @@ var mpg = ui.mpg =  html.wrap("main",'div',{style:{position:"absolute","margin":
     ]),
     
     /* the insert container is not currently in use */
-    ui.insertContainer =  html.Element.mk('<div id="insertContainer" style="border:solid thin green;position:absolute;margin:0px;padding:0px"></div>').addChildren([
-       ui.insertButtons = html.Element.mk('<div id="insertButtons" style="border:solid thin red;"></div>').addChildren([
+    ui.insertContainer =  html.Element.mk('<div id="insertContainer" style="border:solid thin green;position:absolute;margin:0px;padding:0px"></div>').__addChildren([
+       ui.insertButtons = html.Element.mk('<div id="insertButtons" style="border:solid thin red;"></div>').__addChildren([
          ui.doInsertBut =html.Element.mk('<div style = "margin-left:30px" class="roundButton">Insert</div>'),
          ui.closeInsertBut = html.Element.mk('<span style="background-color:red;float:right;cursor:pointer;margin-left:10px;margin-right:0px">X</span>'),
 
        ]),
-       ui.insertDiv = html.Element.mk('<div id="insertDiv" style="border:solid thin green;position:absolute;"></div>').addChildren([
+       ui.insertDiv = html.Element.mk('<div id="insertDiv" style="border:solid thin green;position:absolute;"></div>').__addChildren([
           ui.insertIframe = html.Element.mk('<iframe width="99%" style="overflow:auto" height="200" scrolling="yes" id="insertIframe" />')
       ])
     ]),
     
-    ui.replaceContainer =  html.Element.mk('<div id="replaceContainer" style="background-color:white;border:solid thin green;position:absolute;margin:0px;padding:0px"></div>').addChildren([
-      ui.replaceButtons = html.Element.mk('<div id="replaceButtons" style="margin-left:10px"></div>').addChildren([
+    ui.replaceContainer =  html.Element.mk('<div id="replaceContainer" style="background-color:white;border:solid thin green;position:absolute;margin:0px;padding:0px"></div>').__addChildren([
+      ui.replaceButtons = html.Element.mk('<div id="replaceButtons" style="margin-left:10px"></div>').__addChildren([
        html.Element.mk('<span>Click to replace the marks with:</span>'),
        ui.closeReplaceBut = html.Element.mk('<span style="background-color:red;float:right;cursor:pointer;margin-left:10px;margin-right:0px">X</span>'),
 
       ]),
-      ui.replaceDiv = html.Element.mk('<div id="replaceDiv" style="position:absolute;"></div>').addChildren([
+      ui.replaceDiv = html.Element.mk('<div id="replaceDiv" style="position:absolute;"></div>').__addChildren([
        ui.replaceDivCol1 = html.Element.mk('<div id="col1" style="cursor:pointer;borderr:thin solid black;position:absolute;margin-left:20px;margin-top:40px"></div>'),
        ui.replaceDivCol2 = html.Element.mk('<div id="col2" style="cursor:pointer;margin-right:20px;borderr:thin solid green;float:right;margin-top:40px"></div>')
       ])
@@ -393,11 +393,16 @@ ui.viewDataUrl = function () {
 ui.viewAndUpdateFromData =  function (data,url,cb) {
   ui.viewData(data);
   ui.clearError();
-  try {
+  if (pj.ui.dontCatch) {
     ui.updateFromData(data,url,cb);
     ui.updateTitleAndLegend();
-  } catch (e) {
-    ui.handleError(e);
+  } else {
+    try {
+      ui.updateFromData(data,url,cb);
+      ui.updateTitleAndLegend();
+    } catch (e) {
+      ui.handleError(e);
+    }
   }
 }
 
@@ -484,7 +489,7 @@ ui.closer = html.Element.mk('<div style="position:absolute;right:0px;padding:3px
 
 var chooserClose = ui.closer.instantiate();
 ui.chooserIframe = html.Element.mk('<iframe width="99%" height="99%" scrolling="no" id="chooser" />');
-var chooserDiv = html.Element.mk('<div style="position:relative;width:100%;height:100%"  id="chooserDiv" />').addChildren([
+var chooserDiv = html.Element.mk('<div style="position:relative;width:100%;height:100%"  id="chooserDiv" />').__addChildren([
   chooserClose,
   ui.chooserIframe
 ]);
@@ -527,7 +532,21 @@ ui.loadAndViewData = function (path) {
   }
 }
 
-  
+ui.removeBracketsFromPath = function (path,addS,includeUid) {
+  debugger;
+  if (path[0] === '[') {
+    var closeBracket = path.indexOf(']');
+    var uid = path.substring(1,closeBracket);
+    if (uid !== fb.currentUid()) { // opening files is supported only for the directory of the signed in user, so far
+      pj.error('Not yet');
+    }
+    var rest = path.substring(closeBracket+(includeUid?1:2));
+    var rs = (includeUid?uid:'')+(addS?'/s':'')+rest;
+    return rs;
+  } else {
+    return path;
+  }
+}
 ui.chooserReturn = function (v) {
   debugger;
   mpg.chooser_lightbox.dismiss();
@@ -549,7 +568,8 @@ ui.chooserReturn = function (v) {
       }
      var ext = pj.afterLastChar(v.path,'.',true);
      if (ext) {
-       ui.directoryValue(v.path,function (err,iurl) {
+       var url = ui.removeBracketsFromPath(v.path);
+       fb.directoryValue(url,function (err,iurl) {
          debugger;
          url = ui.removeToken(iurl);
          if (ext === '.svg') {
@@ -561,8 +581,9 @@ ui.chooserReturn = function (v) {
        });
        return;
      }
-     var storeRefString = fb.storeRefString();
-      var url = '/' + storeRefString +  v.path;
+     //var storeRefString = fb.storeRefString();
+      //var url = '/' + storeRefString +  v.path;
+      var url = '/'+ui.removeBracketsFromPath(v.path,true,true);
       var page = 'edit.html';//pj.devVersion?'editd.html':'edit.html';
       var dst = '/'+page+'?'+(pj.endsIn(url,'.js')?'source=':'item=')+url;
       location.href = dst;
@@ -706,7 +727,7 @@ ui.hasTitleLegend = function () {
   var dt = ds[0].__getData();
   return {hasTitle:!!dt.title,hasLegend:!!dt.categories};
 }
-
+/*
 ui.addTitleAndLegend = function () {
   var after = function () {
     svg.main.fitContents();
@@ -729,7 +750,7 @@ ui.addTitleAndLegend = function () {
     ui.insertItem('/repo1/chart/component/legend3.js','legend',undefined,'legend',after);//svg.main.fitContents();});
   }
 }
-
+*/
 
 fsel.onSelect = function (n) {
   var opt = fsel.optionIds[n];
@@ -878,8 +899,8 @@ var afterInsert = function (e,rs) {
   } else if (insertKind === 'title') {
     updateTitleAndLegend1(irs,null,chart);
   }
-  return;
-  if ((insertKind === 'legend') || (insertKind === 'title')) {
+}
+/* if ((insertKind === 'legend') || (insertKind === 'title')) {
     var  ds = dat.findDataSource();
     irs.forChart = ds[0];
     irs.__newData = true;
@@ -906,7 +927,9 @@ var afterInsert = function (e,rs) {
     irs.__select('svg');
     ui.nowInserting = undefined;
   }
-}
+  }
+  */
+
   
 ui.insertItem = function (path,where,position,kind,cb) {
   insertKind = kind;
@@ -1136,8 +1159,8 @@ ui.replaceBut.$click(function () {
     }
     allEls.push(repEl);
   }
-  ui.replaceDivCol1.addChildren(repEls1);
-  ui.replaceDivCol2.addChildren(repEls2);
+  ui.replaceDivCol1.__addChildren(repEls1);
+  ui.replaceDivCol2.__addChildren(repEls2);
   highlightEl(allEls[allEls.length-1]); // by convention the original proto is la
   
   });

@@ -81,7 +81,7 @@ html.Element.addChild = function (a1,a2) {
   return this;
 }
 
-html.Element.addChildren = function (ch) {
+html.Element.__addChildren = function (ch) {
   var thisHere = this;
   ch.forEach(function (c) {
     thisHere.addChild(c);

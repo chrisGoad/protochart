@@ -264,7 +264,7 @@ fb.addToDirectory = function (parentPath,name,link,cb) {
 
 fb.directoryValue = function (path,cb) {
   fb.getDirectory(function (err,directory) {
-      cb(null,pj.evalPath(diretory,path));
+      cb(null,pj.evalPath(directory,path));
     });
   
   }

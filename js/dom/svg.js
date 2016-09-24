@@ -96,7 +96,7 @@ svg.set("Element",Object.create(dom.Element)).__namedType();
 svg.Element.mk = function () {return Object.create(svg.Element)};
 
 
-svg.Element.svgStringR = function (dst) {
+svg.Element.__svgStringR = function (dst) {
   var el;
   if (this.__hidden()) {
     return;
@@ -109,7 +109,7 @@ svg.Element.svgStringR = function (dst) {
 
 
 
-svg.Element.addChildren = function (ch) {
+svg.Element.__addChildren = function (ch) {
   var thisHere = this;
   ch.forEach(function (c) {
     thisHere.push(c);
@@ -254,7 +254,7 @@ function primSvgStringR(dst) {
   }
  }
   
-tag.line.svgStringR = function (dst) {
+tag.line.__svgStringR = function (dst) {
   var el;
   if (this.__hidden()) {
     return;
@@ -343,7 +343,7 @@ geom.Rectangle.toRect = function () {
   rs.__enactBounds(this);
 }
   
-tag.rect.svgStringR = function (dst) {
+tag.rect.__svgStringR = function (dst) {
   var el;
   if (this.__hidden()) {
     return;
@@ -375,7 +375,7 @@ tag.set("path",svg.Element.mk()).__namedType();
 tag.path.set("attributes",pj.lift({d:"S"}));
 tag.path.set('__signature',pj.Signature.mk({fill:'S',stroke:'S','stroke-width':'N'}));
 
-tag.path.svgStringR = function (dst) {
+tag.path.__svgStringR = function (dst) {
   var el;
   if (this.__hidden()) {
     return;
@@ -388,7 +388,7 @@ tag.path.svgStringR = function (dst) {
 tag.set("polyline",svg.Element.mk()).__namedType();
 tag.polyline.set("attributes",pj.lift({points:"S"}));
 
-tag.polyline.svgStringR = function (dst) {
+tag.polyline.__svgStringR = function (dst) {
   var el;
   if (this.__hidden()) {
     return;
@@ -404,7 +404,7 @@ tag.polyline.svgStringR = function (dst) {
   tag.set("polygon",svg.Element.mk()).__namedType();
   tag.polygon.set("attributes",pj.lift({points:"S"}));
 
-tag.polygon.svgStringR = function (dst) {
+tag.polygon.__svgStringR = function (dst) {
   var el;
   if (this.__hidden()) {
     return;
@@ -593,7 +593,7 @@ tag.circle.__setExtent = function (extent) {
 
 tag.circle.__adjustable = true;
 
-tag.circle.svgStringR = primSvgStringR;
+tag.circle.__svgStringR = primSvgStringR;
 tag.set("text",svg.Element.mk()).__namedType();
 tag.text.set({"font-family":"Arial","font-size":"10",fill:"black"});
 tag.text.mk = function (txt) {
@@ -619,7 +619,7 @@ tag.text.update = function () {
   tag.tspan.set("attributes",pj.lift({x:"N",y:"N",dx:"N",dy:"N","font-family":"S","font-size":"N"}));
 
   
-tag.text.svgStringR = function (dst) {
+tag.text.__svgStringR = function (dst) {
   var el;
   if (this.__hidden()) {
     return;
