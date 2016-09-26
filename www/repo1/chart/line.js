@@ -37,7 +37,7 @@ item.shifterPlacement = function () {
 item.update = function () {
   if (!this.__data) return;
   var idata = this.__getData();
-  if (!dat.Series.isPrototypeOf(idata)) {
+  if (!dat.Sequence.isPrototypeOf(idata)) {
     pj.dat.throwDataError('Data has the wrong form; data sequence expected');
   }
   if (!idata.numericalDomain()) {

@@ -119,11 +119,11 @@ var elementToObject = function (fields,el) {
   return rs;
 }
 
-dat.set("Series",pj.Object.mk()).__namedType();
+dat.set("Sequence",pj.Object.mk()).__namedType();
 
  
 //find the index of the field whose role or id is nm
-dat.Series.fieldIndex = function (nm) {
+dat.Sequence.fieldIndex = function (nm) {
   var n=0;
   var rs=-1;
   this.fields.some(function (f) {
@@ -140,7 +140,7 @@ dat.Series.fieldIndex = function (nm) {
 //  if containsPoints is true, assume an array of pairs, and each is to be a point
 
 dat.mkPointSeries = function (pnts) {
-  var rs = Object.create(dat.Series);
+  var rs = Object.create(dat.Sequence);
   rs.containsPoints = true;
   rs.set("elements",pnts);
   return rs;
@@ -176,10 +176,10 @@ var fillInLabelsIds = function (fields) {
   return fields;
 }
 
-dat.Series.mk = function (dt) {
+dat.Sequence.mk = function (dt) {
   var els,rs,nels,fields,ln,primitiveSeries;
   if (!dt) return undefined;
-  if (dat.Series.isPrototypeOf(dt)) {
+  if (dat.Sequence.isPrototypeOf(dt)) {
     return dt;
   }
   els = dt.rows;
@@ -189,7 +189,7 @@ dat.Series.mk = function (dt) {
   if (!pj.Array.isPrototypeOf(els)) {
     return "elements should be array";
   }
-  rs = Object.create(dat.Series);
+  rs = Object.create(dat.Sequence);
   nels = pj.Array.mk();
   if (dt.containsPoints) {
     rs.containsPoints = true;
@@ -215,14 +215,14 @@ dat.Series.mk = function (dt) {
   return rs;
 }
 
-dat.Series.length = function () {
+dat.Sequence.length = function () {
   return this.value.length;
 }
 
 // for use with polylines
   
 
-dat.Series.toPoints= function (category) {
+dat.Sequence.toPoints= function (category) {
   var rs,els;
   if (this.containsPoints) {
     return this.elements;
@@ -242,7 +242,7 @@ dat.Series.toPoints= function (category) {
  
   
 // gather the categories from the data
-dat.Series.computeCategories = function () {
+dat.Sequence.computeCategories = function () {
   var ccts = this.categories;
   var flds,cti,els,cts,cto,perEl;
   if (ccts) {
@@ -279,18 +279,18 @@ dat.Series.computeCategories = function () {
  * N means that the mark conveys a numerical value.  Numerical marks are always placed along a domain
  * (which might be horizontal or vertical), and that placement conveys another number : the domain value
  * Incoming data has the form {title:, fields: , elements: }.
- *  The first field is treated as the domain, and the remaining fields specify a series of range values for each domain value.
+ *  The first field is treated as the domain, and the remaining fields specify a sequence of range values for each domain value.
  *  Often, as with bar a scatter charts, for each domain value, there is one mark allocated for each range value.
  *
- *   Data internalization computesa new data series from the incoming data, where there a separate data element for each range value.
+ *   Data internalization computesa new data sequence from the incoming data, where there a separate data element for each range value.
  *   Specifically, each incoming element {domain:v,range1:r1,...,rangen:rN} is turned into N elements:
  *  {domain:v,range:r1,category:range1},... {domain:v,range:rN,category:rangen}.
- *  Then, in building the chart, one mark is created for each element of the internalized series
+ *  Then, in building the chart, one mark is created for each element of the internalized sequence
  *  In the case of the bar graph, and scatter graphs, the marks are assigned a color to indicate their category.
  *  
  *  For point arrays, the idea is similar: rearrange the data so that there is one data  element per mark.
  *  
- * pointArrays give a mapping from a series of domain values to their corresponding range values.
+ * pointArrays give a mapping from a sequence of domain values to their corresponding range values.
  * "NNC" means that each element has fields domain:number range:number category:string
  * SNC means that the elements have fiedls domain:string range:number category:string
  * "[P]C" means that elements have fields points:array(Point) C:category
@@ -320,7 +320,7 @@ var fieldLabel = function (field) {
   }
 }
 
-dat.Series.setupCategories = function (dt,flds) {
+dat.Sequence.setupCategories = function (dt,flds) {
   var nflds;
   //var flds = dt.fields;
   var ln = flds.length;
@@ -389,12 +389,12 @@ dat.addTypesToFields = function (dt) {
 }
 dat.toCategorized = function (dt) {
   debugger;
-  var rs =  Object.create(dat.Series);
+  var rs =  Object.create(dat.Sequence);
   var flds,ln,categorize,els,i,domainId,domainType,domainV,cts,ct,nels,fld0,fld1,fld2,nflds,eltype;
   flds = dat.addTypesToFields(dt);
   els = dt.elements;
   var el0 = els[0];
-  /* if there is only one field, then there is nothing to do; this is a primitive series.  
+  /* if there is only one field, then there is nothing to do; this is a primitive sequence.  
    *  for now, the categories are the ids of the fields after the 0th (which is the domain)
    */
   ln = flds.length;
@@ -422,11 +422,11 @@ dat.toCategorized = function (dt) {
 }
   // this converts incoming data to a form where each mark has the form {points:,[category:]}
 dat.to_pointArrays = function (dt) {
-  var rs =  Object.create(dat.Series);
+  var rs =  Object.create(dat.Sequence);
   var flds = dat.addTypesToFields(dt);
 
  // var flds = dt.fields;
-  // if there is only one field, then there is nothing to do; this is a primitive series.
+  // if there is only one field, then there is nothing to do; this is a primitive sequence.
   //  for now, the categories are the ids of the fields after the 0th (which is the domain) 
   var ln = flds.length;
   var categorize,els,i,domain,nel,nels,cts,ctd,nel,fld0,fld1,fld2,nflds;
@@ -521,7 +521,7 @@ dat.toDayOrdinal = function(dts) {
   
   // converts date fields to JavaScript numerical times. No milliseconds included
   
-dat.Series.convertDateField = function (f) {
+dat.Sequence.convertDateField = function (f) {
   var els = this.elements;
   els.forEach(function (el) {
     var dv = el[f];
@@ -532,7 +532,7 @@ dat.Series.convertDateField = function (f) {
   });
 }
   
-dat.Series.convertField = function (f,typ) {
+dat.Sequence.convertField = function (f,typ) {
   var els = this.elements;
   els.forEach(function (el) {
     var dv = el[f];
@@ -547,7 +547,7 @@ dat.Series.convertField = function (f,typ) {
 }
   
 
-dat.Series.convertNumberField = function (f) {
+dat.Sequence.convertNumberField = function (f) {
   var els = this.elements;
   els.forEach(function (el) {
     var dv = el[f];
@@ -566,7 +566,7 @@ dat.internalName = function (f) {
 
 var convertableTypes = {"date":1,"number":1,"integer":1};
   
-dat.Series.convertFields = function () {
+dat.Sequence.convertFields = function () {
   var flds = this.fields;
   var ln = flds.length;
   var fldi,ftp;
@@ -589,7 +589,7 @@ dat.arrayExtreme = function (arr,fld,findMax) {
   return rs;
 }
     
-dat.Series.extreme = function (fld,findMax) {
+dat.Sequence.extreme = function (fld,findMax) {
   var elType = this.elementType;
   var pfld,rs,els;
   if (elType === "pointArray") {
@@ -610,15 +610,15 @@ dat.Series.extreme = function (fld,findMax) {
   return rs;
 }
   
-dat.Series.max = function (fld) {
+dat.Sequence.max = function (fld) {
   return this.extreme(fld,true);
 }
   
-dat.Series.min = function (fld) {
+dat.Sequence.min = function (fld) {
   return this.extreme(fld,false);
 }
 
-dat.Series.range = function (fld) {
+dat.Sequence.range = function (fld) {
   var mn = this.min(fld);
   var mx = this.max(fld);
   return geom.Interval.mk(mn,mx);
@@ -627,14 +627,14 @@ dat.Series.range = function (fld) {
       
     
   
-dat.Series.map = function (fn) {
+dat.Sequence.map = function (fn) {
   var opnts = this.value.map(fn);
-  var rs = dat.Series.mk({value:opnts});
+  var rs = dat.Sequence.mk({value:opnts});
   pj.setProperties(rs,this,["caption"]);
   return rs;
 }
   
-dat.Series.scale = function (xScale,yScale) {
+dat.Sequence.scale = function (xScale,yScale) {
   function scaleDatum(p) {
     var ln = p.length;
     var npx = xScale.eval(datumGet(p,"x"));
@@ -642,15 +642,15 @@ dat.Series.scale = function (xScale,yScale) {
     var np = pj.Array.mk((ln===2)?[npx,npy]:[p[0],npx,npy]);
     return np;
   }
-  return dat.Series.map(scaleDatum);
+  return dat.Sequence.map(scaleDatum);
 }
   
-dat.Series.domainType = function () {return "string"}; // for now
+dat.Sequence.domainType = function () {return "string"}; // for now
 
- // often, for labels we don't need the whole series, only domain values.  This
- // returns the domain values as a series
-dat.Series.extractDomainValues = function () {
-  var rs = Object.create(dat.Series);
+ // often, for labels we don't need the whole sequence, only domain values.  This
+ // returns the domain values as a sequence
+dat.Sequence.extractDomainValues = function () {
+  var rs = Object.create(dat.Sequence);
   var els = this.elements;
   var nels = pj.Array.mk();
   var cats = this.categories;
@@ -669,17 +669,17 @@ dat.Series.extractDomainValues = function () {
   return rs;
 }
   
-dat.Series.numericalDomain = function () { 
+dat.Sequence.numericalDomain = function () { 
   return this.fields[0].type === "number";
 }
   
  
-// a Series might have an associated transform in its __transform field. If so, the data is transformed before binding
+// a Sequence might have an associated transform in its __transform field. If so, the data is transformed before binding
 // to marks.
 
 pj.nodeMethod("__dataTransform",function () {
   var anc = pj.ancestorWithProperty(this,"__transform");
-  if (anc && dat.Series.isPrototypeOf(anc)) {
+  if (anc && dat.Sequence.isPrototypeOf(anc)) {
     return anc["__transform"]
   }
 });
@@ -688,7 +688,7 @@ pj.nodeMethod("__dataTransform",function () {
 // where only the domain is transformed, eg 1d bubble charts
 pj.nodeMethod("__dataTransform1d",function () {
   var anc = pj.ancestorWithProperty(this,"__transform1d");
-  if (anc && dat.Series.isPrototypeOf(anc)) {
+  if (anc && dat.Sequence.isPrototypeOf(anc)) {
     return anc["__transform1d"]
   }
 });
@@ -727,7 +727,7 @@ dat.internalizeData = function (dt,markType) {
     return dt;
   }
   if (dt.containsPoints) {
-    pdt = dat.Series.mk(dt);
+    pdt = dat.Sequence.mk(dt);
   } else if (markType === 'N') {
     pdt = dat.toCategorized(dt);
   } else if (markType === "pointArray") {
@@ -744,7 +744,7 @@ dat.internalizeData = function (dt,markType) {
 // data for x will be present either in x.data, or x.__idata, if there is an internalization step; choose __idata if present
 
 
-pj.Object.__setData = function (xdt,doUpdate) {
+pj.Object.__setData = function (xdt,dontUpdate) {
   debugger;
   this.__idata = undefined;
   var isNode = pj.isNode(xdt);
@@ -767,7 +767,7 @@ pj.Object.__setData = function (xdt,doUpdate) {
       }
     }
   }
-  if (doUpdate)  {
+  if (1 || !dontUpdate)  {
     this.__getData();// gets data into internal form
     this.__update();
   }

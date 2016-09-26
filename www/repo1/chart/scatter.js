@@ -36,7 +36,7 @@ item.update = function () {
   if (!this.__data) return;
   //pj.dat.throwDataError('bad data');
   var idata = this.__getData();
-  if (!dat.Series.isPrototypeOf(idata)) {
+  if (!dat.Sequence.isPrototypeOf(idata)) {
     pj.dat.throwDataError('Data has the wrong form; data sequence expected');
   }
   if (!idata.numericalDomain()) {

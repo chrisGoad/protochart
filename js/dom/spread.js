@@ -279,7 +279,7 @@ pj.Spread.sync = function () {
   
   
   /*
-   * a spread may have a 'binder' function, which given a mark, its datum, index, and the lenght of the series
+   * a spread may have a 'binder' function, which given a mark, its datum, index, and the lenght of the sequence
    *  adjusts the mark as appropriate. Binders are optional.
    */
   

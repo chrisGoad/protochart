@@ -44,7 +44,7 @@ item.at10s = true;
 */
 item.set("theLabels",labelsP.instantiate());
 item.theLabels.__unselectable = true;
-item.theLabels.set("__data",Object.create(pj.dat.Series));
+item.theLabels.set("__data",Object.create(pj.dat.Sequence));
 item.theLabels.__data.set("elements",pj.Array.mk());
 
 item.set('dataBounds',pj.geom.mkInterval(100,300));
