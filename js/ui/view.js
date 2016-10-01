@@ -1,18 +1,15 @@
 (function (pj) {
+  "use strict";
   var actionHt;
-  
+  var html = pj.html;
   var geom = pj.geom;
   var svg = pj.svg;
-   var dat = pj.dat;
   var ui = pj.ui = {};
   ui.fitMode = true;
   //stubs
   ui.hide = function () {}
 
-   // This is one of the code files assembled into pjview.js. "start extract" and "end extract" indicate the part used in the assembly
-
-//start extract
-
+   // This is one of the code files assembled into pjview.js. 
 
 /*
  * Prototypejungle items can be embedded in pages via iframes. These functions provide support
@@ -86,15 +83,25 @@ var parseQuerystring = function(){
     var svgdiv = document.getElementById("svgDiv");
     svgdiv.style.width = svgwd +"px";
     svgdiv.style.height = svght + "px";
-    if (ui.fitMode) svg.main.fitContents();
+    svg.main.resize(svgwd,svght); 
+
+   // if (ui.fitMode)
+    svg.main.fitContents();
   }
 
   
 pj.init = function (q) {
   processQuery(q);
+  var svgDiv;
+   //   ui.svgDiv = html.Element.mk('<div id="svgDiv" style="position:absolute;height:400px;width:600px;background-color:white;border:solid thin black;display:inline-block"/>').__addChildren([
+  //var mpg =  html.wrap("main",'div',{style:{position:"absolute","margin":"0px",padding:"0px"}}).__addChildren([
+  //  svgDiv = html.Element.mk('<div id="svgDiv" style="position:absolute;height:400px;width:600px;background-color:white;border:solid thin black;display:inline-block"/>')
+  //]);
+  //mpg.__addToDom(); 
+  //var svgRoot = svg.Root.mk(svgDiv.__element);
   var svgRoot = svg.Root.mk(document.getElementById("svgDiv"));
   svg.main = svgRoot;
-  svgRoot.fitFactor = 0.7;
+  svgRoot.fitFactor = 0.8;
   function afterInstall(e,rs)  {
     pj.root = rs;
     var bkc = rs.backgroundColor;
@@ -117,7 +124,6 @@ pj.init = function (q) {
   window.onresize = layout;
 }
 
-//end extract
 
 })(prototypeJungle);
 

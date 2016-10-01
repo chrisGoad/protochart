@@ -155,11 +155,11 @@ item.update = function () {
     var L = this.__data.elements.length;
     var G = L/(this.categoryCount);
     this.aGroupSep = effectiveWidth/(G-1);
-    this.labelC.__setData(domainValues);
+    this.labelC.__setData(domainValues,true);
     
   }
   this.marks.scale = 1;
-  this.marks.__setData(this.__data,true);
+  this.marks.__setData(this.__data);
   color_utils.initColors(this);
   if (this.__data.categories) {
     // so the legend colors can be updated

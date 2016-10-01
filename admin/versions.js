@@ -14,7 +14,7 @@ exports.pjpage = "0.9.3";
 exports.pjdraw = "0.8.2";
 exports.pjdev = "0.8.2";
 exports.pjchooser = "0.9.3";
-exports.pjview = "0.9.2";
+exports.pjview = "0.9.3";
 exports.pjloginout = "0.8.2";
 
 exports.chart = "0.9.3";

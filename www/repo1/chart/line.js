@@ -3,7 +3,7 @@ pj.require('./component/axis.js','./core/line.js','../lib/axis_utils.js',functio
 debugger;
 var ui=pj.ui;
 var geom=pj.geom;
-var dat=pj.dat;
+var dat=pj.data;
 
 var item = pj.svg.Element.mk('<g/>');
 item.markType = 'pointArray';
@@ -44,7 +44,7 @@ item.update = function () {
     pj.dat.throwDataError('Data has the wrong form: numerical domain expected');
   }
   axisUtils.updateAxes(this);
-  this.core.__setData(this.__getData(),true);
+  this.core.__setData(this.__getData());
 }
 
 item.reset = function () {

@@ -36,7 +36,8 @@ ui_files = ui_files.map(function (f) { return "ui/"+f;});
 //var chooser_files = ["ui/ajax","ui/ui","ui/constants","editor/chooser"];
 var chooser_files = ["ui/ui","editor/chooser"];
 
-var view_files = ["ui/poster","ui/constants","ui/min_ui","ui/view"];
+//var view_files = ["ui/poster","ui/constants","ui/min_ui","ui/view"];
+var view_files = ["ui/view"];
 
 //var editor_files = ["editor/constants","editor/page_top","editor/page","editor/init"];
 var editor_files = ["editor/page_top","editor/page","editor/init"];
@@ -156,11 +157,11 @@ function mk_pjchooser(cb) {
 
 function mk_pjview(cb) {
   var fls = view_files;
-  var rs = "(function (pj) {\n\nvar dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
-            '"use strict"\n'+
-             mextract(fls) + "\n})(prototypeJungle);\n"
+  //var rs = "(function (pj) {\n\nvar dat=pj.dat,dom=pj.dom,svg=pj.svg,html=pj.html,ui=pj.ui;\n"+
+   //         '"use strict"\n'+
+   var rs =          mextract(fls);// + "\n})(prototypeJungle);\n"
   
-  mkModule("pjview",versions.pjview,rs,cb);
+  mkModule("view",versions.pjview,rs,cb);
 
 }
 

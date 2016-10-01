@@ -46,7 +46,7 @@ item.update = function () {
   core.groupSep = this.groupSep;
   this.axis.orientation = this.core.orientation = this.orientation;
   axisUtils.updateAxes(this);
-  core.__setData(data,true);
+  core.__setData(data);
   core.bars.__unselectable = true; 
 }
 

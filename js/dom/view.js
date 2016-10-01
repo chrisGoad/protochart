@@ -12,7 +12,7 @@ pj.viewItem = function (item,inDiv,cb) {
       cb();
     }
   }
-  if (document.readyState == "complete" || document.readyState == "loaded") {
+  if (document.readyState == "complete" || document.readyState == "loaded"  || document.readyState == "interactive") {
      viewIt();
   } else {
     document.addEventListener('DOMContentLoaded',viewIt);

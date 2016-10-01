@@ -1,7 +1,7 @@
 
 
-  var dat = pj.set("dat",pj.Object.mk());
-  dat.__builtIn = true;
+  var data = pj.set("data",pj.Object.mk());
+  data.__builtIn = true;
 
 /* utilities for data
 
@@ -12,18 +12,18 @@
 
 
     
-dat.set("LinearScale",pj.Object.mk()).__namedType();
-dat.LinearScale.set("coverage",geom.Interval.mk(0,100));
-dat.LinearScale.set("extent",geom.Interval.mk(0,100));
+data.set("LinearScale",pj.Object.mk()).__namedType();
+data.LinearScale.set("coverage",geom.Interval.mk(0,100));
+data.LinearScale.set("extent",geom.Interval.mk(0,100));
 
 
 
-dat.LinearScale.setExtent = function (xt) {
+data.LinearScale.setExtent = function (xt) {
   this.set("extent",(typeof xt=="number")?geom.Interval.mk(0,xt):xt);
 }
 
-dat.LinearScale.mk = function (cv,xt) {
-  var rs = dat.LinearScale.instantiate();
+data.LinearScale.mk = function (cv,xt) {
+  var rs = data.LinearScale.instantiate();
   if (cv) rs.set("coverage",cv);
   if (xt) {
     rs.setExtent(xt);
@@ -31,14 +31,14 @@ dat.LinearScale.mk = function (cv,xt) {
   return rs;
 }
   
-dat.LinearScale.eval = function (v) {
+data.LinearScale.eval = function (v) {
   var cv = this.coverage;
   var xt = this.extent;
   var sc = (xt.ub - xt.lb)/(cv.ub - cv.lb);
   return (this.isY)?xt.ub - sc * (v - cv.lb):xt.lb + sc * (v - cv.lb); // Y up 
 }
 
-dat.LinearScale.dtToImScale = function () {
+data.LinearScale.dtToImScale = function () {
    var cv = this.coverage;
    var xt = this.extent;
    return (xt.ub-xt.lb)/(cv.ub - cv.lb);
@@ -64,20 +64,20 @@ pj.nDigits = function (n,d) {
 
 
   
-dat.LinearScale.label = function (dv) {
+data.LinearScale.label = function (dv) {
   return pj.nDigits(dv,3);
 }
 
-dat.set("OrdinalScale",pj.Object.mk()).__namedType();
-dat.OrdinalScale.set("coverage",10); // the number of __values
-dat.OrdinalScale.set("extent",geom.Interval.mk(0,100));// the range in which to place them
+data.set("OrdinalScale",pj.Object.mk()).__namedType();
+data.OrdinalScale.set("coverage",10); // the number of __values
+data.OrdinalScale.set("extent",geom.Interval.mk(0,100));// the range in which to place them
 
-dat.OrdinalScale.setExtent = function (xt) {
+data.OrdinalScale.setExtent = function (xt) {
   this.set("extent",(typeof xt=="number")?geom.Interval.mk(0,xt):xt);
 }
 
-dat.OrdinalScale.mk = function (cv,xt) {
-  var rs = dat.OrdinalScale.instantiate();
+data.OrdinalScale.mk = function (cv,xt) {
+  var rs = data.OrdinalScale.instantiate();
   if (cv) rs.set("coverage",cv);
   if (xt) {
     this.setExtent(xt);
@@ -85,7 +85,7 @@ dat.OrdinalScale.mk = function (cv,xt) {
   return rs;
 }
 
-dat.OrdinalScale.eval = function (v) {
+data.OrdinalScale.eval = function (v) {
   var cv = this.coverage;
   var xt = this.extent;
   var sc = (xt.ub - xt.lb)/cv;
@@ -93,13 +93,13 @@ dat.OrdinalScale.eval = function (v) {
  
 }
 
-dat.OrdinalScale.dtToImScale = function () {
+data.OrdinalScale.dtToImScale = function () {
    var cv = this.coverage;
    var xt = this.extent;
    return (xt.ub-xt.lb)/cv;
 }
 
-dat.OrdinalScale.label = function (dv) {
+data.OrdinalScale.label = function (dv) {
   return dv;
 }
 
@@ -119,11 +119,11 @@ var elementToObject = function (fields,el) {
   return rs;
 }
 
-dat.set("Sequence",pj.Object.mk()).__namedType();
+data.set("Sequence",pj.Object.mk()).__namedType();
 
  
 //find the index of the field whose role or id is nm
-dat.Sequence.fieldIndex = function (nm) {
+data.Sequence.fieldIndex = function (nm) {
   var n=0;
   var rs=-1;
   this.fields.some(function (f) {
@@ -139,8 +139,8 @@ dat.Sequence.fieldIndex = function (nm) {
 //
 //  if containsPoints is true, assume an array of pairs, and each is to be a point
 
-dat.mkPointSeries = function (pnts) {
-  var rs = Object.create(dat.Sequence);
+data.mkPointSeries = function (pnts) {
+  var rs = Object.create(data.Sequence);
   rs.containsPoints = true;
   rs.set("elements",pnts);
   return rs;
@@ -148,7 +148,7 @@ dat.mkPointSeries = function (pnts) {
 
 var fieldProps = ['id','type','label'];
 
-dat.copyFields = function (fields) {
+data.copyFields = function (fields) {
   var rs = pj.Array.mk();
   fields.forEach(function (field) {
     var cf = pj.Object.mk();
@@ -176,10 +176,10 @@ var fillInLabelsIds = function (fields) {
   return fields;
 }
 
-dat.Sequence.mk = function (dt) {
+data.Sequence.mk = function (dt) {
   var els,rs,nels,fields,ln,primitiveSeries;
   if (!dt) return undefined;
-  if (dat.Sequence.isPrototypeOf(dt)) {
+  if (data.Sequence.isPrototypeOf(dt)) {
     return dt;
   }
   els = dt.rows;
@@ -189,7 +189,7 @@ dat.Sequence.mk = function (dt) {
   if (!pj.Array.isPrototypeOf(els)) {
     return "elements should be array";
   }
-  rs = Object.create(dat.Sequence);
+  rs = Object.create(data.Sequence);
   nels = pj.Array.mk();
   if (dt.containsPoints) {
     rs.containsPoints = true;
@@ -208,21 +208,21 @@ dat.Sequence.mk = function (dt) {
   els.forEach(function (el) {
     nels.push(primitiveSeries?el:elementToObject(fields,el));
   });
-  rs.set("fields",dat.copyFields(fields));
+  rs.set("fields",data.copyFields(fields));
   pj.setProperties(rs,dt,["categories","categoryCaptions"]);
   rs.set("elements",nels);
   pj.setProperties(rs,dt,["title"]);
   return rs;
 }
 
-dat.Sequence.length = function () {
+data.Sequence.length = function () {
   return this.value.length;
 }
 
 // for use with polylines
   
 
-dat.Sequence.toPoints= function (category) {
+data.Sequence.toPoints= function (category) {
   var rs,els;
   if (this.containsPoints) {
     return this.elements;
@@ -242,7 +242,7 @@ dat.Sequence.toPoints= function (category) {
  
   
 // gather the categories from the data
-dat.Sequence.computeCategories = function () {
+data.Sequence.computeCategories = function () {
   var ccts = this.categories;
   var flds,cti,els,cts,cto,perEl;
   if (ccts) {
@@ -320,7 +320,7 @@ var fieldLabel = function (field) {
   }
 }
 
-dat.Sequence.setupCategories = function (dt,flds) {
+data.Sequence.setupCategories = function (dt,flds) {
   var nflds;
   //var flds = dt.fields;
   var ln = flds.length;
@@ -353,7 +353,7 @@ dat.Sequence.setupCategories = function (dt,flds) {
   this.set('fields',nflds);
 }
 
-dat.determineTypeOfField = function (dt,field) {
+data.determineTypeOfField = function (dt,field) {
   var els = dt.elements;
   var ln = els.length;
   for (var i=0;i<ln;i++) {
@@ -365,14 +365,14 @@ dat.determineTypeOfField = function (dt,field) {
   return 'number';
 }
 
-dat.addTypesToFields = function (dt) {
+data.addTypesToFields = function (dt) {
   var iflds = dt.fields;
   var rs = pj.Array.mk();
   iflds.forEach(function (field) {
     if ((typeof field === 'object') && field.type) {
       rs.push(field);
     } else {
-      var tp = dat.determineTypeOfField(dt,field);
+      var tp = data.determineTypeOfField(dt,field);
       if (typeof field === 'object') {
         field.type = tp;
         rs.push(field);
@@ -387,11 +387,11 @@ dat.addTypesToFields = function (dt) {
   });
   return rs;;
 }
-dat.toCategorized = function (dt) {
+data.toCategorized = function (dt) {
   debugger;
-  var rs =  Object.create(dat.Sequence);
+  var rs =  Object.create(data.Sequence);
   var flds,ln,categorize,els,i,domainId,domainType,domainV,cts,ct,nels,fld0,fld1,fld2,nflds,eltype;
-  flds = dat.addTypesToFields(dt);
+  flds = data.addTypesToFields(dt);
   els = dt.elements;
   var el0 = els[0];
   /* if there is only one field, then there is nothing to do; this is a primitive sequence.  
@@ -402,15 +402,16 @@ dat.toCategorized = function (dt) {
   categorize = ln >= 3;
   domainId = fieldId(flds[0]);
   rs.setupCategories(dt,flds);
-  nels = pj.Array.mk(); 
+  nels = pj.Array.mk();
   els.forEach(function (el) {
-    var domainV = el[domainId];
+    var isArray = pj.Array.isPrototypeOf(el);
+    var domainV = isArray?el[0]:el[domainId];
     for (i=1;i<ln;i++) {
       var fld = flds[i];
       var fid = fieldId(fld);
       var nel = pj.Object.mk();
       nel.domain = domainV;
-      nel.range = el[fid]; 
+      nel.range = isArray?el[i]:el[fid]; 
       if (categorize) nel.category = fid;//cts[i-1];  
       nels.push(nel);
     } 
@@ -421,9 +422,9 @@ dat.toCategorized = function (dt) {
   return rs;
 }
   // this converts incoming data to a form where each mark has the form {points:,[category:]}
-dat.to_pointArrays = function (dt) {
-  var rs =  Object.create(dat.Sequence);
-  var flds = dat.addTypesToFields(dt);
+data.to_pointArrays = function (dt) {
+  var rs =  Object.create(data.Sequence);
+  var flds = data.addTypesToFields(dt);
 
  // var flds = dt.fields;
   // if there is only one field, then there is nothing to do; this is a primitive sequence.
@@ -433,7 +434,7 @@ dat.to_pointArrays = function (dt) {
   if (ln < 2) return this; 
   var categorize = ln >= 3;
   els = dt.elements;
-  domain = fieldId(flds[0]);
+  domainId = fieldId(flds[0]);
   nels = pj.Array.mk(); // each will have the form {category:,points:},
   rs.setupCategories(dt,flds);
   if (categorize) {
@@ -445,12 +446,13 @@ dat.to_pointArrays = function (dt) {
     nels.push(pj.Object.mk({category:undefined,points:pj.Array.mk()}))
   }
   els.forEach(function (el) {
-    var domainV = el[domain];
+    var isArray = pj.Array.isPrototypeOf(el);
+    var domainV = isArray?el[0]:el[domainId];
     var fld,fid,pnt,nel;
     for (i=1;i<ln;i++) {
       var fldi = flds[i];
       var fid =  fieldId(fldi);
-      pnt = geom.Point.mk(domainV,el[fid]);
+      pnt = geom.Point.mk(domainV,isArray?el[i]:el[fid]);
       nel = nels[i-1];
       nel.points.push(pnt);
     } 
@@ -472,10 +474,10 @@ var fieldsById = function (fields) {
   // formats: "ymd" (eg "1982-2-3"), or "year". In future, will support "monthName"(eg"Jan") "md" (eg "10-27") "m"year". Defaults to ymd
 
   
-dat.dayOrdinalToYear = function (o) {
+data.dayOrdinalToYear = function (o) {
   var rdt = new Date(o * dayMilliseconds);
   var yr = rdt.getUTCFullYear();
-  var yo = dat.toDayOrdinal(yr);
+  var yo = data.toDayOrdinal(yr);
   var lyear = 0;
   var dys = o - yo;
   return yr + dys/365;
@@ -483,7 +485,7 @@ dat.dayOrdinalToYear = function (o) {
     
 
   
-dat.dayOrdinalToString = function (o,format) {
+data.dayOrdinalToString = function (o,format) {
   var rdt = new Date(o * dayMilliseconds);
   var yr = rdt.getUTCFullYear();
   if (format === "year") {
@@ -496,7 +498,7 @@ dat.dayOrdinalToString = function (o,format) {
     
   // the number of days since 1970-1-1
 var dayMilliseconds = 60*60*24 * 1000;
-dat.toDayOrdinal = function(dts) {
+data.toDayOrdinal = function(dts) {
   var dtn,sp,y,m,d,rs;
   if (typeof(dts) === 'number') {
     dtn = new Date(dts,0,1);
@@ -521,24 +523,24 @@ dat.toDayOrdinal = function(dts) {
   
   // converts date fields to JavaScript numerical times. No milliseconds included
   
-dat.Sequence.convertDateField = function (f) {
+data.Sequence.convertDateField = function (f) {
   var els = this.elements;
   els.forEach(function (el) {
     var dv = el[f];
     if (typeof dv ==="string") {
-      var dord = dat.toDayOrdinal(dv);
+      var dord = data.toDayOrdinal(dv);
       el[f] = dord;
     }
   });
 }
   
-dat.Sequence.convertField = function (f,typ) {
+data.Sequence.convertField = function (f,typ) {
   var els = this.elements;
   els.forEach(function (el) {
     var dv = el[f];
     var nv;
     if (typeof dv==="string") {
-      nv = (typ==="date")?dat.toDayOrdinal(dv):
+      nv = (typ==="date")?data.toDayOrdinal(dv):
                (typ==="number")?parseFloat(dv):
                parseInt(dv);
       el[f] = nv;
@@ -547,7 +549,7 @@ dat.Sequence.convertField = function (f,typ) {
 }
   
 
-dat.Sequence.convertNumberField = function (f) {
+data.Sequence.convertNumberField = function (f) {
   var els = this.elements;
   els.forEach(function (el) {
     var dv = el[f];
@@ -559,14 +561,14 @@ dat.Sequence.convertNumberField = function (f) {
   });
 }
   
-dat.internalName = function (f) {
+data.internalName = function (f) {
   var r = f.role;
   return r?r:f.id;
 }
 
 var convertableTypes = {"date":1,"number":1,"integer":1};
   
-dat.Sequence.convertFields = function () {
+data.Sequence.convertFields = function () {
   var flds = this.fields;
   var ln = flds.length;
   var fldi,ftp;
@@ -574,13 +576,13 @@ dat.Sequence.convertFields = function () {
     var fldi = flds[i];
     var ftp = fldi.type;
     if (convertableTypes[ftp]) {
-      this.convertField(dat.internalName(fldi),ftp);
+      this.convertField(data.internalName(fldi),ftp);
     }
   }
 }
   
       
-dat.arrayExtreme = function (arr,fld,findMax) {
+data.arrayExtreme = function (arr,fld,findMax) {
   var rs = findMax?-Infinity:Infinity;
   arr.forEach(function (el) {
     var v = el[fld];
@@ -589,7 +591,7 @@ dat.arrayExtreme = function (arr,fld,findMax) {
   return rs;
 }
     
-dat.Sequence.extreme = function (fld,findMax) {
+data.Sequence.extreme = function (fld,findMax) {
   var elType = this.elementType;
   var pfld,rs,els;
   if (elType === "pointArray") {
@@ -601,7 +603,7 @@ dat.Sequence.extreme = function (fld,findMax) {
     var points,v;
     if (elType === "pointArray") { // elements are have the form points:,category:
       var points = el.points;
-      var v = dat.arrayExtreme(points,pfld,findMax);
+      var v = data.arrayExtreme(points,pfld,findMax);
     } else {
       var v = el[fld];
     }
@@ -610,15 +612,15 @@ dat.Sequence.extreme = function (fld,findMax) {
   return rs;
 }
   
-dat.Sequence.max = function (fld) {
+data.Sequence.max = function (fld) {
   return this.extreme(fld,true);
 }
   
-dat.Sequence.min = function (fld) {
+data.Sequence.min = function (fld) {
   return this.extreme(fld,false);
 }
 
-dat.Sequence.range = function (fld) {
+data.Sequence.range = function (fld) {
   var mn = this.min(fld);
   var mx = this.max(fld);
   return geom.Interval.mk(mn,mx);
@@ -627,14 +629,14 @@ dat.Sequence.range = function (fld) {
       
     
   
-dat.Sequence.map = function (fn) {
+data.Sequence.map = function (fn) {
   var opnts = this.value.map(fn);
-  var rs = dat.Sequence.mk({value:opnts});
+  var rs = data.Sequence.mk({value:opnts});
   pj.setProperties(rs,this,["caption"]);
   return rs;
 }
   
-dat.Sequence.scale = function (xScale,yScale) {
+data.Sequence.scale = function (xScale,yScale) {
   function scaleDatum(p) {
     var ln = p.length;
     var npx = xScale.eval(datumGet(p,"x"));
@@ -642,15 +644,15 @@ dat.Sequence.scale = function (xScale,yScale) {
     var np = pj.Array.mk((ln===2)?[npx,npy]:[p[0],npx,npy]);
     return np;
   }
-  return dat.Sequence.map(scaleDatum);
+  return data.Sequence.map(scaleDatum);
 }
   
-dat.Sequence.domainType = function () {return "string"}; // for now
+data.Sequence.domainType = function () {return "string"}; // for now
 
  // often, for labels we don't need the whole sequence, only domain values.  This
  // returns the domain values as a sequence
-dat.Sequence.extractDomainValues = function () {
-  var rs = Object.create(dat.Sequence);
+data.Sequence.extractDomainValues = function () {
+  var rs = Object.create(data.Sequence);
   var els = this.elements;
   var nels = pj.Array.mk();
   var cats = this.categories;
@@ -669,7 +671,7 @@ dat.Sequence.extractDomainValues = function () {
   return rs;
 }
   
-dat.Sequence.numericalDomain = function () { 
+data.Sequence.numericalDomain = function () { 
   return this.fields[0].type === "number";
 }
   
@@ -679,7 +681,7 @@ dat.Sequence.numericalDomain = function () {
 
 pj.nodeMethod("__dataTransform",function () {
   var anc = pj.ancestorWithProperty(this,"__transform");
-  if (anc && dat.Sequence.isPrototypeOf(anc)) {
+  if (anc && data.Sequence.isPrototypeOf(anc)) {
     return anc["__transform"]
   }
 });
@@ -688,13 +690,13 @@ pj.nodeMethod("__dataTransform",function () {
 // where only the domain is transformed, eg 1d bubble charts
 pj.nodeMethod("__dataTransform1d",function () {
   var anc = pj.ancestorWithProperty(this,"__transform1d");
-  if (anc && dat.Sequence.isPrototypeOf(anc)) {
+  if (anc && data.Sequence.isPrototypeOf(anc)) {
     return anc["__transform1d"]
   }
 });
   
 // returns the kind
-dat.dataKind = function (dt) {
+data.dataKind = function (dt) {
   if (dt.fields && dt.elements) {
     return 'sequence';
   }
@@ -704,20 +706,24 @@ dat.dataKind = function (dt) {
   return 'unknown';
 }
 
-dat.badDataErrorKind = {};
+data.badDataErrorKind = {};
 
 
-dat.throwDataError = function (msg) {
+data.throwDataError = function (msg) {
   debugger;
-  throw {kind:dat.badDataErrorKind,message:msg}
+  if (pj.throwOnError) {
+    throw {kind:data.badDataErrorKind,message:msg};
+  } else {
+    pj.error(msg);
+  }
 }
 
 // for now, this is only for data sequences
 
-dat.internalizeData = function (dt,markType) {
-  var k = dat.dataKind(dt);
+data.internalizeData = function (dt,markType) {
+  var k = data.dataKind(dt);
   if (k !== 'sequence') {
-    dat.throwDataError('Bad form for data: expected data sequence');
+    data.throwDataError('Bad form for data: expected data sequence');
   }
   var pdt,flds,categories;
   if (dt===undefined) {
@@ -727,11 +733,11 @@ dat.internalizeData = function (dt,markType) {
     return dt;
   }
   if (dt.containsPoints) {
-    pdt = dat.Sequence.mk(dt);
+    pdt = data.Sequence.mk(dt);
   } else if (markType === 'N') {
-    pdt = dat.toCategorized(dt);
+    pdt = data.toCategorized(dt);
   } else if (markType === "pointArray") {
-    pdt = dat.to_pointArrays(dt);
+    pdt = data.to_pointArrays(dt);
   }
   if (dt.title) {
     pdt.title = dt.title;
@@ -767,7 +773,7 @@ pj.Object.__setData = function (xdt,dontUpdate) {
       }
     }
   }
-  if (1 || !dontUpdate)  {
+  if (!dontUpdate)  {
     this.__getData();// gets data into internal form
     this.__update();
   }
@@ -786,7 +792,7 @@ pj.Object.__getData  = function () {
   }
   
   if (this.markType) { // if markType is asserted, then an internalized form of the data is wanted
-    var internaldt =  dat.internalizeData(this.__data, this.markType);
+    var internaldt =  data.internalizeData(this.__data, this.markType);
     internaldt.__computed = 1; // so it won't get saved
     internaldt.__internalized = 1;
     this.set("__idata",internaldt);
@@ -799,14 +805,14 @@ pj.Object.__getData  = function () {
 
 
 pj.Object.__dataSource = function () {
-  var dat = this.__get('__data');
-  if (dat) {
-    while (dat && dat.__get) {
-      var url = dat.__get('__sourceUrl');
+  var data = this.__get('__data');
+  if (data) {
+    while (data && data.__get) {
+      var url = data.__get('__sourceUrl');
       if (url) {
         return url;
       }
-      dat = Object.getPrototypeOf(dat);
+      data = Object.getPrototypeOf(data);
     }
   }
 }
@@ -814,7 +820,7 @@ pj.Object.__dataSource = function () {
 pj.Array.__dataSource = function () {}
 
 
-dat.findDataSource = function (iroot) {
+data.findDataSource = function (iroot) {
   var root = root?root:pj.root;
   var rs;
   pj.forEachTreeProperty(root,function (node) {
@@ -832,7 +838,7 @@ dat.findDataSource = function (iroot) {
 pj.getDataJSONP = function (url,cb) {
   
 ui.getDataJSONP = function (url,cb) {
-  pj.data = function (data) {
+  pj.returnData = function (data) {
     if (cb) {
       cb(data);
     }
@@ -840,6 +846,7 @@ ui.getDataJSONP = function (url,cb) {
   pj.loadScript(url);
 }
 }
-pj.data = pj.returnData;
+
+//pj.data = pj.returnData;
 
   

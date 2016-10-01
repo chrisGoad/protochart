@@ -142,7 +142,7 @@ item.update = function () {
   if (this.__newData) {
     pj.resetComputedObject(this,"lineByCategory");
   }
-  this.lines.__setData(this.__getData(),true);
+  this.lines.__setData(this.__getData());
   //} else {
   //  this.lines.refresh();
  // }

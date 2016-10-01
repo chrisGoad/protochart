@@ -37,13 +37,17 @@
   
   ui.handleError = function (e) {
     debugger;
-    var msg;
-    if (e.kind === dat.badDataErrorKind) {
-      msg = e.message;
+    if (pj.throwOnError) {
+      var msg;
+      if (e.kind === pj.data.badDataErrorKind) {
+        msg = e.message;
+      } else {
+        msg = 'Unknown error in update';
+      } 
+      ui.displayMessageInSvg(msg);
     } else {
-      msg = 'Unknown error in update';
-    } 
-    ui.displayMessageInSvg(msg);
+      pj.error(e.message);
+    }
     //alert(msg);
     //ui.displayMessage(ui.messageElement,msg);
 
@@ -64,7 +68,7 @@
       itm.soloInit(); 
     }
     //ui.displayMessageInSvg('ZUB');
-    if (ui.dontCatch) {
+    if (!pj.throwOnError) {
       ui.refresh(ui.fitMode);
     } else {
       try {
@@ -116,7 +120,7 @@ ui.setSaved = function (){}; // stub called from ui
       if (!pj.replaceableSpread) {
         ui.disableButton(ui.replaceBut);
       }
-      if (!dat.findDataSource()) {
+      if (!pj.data.findDataSource()) {
         ui.disableButton(ui.viewDataBut);
       }
       /*

@@ -98,27 +98,39 @@ item.setColorOfCategory = function (category,color) {
 /* the scaling function should be set from the outside, usually from the axis
  * a default is is included
  */
-
+/*
 item.rangeScaling = function (x) {
   var extent = (this.orientation === 'horizontal')?this.width:this.height;
   return ( x/this.dataMax) * extent;
 }
-
+*/
 item.bars.binder = function (bar,data,indexInSeries,lengthOfDataSeries) {
   var item = this.__parent,
     categoryCount,group,x,y;
   var horizontal = item.orientation === 'horizontal';
+  debugger;
   var datum = item.rangeScaling(data.range);// this is the top of the bar, if vertical
+  console.log('bar datum',datum);
+ 
   var barDim = item.barDim;
   var hbarDim = 0.5*barDim;
   bar.__data = datum;
   bar.__editPanelName = 'This bar';
   if (horizontal) {
+    if (datum <= 0) {
+      bar.__hide();
+      return;
+    }
     bar.width = datum;
     bar.height = barDim;
   } else {
+    var ht = item.height - datum;
+    if (ht <= 0) {
+      bar.__hide();
+      return;
+    }
     bar.width = barDim;
-    bar.height = item.height - datum;
+    bar.height = ht;
   }
   categoryCount = item.categoryCount;
   group = Math.floor(indexInSeries/categoryCount);// which group of data, grouping by domain
@@ -173,9 +185,9 @@ item.update = function () {
     categories,cnt,max,data;
   
   if (!this.__data) return;
-  if (!this.bars.masterPrototype) { 
-    this.bars.masterPrototype = this.barP;
-  }
+  //if (!this.bars.masterPrototype) { 
+ //  this.bars.masterPrototype = this.barP;
+//  }
   data = this.__getData();
   this.labelC.orientation = horizontal?'vertical':'horizontal';
   //this.labelC.orientation = this.orientation;
@@ -214,13 +226,13 @@ item.update = function () {
     this.labelC.width = this.width - groupWidth;
     this.labelC.__moveto(group0center ,this.height+20);
   }
-  this.labelC.__setData(domainValues,true);
+  this.labelC.__setData(domainValues);
   pj.declareComputed(this.labelC.__data); // so it won't be saved
   if (horizontal) {
     this.labelC.__moveto(-20- this.labelC.maxLabelWidth,group0center);
   } 
   this.bars.scale = 1;
-  this.bars.__setData(data,true);
+  this.bars.__setData(data);
   if (data.categories) {  // so the legend colors can be updated
     // repeated since categorizedPrototypes might not have been around the first time
       color_utils.initColors(this);

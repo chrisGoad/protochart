@@ -48,11 +48,12 @@ JavaScript component technology hosted at prototypejungle.org. Deep prototypes a
    <div class="contentsLine"><a href="#nonews">5. No news</a></div>  
   <div class="contentsLine"><a href="#svg">6. SVG</a></div>
    <div class="contentsLine"><a href="#conventions">7. Naming Conventions</a></div>
-    <div class="contentsLine"><a href="#controllers">9. Controllers</a></div>
-      <div class="contentsLine"><a href="#dataBinding">10.  Data Binding</a></div>
-        <div class="contentsLine"><a href="#spreads">11. Spreads</a></div>
-           <div class="contentsLine"><a href="#externalData">12. External Data</a></div>
-         <div class="contentsLine"><a href="#dataFormat">13. Data Format</a></div>
+    <div class="contentsLine"><a href="#controllers">8. Controllers</a></div>
+      <div class="contentsLine"><a href="#dataBinding">9.  Data Binding</a></div>
+        <div class="contentsLine"><a href="#spreads">10. Spreads</a></div>
+           <div class="contentsLine"><a href="#externalData">11. External Data</a></div>
+         <div class="contentsLine"><a href="#dataFormat">12. Data Format</a></div>
+         <div class="contentsLine"><a href="#API">13. API</a></div>
 
 
 </div>
@@ -227,7 +228,7 @@ Use your browser's <i>view source</i>  to see how this works.
 <a href="https://protochart.org/repo1/example/standalone2.html">https://protochart.org/repo1/example/standalone2.html</a>, is similar
 but builds the item inline rather than requiring it from simple_diagram.js.
 The second variant is available at
-<a href = "https://jsfiddle.net/prototypejungle/qka1n30q/">jsfiddle</a></p>
+<a href = "https://jsfiddle.net/tasp1umh/">jsfiddle</a></p>
 <p>
 ProtoChart also has a viewer:<br/> <a href="https://protochart.org/view.html?source=https://protochart.org/repo1/example/simple_diagram.js">
 https://protochart.org/edit.html?source=https://protochart.org/repo1/example/simple_diagram.js</a>
@@ -487,7 +488,7 @@ few basic methods should not be trampled on either, but it is a very short list,
 It is not quite right to call the double underbarred symbols <i>private</i>, since, as you will see,
 several of them
 (eg __getExtent to take a random example) have designated public purposes. </p>
-<div class="section" id="controllers">9.  Controllers </div>
+<div class="section" id="controllers">8.  Controllers </div>
 <p>Notice that when you select a bar in the  bar chart, and then click the up button, a box with draggable handles appears
 which allows you to resize the chart. Also, when you select one of the arrows in the component example, handles appear that allow
 modification of the arrow. These are dubbed "controllers",  can be implemented for any item, and come in two varieties "resizer"
@@ -504,25 +505,29 @@ __updateControlPoint to update and redisplay the item as appropriate given the n
 provides an example.</p>
 <p>If all four methods are defined, the item will be displayed with both a resize box, and the custom handles.</p>
 </p>
-<div class="section" id="dataBinding">10.  Data Binding </div>
+<div class="section" id="dataBinding">9.  Data Binding </div>
 
 
 <p id="setData"> 
 Data binding is done in a very simple way, amounting to no more than two conventions.  The first is that the data associated
-with any node N is held in the field N.__data. The second is that the method N.update, if any, has the job of causing the state of N to
+with any node <cw>N</cw> is held in the field <cw>N.__data</cw>. The second is that the method <cw>N.update</cw>, if any, has the job of causing the state of
+<cw>N</cw> to
 reflect the data. The basic data binding operator is (in essence):</p>
 
-<pre>
-Object.__setData = function (d,doUpdate) {
-  this.set('__data',pj.lift(d));if (doUpdate && this.update) this.update();
+<precode>
+Object.__setData = function (d) {
+  this.set('__data',pj.lift(d));
+  if (this.update) {
+    this.update();
+  }
 }
-</pre>
-<p> (pj.lift is a no-op when applied to an object which is already in Object/Array form.) </p>
-<div class="section" id="spreads">11. Spreads</div>
+</precode>
+<p> (<cw>pj.lift</cw> is a no-op when applied to an object which is already in Object/Array form.) </p>
+<div class="section" id="spreads">10. Spreads</div>
 
-<p>A pj.Spread represents a collection of items instantiated from the same prototype. The data associated
+<p>A <cw>pj.Spread</cw> represents a collection of items instantiated from the same prototype. The data associated
 with a spread contains a sequence of individual data entities (eg numbers or points). The spread update method instantiates its prototype once for each
-datum, and then binds each instantiation to its corresponding datum.   (Each spread has its own method for binding, but the update method is common to all).
+datum, and binds each instantiation to that datum.   (Each spread has its own method for binding, but the update method is common to all).
 For example,for the bar chart, the set of bars is represented as a spread, and the data 
 contains a sequence of metal densities. The prototype  for this spread is a rectangle, and the binding method  sets the width of each rectangle instantiation 
 to the corresponding density, properly scaled (the height is set to a common value).</p>
@@ -530,11 +535,11 @@ to the corresponding density, properly scaled (the height is set to a common val
 In infographics, it is conventional to refer to visual items, such as the bars in a bar graph, whose properties encode data values  as "marks".
 </p>
 <p>Now, to details:</p>
-<pre>
+<precode>
 var spread = pj.Spread.mk(mProto);
-</pre>
+</precode>
 
-<p>creates a spread whose members are instantiated from  mProto.
+<p>creates a spread whose members are instantiated from  <cw>mProto</cw>.
 <!-- Suppose that spread is bound to the following data sequence:</p>
 <pre>
 {'elements':[3,4,5]]}
@@ -544,33 +549,32 @@ var spread = pj.Spread.mk(mProto);
 
 <p>The general format for data sequences is described <a href="#dataFormat">below</a>.</p>
 -->
-As indicated earlier, a spread should also have a method which binds elements of the data sequence to the marks.
+As indicated earlier, a spread should also have a method which binds elements of the data sequence to the marks:
 <precode>
 spread.binder = function (mark,datum,index,size) {...}
 </precode>
 <p>
- <cw>index</cw> is the index of this  mark and datum within the sequence. Size is length of the data sequence.
+ <cw>index</cw> is the index of the datum and its corresponding mark  within the sequence. Size is length of the data sequence.
 </p>
 <!-- The default update method for a spread works as outlined above:
 if a series has been bound to the spread, then
 for each element e of the series, the prototype (eg mProto) is instantiated, and then e is bound to the instance using the binder method.
 -->
 <p>
- Here's an example: <a href="http://127.0.0.1:3000/edit.html?source=/repo1/example/simple_bar_chart.js">
- https://protochart.org/edit.html?source=/repo1/example/simple_bar_chart.js</a> Code:
+ Here's an example: <a href="http://127.0.0.1:3000/view.html?source=/repo1/example/simple_bar_chart.js">
+ https://protochart.org/view.html?source=/repo1/example/simple_bar_chart.js</a> Code:
 </p>
 
 <precode>
 (function () {
 var item = pj.svg.Element.mk('&lt;g/&gt;');
 // barP is the prototype for bars
-item.set("barP",pj.svg.Element.mk(
-  '&lt;rect fill="rgb(39, 49, 151)" stroke="black" stroke-width="3"  height="50"/&gt;'));
+item.set("barP",pj.svg.Element.mk('&lt;rect fill="blue" stroke="black" stroke-wwidth="3" height="50"/&gt;'));
 item.barP.scale = 100;
 item.set("marks",pj.Spread.mk(item.barP));
 item.marks.binder = function (mark,data,index,size) {
   mark.width = mark.scale * data; // the width of the bar set from the data
-  mark.y = (size - index) * 60; // stack the bars from bottom to top
+  mark.__moveto(0,(size - index) * 60; // stack the bars from bottom to top
 }
 item.update = function () {
   // send the top level data down to the mark set for display
@@ -580,6 +584,8 @@ item.update = function () {
 pj.returnValue(undefined,item);
 })();
 </precode>
+
+<p>Note the form of the data sequence: {"elements":[3,4,1]}. More will be said about data sequences in a moment. </p>
 <!--
 <p> Here's a walk-through of what happens. When the item is loaded, the update method is run. This first binds the data (a series) to the mark set. The mark set's
 update method in turn instantiates barP once for each element e of the series, and binds that element to the instance, which has the effect
@@ -588,9 +594,9 @@ in such a way that the bars are stacked.
 </p>-->
 
 
-<div class="section" id="externalData">12.  External Data </div>
+<div class="section" id="externalData">11.  External Data </div>
 
-<p>Data can be loaded from external sources using the component mechanism, as follows: (at
+<p>Data can be loaded from external sources using the require mechanism, as follows: (at
 <a href="https://prototypejungle.org/chartsd?source=https://prototypejungle.org/sys/repo3|example/external_data0.js">
   https://prototypejungle.org/sys/repo3/example/external_data0.js
 </a>)
@@ -632,7 +638,7 @@ pj.require('example/simple_bar_chart.js',function (erm,graphP) {
 item.dataSource = '<a href="https://prototypejungle.org/sys/repo2/data/metal_densities.js">https://prototypejungle.org/sys/repo2/data/metal_densities.js'</a>;
 </precode>
 
-<div  class="section"  id="dataFormat">13. Data Format </div>
+<div  class="section"  id="dataFormat">12. Data Format </div>
 <!--
 <p> Externally, data should be formated  as a
 <a href="https://developers.google.com/chart/interactive/docs/reference#dataparam">Google Charts data object</a>, wrapped by callback as mentioned above.
@@ -640,18 +646,30 @@ This is converted
 into an object of form <code>{fields:f,elements:e}</code>.
 The details of the internal form are beyond the scope of this document.</p>
 <p> A minor simplification in the Google Charts format is supported. Namely, column -->
-<p> Here is the data for the <a href="https://prototypejungle.org/chartsd?item=/anon/repo2/w3hxiqyviz/item.js">bar graph</a> of metal densities:</p>
+<p> There is no fixed format for data objects in the general context of data binding.
+(Although JSON is normally used for their external form, in any case). However, there is special support for data sequences in the implementation
+of the pj.Spread class, and at the level of the user interface.
+Here is the data for the <a href="https://prototypejungle.org/chartsd?item=/anon/repo2/w3hxiqyviz/item.js">bar graph</a> of metal densities:</p>
 
-<pre>
-  {'fields':[
-    {'id':'metal','type':'string'},
-    {'id':'density','type':'number'}],
-  'elements':[['Lithium',0.53],['Copper',9],['Silver',10.5],['Gold',19.3]]})
-</pre>
+<precode>
+{"title":"Density in grams per cubic centimeter",
+ "fields":["metal","density"],
+  "elements":[{"metal":"Lithium","density":0.53},{"metal":"Copper","density":9},
+              {"metal":"Silver","density":10.5},{"metal":"Gold","density":19.3}]
+}
+</precode>
+<p> This is equivalent:</p>
+<precode>
+{"title":"Density in grams per cubic centimeter",
+"fields":["metal","density"],
+ "elements":[["Lithium",0.53],["Copper",9],["Silver",10.5],["Gold",19.3]]
+}
+</precode>
 
 <p>
-The fields property describes the meaning of the individual elements in the series. Each series element should be an array with  one element
-per field, specifying the values of the fields.
+The <cw>fields</cw> property lists the properties of the individual elements in the sequence. Each  member <cw>elements</cw> may have two forms:
+an object with the properies specified in  <cw>field</cw>, or an array with  one element
+per field, specifying the values of the fields,  in the order given in  <cw>fields</cw>. The <cw>title</cw> property is optional.
 </p>
 <!--
 When the data elements are bound to the individual marks of a mark set, they are
@@ -699,17 +717,17 @@ result of interactively  modifying an existing item  and then storing the result
 further variations can be introduced into variants.  You are not allowed overwrite a code-built item with a variant with a simple
 save; you must save the variant somewhere else, with "Save as Variant". The UI attempts to find a suitable name for new saves based on these distinctions.But the names  are only suggestions; you can put things where you want.</p>
 
+-->
 
 
-
-<div class="section" id="api">15. API </div>
-<p>This section supplies a short list of the stable calls  in this proof-of-concept. </p>
+<div class="section" id="API">13. API </div>
+<!--<p>This section supplies a short list of the stable calls  in this proof-of-concept. </p>-->
 
 
 <p>Calls are given in the form <code>f(arg1:type1,arg2:type2...)</code> where types are: <code>string, number, Node (Array or Object) </code> or <code>any</code>. When a call
 is described in more detail elsewhere in this document, a <a href="">link</a> is supplied.</p>
 
-<div class="apiSection">om</div>
+<div class="apiSection">Core</div>
 
 <div class="apiCall">
   <div class="apiCallNm">pj.Object.mk()</div><div class="apiCallDf">Constructor for pj.Object</div>
@@ -911,7 +929,7 @@ pjdom.0.9.0.js stubs them. </p>
 
 
 </div>
-
+<!--
 <div class="section" id="names">16. Avoiding name conflicts</div>
 
 <p>When you implement a new component  or chart, method names should not conflict with the names of methods

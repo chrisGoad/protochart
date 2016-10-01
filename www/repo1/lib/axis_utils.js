@@ -1,26 +1,29 @@
 /* These are utilities for dealing with axes. A standard naming convention is assumed. The main item should have chidren core,
- * and axisH, and axisV for the two axis config, and axis for the one axis config. main.core is the "core" of the chart, in which the marks
+ * axisH, and axisV for the two axis config, and axis for the one axis config. main.core is the "core" of the chart, in which the marks
  * (bars, scatter points, or whatever) are displayed. The positioning of the axes, but also other standard matters are handled:
  * If categories are involed,  the colors of main must be coordinated with those of the core.  If the graph is to be adjustable,
  * __setExtent and __getExtent must be defined. */
 
 (function () {
 var geom = pj.geom;
-var dat = pj.dat;
 var item = pj.Object.mk();
 
 item.initAxes = function (main) {
-var axis = main.axisH;
+var axisH = main.axisH;
 var axisV = main.axisV;
 if (axisV) {
   axisV.__show();
   axisV.orientation = 'vertical';
-  axisV.set('scale',dat.LinearScale.mk());
+  axisH.set('scale',pj.data.LinearScale.mk());
+  axisV.set('scale',pj.data.LinearScale.mk());
+  axisH.__show();
+  axisV.__show();
 }  else {
-  axis = main.axis;
+  var axis = main.axis;
+  axis.set('scale',pj.data.LinearScale.mk());
+  axis.__show();
 }
-axis.__show();
-axis.set('scale',dat.LinearScale.mk());
+ 
 
 main.colorOfCategory = function (category) {
   return this.core.colorOfCategory(category);
@@ -41,7 +44,7 @@ if (main.__adjustable) {
   }
 }
 }
-
+// the two - axis case
 item.updateAxes = function (main,flip) {
   var categories,cnt,max;
   var core = main.core;
@@ -106,14 +109,17 @@ item.updateAxes = function (main,flip) {
 
 }
 
-
+//the one axis case
 item.updateAxis = function (main) {
+  debugger;
   var core = main.core;
   var axis = main.axis;
   core.rangeScaling = function (x) {
     return axis.scale.eval(x);
   }
-  axis.orientation = main.orientation;
+  if (axis.orientation === 'undefined') {
+    axis.orientation = main.orientation;
+  }
   var horizontal = axis.orientation === 'horizontal';
   var data = main.__getData();
   var mainHeight = main.extent.y - main.axisSep;
@@ -122,8 +128,12 @@ item.updateAxis = function (main) {
   axis.scale.setExtent(horizontal?mainWidth:mainHeight);
   var upperLeft = main.extent.times(-0.5);
   //upperLeft = geom.Point.mk();
-  var max = data.max('range');
-  axis.set('dataBounds',prototypeJungle.geom.Interval.mk(0,max));
+  if (core.dataBounds) {
+    axis.set('dataBounds',core.dataBounds()) 
+  } else {
+    var max = data.max('range');
+    axis.set('dataBounds',prototypeJungle.geom.Interval.mk(0,max));
+  }
   axis.gridLineLength = gridlineLength;//-this.minY;
   axis.update();
   axis.__moveto(horizontal?(upperLeft.plus(geom.Point.mk(0,mainHeight + main.axisSep))):upperLeft);

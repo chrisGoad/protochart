@@ -52,7 +52,7 @@ item.displayWords = function (text) {
   } else {
     this.lastText = text;
   }
-  words.__setData(pj.Array.mk(text.split(" ")),1);
+  words.__setData(pj.Array.mk(text.split(" ")));
   return;
 }
 

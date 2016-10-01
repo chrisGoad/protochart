@@ -47,7 +47,6 @@ item.labels.binder = function (label,data,indexInSeries,lengthOfDataSeries) {
   }  else {
     x = indexInSeries * gap;
     y =0;
-    debugger;
   }
   label.__moveto(x,y);
   label.__show();
@@ -76,7 +75,7 @@ item.update = function () {
   this.labels.masterPrototype = this.labelP;
   this.labels.__moveto(this.labelSep);
   this.labelP.__editPanelName = 'Prototype for all labels on this axis'
-  this.labels.__setData(this.__data,true);
+  this.labels.__setData(this.__data);
   if (horizontal) {  // prevent labels from crowding
     var crowding =this.maxLabelWidth/this.labelGap;
     if (crowding > 0.9) {

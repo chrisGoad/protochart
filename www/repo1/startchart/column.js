@@ -8,7 +8,7 @@ pj.require('../chart/bar.js','[TcYg4ep5s5TrvfxG5CWr11vjZZu1]/data/temperature.js
   item.graph.orientation = 'vertical';
   item.graph.axis.bigTickImageInterval = 30;
   item.graph.set('extent',pj.geom.Point.mk(500,300));
-  item.graph.__setData(data);
+  item.graph.__setData(data,'noUpdate');
   pj.returnValue(undefined,item);
 });
 /*

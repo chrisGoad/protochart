@@ -25,7 +25,7 @@ item.set('__signature',pj.Signature.mk({
   showGridLines:'boolean',
   at01s:'boolean', /* if at10s, then the tick pattern is big ticks at multiples of 10,
                      smaller at 5s, and smallest at 1s. Otherwise the big ticks are at 5s */
-  scale:{type:pj.dat.LinearScale,required:true}
+  scale:{type:pj.data.LinearScale,required:true}
   
 }));
 
@@ -44,7 +44,7 @@ item.at10s = true;
 */
 item.set("theLabels",labelsP.instantiate());
 item.theLabels.__unselectable = true;
-item.theLabels.set("__data",Object.create(pj.dat.Sequence));
+item.theLabels.set("__data",Object.create(pj.data.Sequence));
 item.theLabels.__data.set("elements",pj.Array.mk());
 
 item.set('dataBounds',pj.geom.mkInterval(100,300));
@@ -76,9 +76,7 @@ item.firstLabelPos = undefined; // defined later; mentioned here so it can be fr
 item.update = function () {
   debugger;
   var ui = pj.ui;
-  var geom = pj.geom;
-  var dat = pj.dat;
-  
+  var geom = pj.geom;  
 
   var svg = pj.svg;
   var thisHere = this;

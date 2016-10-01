@@ -393,7 +393,7 @@ ui.viewDataUrl = function () {
 ui.viewAndUpdateFromData =  function (data,url,cb) {
   ui.viewData(data);
   ui.clearError();
-  if (pj.ui.dontCatch) {
+  if (!pj.throwOnError) {
     ui.updateFromData(data,url,cb);
     ui.updateTitleAndLegend();
   } else {
@@ -408,7 +408,7 @@ ui.viewAndUpdateFromData =  function (data,url,cb) {
 
 ui.getDataJSONP = function (url,initialUrl,cb,dontUpdate) {
   debugger;
-  pj.data = function (data) {
+  pj.returnData = function (data) {
       if (dontUpdate) {
          ui.viewData(data,url);
         if (cb) {
@@ -643,8 +643,8 @@ ui.initFsel = function () {
     fsel.options = ["New Item","New Scripted Item","Open...","Insert Chart...","Add title/legend","Insert own item  ...","View source...","Save","Save As...","Save As SVG..."]; 
     fsel.optionIds = ["new","newCodeBuilt","open","insertChart","addLegend","insertOwn","viewSource","save","saveAs","saveAsSvg"];
   } else {
-    fsel.options = ["Open...","Add title/legend","Save","Save As...","Save As SVG..."]; 
-    fsel.optionIds = ["open","addLegend","save","saveAs","saveAsSvg"];
+    fsel.options = ["Open...","Insert...","Add title/legend","Save","Save As...","Save As SVG..."]; 
+    fsel.optionIds = ["open","insert","addLegend","save","saveAs","saveAsSvg"];
   }
  var el = fsel.build();
  el.__name = undefined;
@@ -777,7 +777,7 @@ fsel.onSelect = function (n) {
 
     case "addLegend":
       //ui.addTitleAndLegend();
-      ui.updateTitleAndLegend();
+      ui.updateTitleAndLegend('add');
       return;
       debugger;
       var htl = ui.hasTitleLegend();
@@ -851,14 +851,18 @@ var updateTitleAndLegend1 = function (titleBox,legend,chart) {
   }
 }
 
-ui.updateTitleAndLegend  = function () {
+ui.updateTitleAndLegend  = function (add) {
   var  ds = dat.findDataSource();
   var chart = ds[0];
   var dt = chart.__getData();
-  var needsLegend = dt.categories;
   var legend = pj.root.legend;
-  var needsTitle = dt.title;
   var title = pj.root.titleBox;
+  var hasTitleOrLegend = title || legend;
+  var needsLegend = (add || hasTitleOrLegend) && dt.categories;;
+  var needsTitle = add ||  hasTitleOrLegend && dt.title;
+  if (!(needsTitle || needsLegend)) {
+    return;
+  }
   var newTitle = needsTitle && !title;
   var newLegend = needsLegend && !legend;
   var titleToUpdate = needsTitle?title:undefined;
